@@ -1,7 +1,3 @@
 # Build files
 build/**/*
 programa-*
-
-# IDEs
-.idea/**/*
-.vscode/**/*
