@@ -6,17 +6,18 @@ FLAGS := -Wall -Wextra -Werror=pedantic -Wfatal-errors
 LIBS := $(shell pkg-config --libs glib-2.0)
 FLAGS += $(shell pkg-config --cflags glib-2.0)
 
-SRC += $(wildcard src/*.c src/*/*.c)
+SRC := $(shell find src/ -name "*.c")
+INCLUDES := $(shell find include/ -name "*.h")
 
 BUILD_TYPE ?= release
 ifeq ($(BUILD_TYPE), debug)
 	FLAGS += -g -O0
 	BUILD_DIR_PATH := build/debug
-	CFLAGS += -Iinclude/
+	FLAGS += -Iinclude/
 else ifeq ($(BUILD_TYPE), release)
 	FLAGS += -O3
 	BUILD_DIR_PATH := build/release
-	CFLAGS += -Iinclude/
+	FLAGS += -Iinclude/
 endif
 
 OBJ := $(addprefix $(BUILD_DIR_PATH)/, $(SRC:.c=.o))
@@ -42,13 +43,13 @@ build-release:
 build: $(BUILD_DIR_PATH)/$(EXEC)
 
 $(BUILD_DIR_PATH)/$(EXEC): $(OBJ)
-	@$(CC) -o $@ $^ $(CFLAGS) -lm $(LIBS)
+	@$(CC) -o $@ $^ $(FLAGS) -lm $(LIBS)
 	@printf "$(BLUE)[COMPILER]$(WHITE) $(BLUE)$(EXEC) $(WHITE)compiled.\n"
 
 $(BUILD_DIR_PATH)/%.o: %.c
 	@mkdir -p $(dir $@)
 	@printf "$(BLUE)[COMPILER]$(WHITE) Compiling $(BLUE)$<$(WHITE).\n"
-	@$(CC) $(CFLAGS) -c -o $@ $<
+	@$(CC) $(FLAGS) -c -o $@ $<
 
 .PHONY: clean
 clean:
@@ -58,7 +59,7 @@ clean:
 
 .PHONY: format
 format:
-	@clang-format --verbose -i $(SRC) $(INCLUDE_FILES)
+	@clang-format --verbose -i $(SRC) $(INCLUDES)
 	@printf "$(PINK)[FORMATTER]$(WHITE) Formatted all available files.\n"
 
 place-build-on-root: build-release

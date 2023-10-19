@@ -1,18 +1,24 @@
 #include <stdio.h>
 
-#include "workers/batch.h"
+#include "program.h"
 
 int main(int argc, char** argv) {
+  ProgramMode programMode;
+
   switch (argc) {
     case 3:
-      /* BATCH MODE */
-      batch_worker(argv);
+      programMode = PROGRAM_MODE_BATCH;
       break;
-    case 2:
-      /* INTERACTIVE MODE */
-      printf("Interactive mode hasn't been implemented yet.\n");
+    case 1:
+      programMode = PROGRAM_MODE_INTERACTIVE;
       break;
     default:
-      break;
+      printf("Wrong number of arguments given.\n");
+      return -1;
   }
+
+  Program* program = initialize_program(programMode);
+  int result = execute_program(program, argv + 1);
+
+  return result;
 }
