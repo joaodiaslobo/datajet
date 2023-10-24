@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "data/database.h"
+
 struct Program {
   ProgramMode mode;
   Database *database;
@@ -11,15 +13,19 @@ struct Program {
 Program *initialize_program(ProgramMode programMode) {
   Program *program = malloc(sizeof(Program));
   program->mode = programMode;
-  /* TODO: Database needs to be initialized here in the future. */
-  program->database = NULL;
+  program->database = initialize_database();
   return program;
+}
+
+void free_program(Program *program) {
+  free_database(program->database);
+  free(program);
 }
 
 int execute_program(Program *program, char **args) {
   switch (program->mode) {
     case PROGRAM_MODE_BATCH:
-      batch_worker(args);
+      batch_worker(args, program->database);
       break;
     case PROGRAM_MODE_INTERACTIVE:
       printf("Interactive mode hasn't been implemented yet.\n");

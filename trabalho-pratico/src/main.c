@@ -19,6 +19,7 @@ int main(int argc, char** argv) {
 
   Program* program = initialize_program(programMode);
   int result = execute_program(program, argv + 1);
+  free_program(program);
 
   return result;
 }

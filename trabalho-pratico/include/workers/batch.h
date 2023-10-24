@@ -1,6 +1,8 @@
 #ifndef BATCH_H
 #define BATCH_H
 
-int batch_worker(char **argv);
+#include "data/database.h"
+
+int batch_worker(char **argv, Database *database);
 
 #endif

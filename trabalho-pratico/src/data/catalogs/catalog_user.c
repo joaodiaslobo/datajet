@@ -1,5 +1,34 @@
 #include "data/catalogs/catalog_user.h"
 
-struct CatalogUser {
+#include "data/schemas/user.h"
+
+struct catalogUser {
   GPtrArray *users;
 };
+
+CatalogUser *initialize_users_catalog() {
+  CatalogUser *catalog = malloc(sizeof(struct catalogUser));
+  catalog->users = g_ptr_array_new();
+
+  return catalog;
+}
+
+void free_users_catalog(CatalogUser *catalog) {
+  for (unsigned int i = 0; i < catalog->users->len; i++) {
+    free_user((User *)catalog->users->pdata[i]);
+  }
+
+  g_ptr_array_free(catalog->users, FALSE);
+
+  free(catalog);
+}
+
+void insert_user(CatalogUser *catalog, User *user) {
+  g_ptr_array_add(catalog->users, user);
+}
+
+int count_users(CatalogUser *catalog) { return catalog->users->len; }
+
+User *catalog_get_user_by_id(CatalogUser *catalog, int user_id) {
+  return (User *)catalog->users->pdata[user_id];
+}

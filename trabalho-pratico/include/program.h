@@ -15,4 +15,6 @@ Program *initialize_program(ProgramMode);
 
 int execute_program(Program *program, char **args);
 
+void free_program(Program *program);
+
 #endif
