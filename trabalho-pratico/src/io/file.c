@@ -14,8 +14,9 @@ FILE *open_file(char *path) {
 void close_file(FILE *file) { fclose(file); }
 
 char *build_full_file_path(char *folder, char *file_name) {
-  char *path = malloc(sizeof(char) * (strlen(folder) + strlen(file_name) + 1));
+  char *path = malloc(sizeof(char) * (strlen(folder) + strlen(file_name) + 2));
   strcpy(path, folder);
+  strcat(path, "/");
   strcat(path, file_name);
 
   return path;
