@@ -7,7 +7,7 @@ typedef struct passenger Passenger;
 
 Passenger* create_passenger(char* flight_id, char* user_id);
 
-void free_passenger(Passenger* passenger);
+void free_passenger(void* passenger_ptr);
 
 int parse_passenger_and_add_to_catalog(RowReader* reader, void* catalog);
 

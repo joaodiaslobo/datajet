@@ -14,7 +14,7 @@ Flight* create_flight(char* id, char* airline, char* plane_model,
                       Timestamp* real_arrival_date, char* pilot, char* copilot,
                       char* notes);
 
-void free_flight(Flight* flight);
+void free_flight(void* flight_ptr);
 
 int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog);
 

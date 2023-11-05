@@ -8,17 +8,13 @@ struct catalogUser {
 
 CatalogUser *initialize_users_catalog() {
   CatalogUser *catalog = malloc(sizeof(struct catalogUser));
-  catalog->users = g_ptr_array_new();
+  catalog->users = g_ptr_array_new_with_free_func(free_user);
 
   return catalog;
 }
 
 void free_users_catalog(CatalogUser *catalog) {
-  for (unsigned int i = 0; i < catalog->users->len; i++) {
-    free_user((User *)catalog->users->pdata[i]);
-  }
-
-  g_ptr_array_free(catalog->users, FALSE);
+  g_ptr_array_free(catalog->users, TRUE);
 
   free(catalog);
 }

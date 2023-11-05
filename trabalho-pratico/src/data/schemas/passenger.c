@@ -21,7 +21,8 @@ Passenger* create_passenger(char* flight_id, char* user_id) {
   return passenger;
 }
 
-void free_passenger(Passenger* passenger) {
+void free_passenger(void* passenger_ptr) {
+  Passenger* passenger = (Passenger*)passenger_ptr;
   g_free(passenger->flight_id);
   g_free(passenger->user_id);
   free(passenger);

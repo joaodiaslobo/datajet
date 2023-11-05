@@ -10,17 +10,13 @@ struct catalogPassenger {
 
 CatalogPassenger *initialize_passengers_catalog() {
   CatalogPassenger *catalog = malloc(sizeof(struct catalogPassenger));
-  catalog->passengers = g_ptr_array_new();
+  catalog->passengers = g_ptr_array_new_with_free_func(free_passenger);
 
   return catalog;
 }
 
 void free_passengers_catalog(CatalogPassenger *catalog) {
-  for (unsigned int i = 0; i < catalog->passengers->len; i++) {
-    free_passenger((Passenger *)catalog->passengers->pdata[i]);
-  }
-
-  g_ptr_array_free(catalog->passengers, FALSE);
+  g_ptr_array_free(catalog->passengers, TRUE);
 
   free(catalog);
 }

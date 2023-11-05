@@ -10,17 +10,13 @@ struct catalogReservation {
 
 CatalogReservation *initialize_reservations_catalog() {
   CatalogReservation *catalog = malloc(sizeof(struct catalogReservation));
-  catalog->reservations = g_ptr_array_new();
+  catalog->reservations = g_ptr_array_new_with_free_func(free_reservation);
 
   return catalog;
 }
 
 void free_reservations_catalog(CatalogReservation *catalog) {
-  for (unsigned int i = 0; i < catalog->reservations->len; i++) {
-    free_reservation((Reservation *)catalog->reservations->pdata[i]);
-  }
-
-  g_ptr_array_free(catalog->reservations, FALSE);
+  g_ptr_array_free(catalog->reservations, TRUE);
 
   free(catalog);
 }

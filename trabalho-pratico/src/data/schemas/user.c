@@ -45,7 +45,8 @@ User* create_user(char* id, char* name, char* email, char* phone_number,
   return user;
 }
 
-void free_user(User* user) {
+void free_user(void* user_ptr) {
+  User* user = (User*)user_ptr;
   g_free(user->id);
   g_free(user->name);
   g_free(user->email);

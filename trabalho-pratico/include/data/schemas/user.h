@@ -14,7 +14,7 @@ User* create_user(char* id, char* name, char* email, char* phone_number,
                   Timestamp* account_creation, PayMethod pay_method,
                   AccountStatus account_status);
 
-void free_user(User* user);
+void free_user(void* user_ptr);
 
 int parse_user_and_add_to_catalog(RowReader* reader, void* catalog);
 

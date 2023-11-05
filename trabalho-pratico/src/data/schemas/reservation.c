@@ -79,7 +79,8 @@ int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog) {
   return 0;
 }
 
-void free_reservation(Reservation* reservation) {
+void free_reservation(void* reservation_ptr) {
+  Reservation* reservation = (Reservation*)reservation_ptr;
   g_free(reservation->id);
   g_free(reservation->user_id);
   g_free(reservation->hotel_id);

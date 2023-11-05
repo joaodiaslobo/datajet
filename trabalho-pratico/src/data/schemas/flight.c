@@ -48,7 +48,8 @@ Flight* create_flight(char* id, char* airline, char* plane_model,
   return flight;
 }
 
-void free_flight(Flight* flight) {
+void free_flight(void* flight_ptr) {
+  Flight* flight = (Flight*)flight_ptr;
   g_free(flight->id);
   g_free(flight->airline);
   g_free(flight->plane_model);

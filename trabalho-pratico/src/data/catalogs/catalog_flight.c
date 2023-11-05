@@ -1,5 +1,7 @@
 #include "data/catalogs/catalog_flight.h"
 
+#include <glib.h>
+
 #include "data/schemas/flight.h"
 
 struct catalogFlight {
@@ -8,17 +10,13 @@ struct catalogFlight {
 
 CatalogFlight *initialize_flights_catalog() {
   CatalogFlight *catalog = malloc(sizeof(struct catalogFlight));
-  catalog->flights = g_ptr_array_new();
+  catalog->flights = g_ptr_array_new_with_free_func(free_flight);
 
   return catalog;
 }
 
 void free_flights_catalog(CatalogFlight *catalog) {
-  for (unsigned int i = 0; i < catalog->flights->len; i++) {
-    free_flight((Flight *)catalog->flights->pdata[i]);
-  }
-
-  g_ptr_array_free(catalog->flights, FALSE);
+  g_ptr_array_free(catalog->flights, TRUE);
 
   free(catalog);
 }

@@ -16,7 +16,7 @@ Reservation* create_reservation(char* id, char* user_id, char* hotel_id,
                                 bool includes_breakfast, char* room_details,
                                 int rating, char* comment);
 
-void free_reservation(Reservation* reservation);
+void free_reservation(void* reservation_ptr);
 
 int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog);
 
