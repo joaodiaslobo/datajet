@@ -21,7 +21,6 @@ int batch_worker(char **argv, Database *database) {
 
   csv_populate_database(database, dataset_folder_path);
 
-  /*
   CatalogUser *userCatalog = database_get_user_catalog(database);
   CatalogFlight *flightCatalog = database_get_flight_catalog(database);
   CatalogReservation *reservationCatalog =
@@ -73,7 +72,6 @@ int batch_worker(char **argv, Database *database) {
   }
 
   printf("\n== FREEING DATA ==\n");
-  */
 
   return 0;
 }
