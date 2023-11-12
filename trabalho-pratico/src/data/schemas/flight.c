@@ -4,6 +4,8 @@
 
 #include "data/catalogs/catalog_flight.h"
 #include "data/schemas/schema_data_types.h"
+#include "data/schemas/validation/flight_validation.h"
+#include "data/schemas/validation/generic_validation.h"
 #include "io/parsing/reader.h"
 
 struct flight {
@@ -13,10 +15,10 @@ struct flight {
   int total_seats;
   char* origin;
   char* destination;
-  Timestamp* schedule_departure_date;
-  Timestamp* schedule_arrival_date;
-  Timestamp* real_departure_date;
-  Timestamp* real_arrival_date;
+  Timestamp schedule_departure_date;
+  Timestamp schedule_arrival_date;
+  Timestamp real_departure_date;
+  Timestamp real_arrival_date;
   char* pilot;
   char* copilot;
   char* notes;
@@ -24,10 +26,10 @@ struct flight {
 
 Flight* create_flight(char* id, char* airline, char* plane_model,
                       int total_seats, char* origin, char* destination,
-                      Timestamp* schedule_departure_date,
-                      Timestamp* schedule_arrival_date,
-                      Timestamp* real_departure_date,
-                      Timestamp* real_arrival_date, char* pilot, char* copilot,
+                      Timestamp schedule_departure_date,
+                      Timestamp schedule_arrival_date,
+                      Timestamp real_departure_date,
+                      Timestamp real_arrival_date, char* pilot, char* copilot,
                       char* notes) {
   Flight* flight = malloc(sizeof(struct flight));
 
@@ -55,10 +57,6 @@ void free_flight(void* flight_ptr) {
   g_free(flight->plane_model);
   g_free(flight->origin);
   g_free(flight->destination);
-  free(flight->schedule_departure_date);
-  free(flight->schedule_arrival_date);
-  free(flight->real_departure_date);
-  free(flight->real_arrival_date);
   g_free(flight->pilot);
   g_free(flight->copilot);
   g_free(flight->notes);
@@ -67,21 +65,62 @@ void free_flight(void* flight_ptr) {
 
 int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog) {
   char* flight_id = reader_next_cell(reader);
+  if (is_empty_value(flight_id)) return 1;
+
   char* flight_airline = reader_next_cell(reader);
+  if (is_empty_value(flight_airline)) return 1;
+
   char* flight_plane_model = reader_next_cell(reader);
-  int flight_total_seats = parse_number(reader_next_cell(reader));
+  if (is_empty_value(flight_plane_model)) return 1;
+
+  char* flight_total_seats_string = reader_next_cell(reader);
+  int flight_total_seats = parse_number(flight_total_seats_string);
+
   char* flight_origin = reader_next_cell(reader);
+  if (invalid_value_length(3, flight_origin)) return 1;
+
   char* flight_destination = reader_next_cell(reader);
-  Timestamp* flight_schedule_departure_date =
-      parse_timestamp(reader_next_cell(reader));
-  Timestamp* flight_schedule_arrival_date =
-      parse_timestamp(reader_next_cell(reader));
-  Timestamp* flight_real_departure_date =
-      parse_timestamp(reader_next_cell(reader));
-  Timestamp* flight_real_arrival_date =
-      parse_timestamp(reader_next_cell(reader));
+  if (invalid_value_length(3, flight_destination)) return 1;
+
+  char* flight_schedule_departure_date_string = reader_next_cell(reader);
+  if (invalid_timestamp(flight_schedule_departure_date_string)) return 1;
+  Timestamp flight_schedule_departure_date =
+      parse_timestamp(flight_schedule_departure_date_string);
+
+  char* flight_schedule_arrival_date_string = reader_next_cell(reader);
+  if (invalid_timestamp(flight_schedule_arrival_date_string)) return 1;
+  Timestamp flight_schedule_arrival_date =
+      parse_timestamp(flight_schedule_arrival_date_string);
+
+  if ((flight_schedule_departure_date.date >
+       flight_schedule_arrival_date.date) ||
+      (flight_schedule_departure_date.date ==
+           flight_schedule_arrival_date.date &&
+       flight_schedule_departure_date.time >=
+           flight_schedule_arrival_date.time))
+    return 1;
+
+  char* flight_real_departure_date_string = reader_next_cell(reader);
+  if (invalid_timestamp(flight_real_departure_date_string)) return 1;
+  Timestamp flight_real_departure_date =
+      parse_timestamp(flight_real_departure_date_string);
+
+  char* flight_real_arrival_date_string = reader_next_cell(reader);
+  if (invalid_timestamp(flight_real_arrival_date_string)) return 1;
+  Timestamp flight_real_arrival_date =
+      parse_timestamp(flight_real_arrival_date_string);
+
+  if ((flight_real_departure_date.date > flight_real_arrival_date.date) ||
+      (flight_real_departure_date.date == flight_real_arrival_date.date &&
+       flight_real_departure_date.time >= flight_real_arrival_date.time))
+    return 1;
+
   char* flight_pilot = reader_next_cell(reader);
+  if (is_empty_value(flight_pilot)) return 1;
+
   char* flight_copilot = reader_next_cell(reader);
+  if (is_empty_value(flight_copilot)) return 1;
+
   char* flight_notes = reader_next_cell(reader);
 
   Flight* flight = create_flight(

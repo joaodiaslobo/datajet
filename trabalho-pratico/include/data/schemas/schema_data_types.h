@@ -20,9 +20,9 @@ PayMethod parse_payment_method(char *payment);
 
 AccountStatus parse_account_status(char *status);
 
-Timestamp *parse_timestamp(char *timestamp_string);
+Timestamp parse_timestamp(char *timestamp_string);
 
-Timestamp *parse_date(char *date_string);
+Timestamp parse_date(char *date_string);
 
 int parse_number(char *number_string);
 

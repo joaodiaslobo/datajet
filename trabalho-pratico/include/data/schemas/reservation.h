@@ -11,8 +11,8 @@ typedef struct reservation Reservation;
 
 Reservation* create_reservation(char* id, char* user_id, char* hotel_id,
                                 char* hotel_name, int hotel_stars, int city_tax,
-                                char* address, Timestamp* begin_date,
-                                Timestamp* end_date, int price_per_night,
+                                char* address, Timestamp begin_date,
+                                Timestamp end_date, int price_per_night,
                                 bool includes_breakfast, char* room_details,
                                 int rating, char* comment);
 

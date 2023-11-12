@@ -9,10 +9,9 @@
 typedef struct user User;
 
 User* create_user(char* id, char* name, char* email, char* phone_number,
-                  Timestamp* birth_date, Sex sex, char* passport,
-                  char* country_code, char* address,
-                  Timestamp* account_creation, PayMethod pay_method,
-                  AccountStatus account_status);
+                  Timestamp birth_date, Sex sex, char* passport,
+                  char* country_code, char* address, Timestamp account_creation,
+                  PayMethod pay_method, AccountStatus account_status);
 
 void free_user(void* user_ptr);
 

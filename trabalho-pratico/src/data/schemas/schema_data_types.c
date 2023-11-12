@@ -20,9 +20,7 @@ AccountStatus parse_account_status(char *status) {
   return strcmp(status, "ACTIVE");
 }
 
-Timestamp *parse_timestamp(char *timestamp_string) {
-  Timestamp *timestamp = malloc(sizeof(Timestamp));
-
+Timestamp parse_timestamp(char *timestamp_string) {
   int date = 0;
   int time = 0;
 
@@ -46,14 +44,10 @@ Timestamp *parse_timestamp(char *timestamp_string) {
   time += (timestamp_string[17] - '0') * 10;
   time += (timestamp_string[18] - '0');
 
-  timestamp->date = date;
-  timestamp->time = time;
-
-  return timestamp;
+  return (Timestamp){.date = date, .time = time};
 }
 
-Timestamp *parse_date(char *date_string) {
-  Timestamp *timestamp = malloc(sizeof(Timestamp));
+Timestamp parse_date(char *date_string) {
   int date = 0;
 
   date += (date_string[0] - '0') * 10000000;
@@ -67,10 +61,7 @@ Timestamp *parse_date(char *date_string) {
   date = (date_string[8] - '0') * 10;
   date += (date_string[9] - '0');
 
-  timestamp->date = date;
-  timestamp->time = 0;
-
-  return timestamp;
+  return (Timestamp){.date = date, .time = 0};
 }
 
 int parse_number(char *number_string) {

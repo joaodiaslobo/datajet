@@ -6,6 +6,8 @@
 
 #include "data/catalogs/catalog_reservation.h"
 #include "data/schemas/schema_data_types.h"
+#include "data/schemas/validation/generic_validation.h"
+#include "data/schemas/validation/reservation_validation.h"
 #include "io/parsing/reader.h"
 
 struct reservation {
@@ -16,8 +18,8 @@ struct reservation {
   int hotel_stars;
   int city_tax;
   char* address;
-  Timestamp* begin_date;
-  Timestamp* end_date;
+  Timestamp begin_date;
+  Timestamp end_date;
   int price_per_night;
   bool includes_breakfast;
   char* room_details;
@@ -27,8 +29,8 @@ struct reservation {
 
 Reservation* create_reservation(char* id, char* user_id, char* hotel_id,
                                 char* hotel_name, int hotel_stars, int city_tax,
-                                char* address, Timestamp* begin_date,
-                                Timestamp* end_date, int price_per_night,
+                                char* address, Timestamp begin_date,
+                                Timestamp end_date, int price_per_night,
                                 bool includes_breakfast, char* room_details,
                                 int rating, char* comment) {
   Reservation* reservation = malloc(sizeof(struct reservation));
@@ -53,18 +55,54 @@ Reservation* create_reservation(char* id, char* user_id, char* hotel_id,
 
 int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog) {
   char* reservation_id = reader_next_cell(reader);
+  if (is_empty_value(reservation_id)) return 1;
+
   char* reservation_user_id = reader_next_cell(reader);
+  if (is_empty_value(reservation_user_id)) return 1;
+
   char* reservation_hotel_id = reader_next_cell(reader);
+  if (is_empty_value(reservation_hotel_id)) return 1;
+
   char* reservation_hotel_name = reader_next_cell(reader);
-  int reservation_hotel_stars = parse_number(reader_next_cell(reader));
-  int reservation_city_tax = parse_number(reader_next_cell(reader));
+  if (is_empty_value(reservation_hotel_name)) return 1;
+
+  char* reservation_hotel_stars_string = reader_next_cell(reader);
+  if (invalid_hotel_stars(reservation_hotel_stars_string)) return 1;
+  int reservation_hotel_stars = parse_number(reservation_hotel_stars_string);
+
+  char* reservation_city_tax_string = reader_next_cell(reader);
+  if (invalid_city_tax(reservation_city_tax_string)) return 1;
+  int reservation_city_tax = parse_number(reservation_city_tax_string);
+
   char* reservation_address = reader_next_cell(reader);
-  Timestamp* reservation_begin_date = parse_date(reader_next_cell(reader));
-  Timestamp* reservation_end_date = parse_date(reader_next_cell(reader));
-  int reservation_price_per_night = parse_number(reader_next_cell(reader));
-  bool reservation_includes_breakfast = parse_boolean(reader_next_cell(reader));
+  if (is_empty_value(reservation_address)) return 1;
+
+  char* reservation_begin_date_string = reader_next_cell(reader);
+  if (invalid_date(reservation_begin_date_string)) return 1;
+  Timestamp reservation_begin_date = parse_date(reservation_begin_date_string);
+
+  char* reservation_end_date_string = reader_next_cell(reader);
+  if (invalid_date(reservation_end_date_string)) return 1;
+  Timestamp reservation_end_date = parse_date(reservation_end_date_string);
+
+  if (reservation_begin_date.date > reservation_end_date.date) return 1;
+
+  char* reservation_price_per_night_string = reader_next_cell(reader);
+  if (invalid_positive_integer(reservation_price_per_night_string)) return 1;
+  int reservation_price_per_night =
+      parse_number(reservation_price_per_night_string);
+
+  char* reservation_includes_breakfast_string = reader_next_cell(reader);
+  if (invalid_bool_value(reservation_includes_breakfast_string)) return 1;
+  bool reservation_includes_breakfast =
+      parse_boolean(reservation_includes_breakfast_string);
+
   char* reservation_room_details = reader_next_cell(reader);
-  int reservation_rating = parse_number(reader_next_cell(reader));
+
+  char* reservation_rating_string = reader_next_cell(reader);
+  if (invalid_rating(reservation_rating_string)) return 1;
+  int reservation_rating = parse_number(reservation_rating_string);
+
   char* reservation_comment = reader_next_cell(reader);
 
   Reservation* reservation = create_reservation(
@@ -86,8 +124,6 @@ void free_reservation(void* reservation_ptr) {
   g_free(reservation->hotel_id);
   g_free(reservation->hotel_name);
   g_free(reservation->address);
-  free(reservation->begin_date);
-  free(reservation->end_date);
   g_free(reservation->room_details);
   g_free(reservation->comment);
   free(reservation);

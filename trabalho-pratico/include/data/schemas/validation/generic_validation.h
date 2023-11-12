@@ -3,14 +3,20 @@
 
 #include "data/schemas/schema_data_types.h"
 
-int empty_error(char* error);
+bool is_empty_value(char* value);
 
-int invalid_date(char* date);
+bool invalid_date(char* date);
 
-int invalid_timestamp(char* timestamp);
+bool invalid_timestamp(char* timestamp);
 
-int compare_date(char* start_date, char* end_date);
+bool compare_date(char* start_date, char* end_date);
 
-int compare_timestamp(char* start_timestamp, char* end_timestamp);
+bool compare_timestamp(char* start_timestamp, char* end_timestamp);
+
+bool invalid_value_length(int length, char* value);
+
+bool invalid_bool_value(char* value);
+
+bool invalid_positive_integer(char* value);
 
 #endif

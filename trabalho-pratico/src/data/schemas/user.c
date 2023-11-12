@@ -12,21 +12,20 @@ struct user {
   char* name;
   char* email;
   char* phone_number;
-  Timestamp* birth_date;
+  Timestamp birth_date;
   Sex sex;
   char* passport;
   char* country_code;
   char* address;
-  Timestamp* account_creation;
+  Timestamp account_creation;
   PayMethod pay_method;
   AccountStatus account_status;
 };
 
 User* create_user(char* id, char* name, char* email, char* phone_number,
-                  Timestamp* birth_date, Sex sex, char* passport,
-                  char* country_code, char* address,
-                  Timestamp* account_creation, PayMethod pay_method,
-                  AccountStatus account_status) {
+                  Timestamp birth_date, Sex sex, char* passport,
+                  char* country_code, char* address, Timestamp account_creation,
+                  PayMethod pay_method, AccountStatus account_status) {
   User* user = malloc(sizeof(struct user));
 
   user->id = g_strdup(id);
@@ -51,11 +50,9 @@ void free_user(void* user_ptr) {
   g_free(user->name);
   g_free(user->email);
   g_free(user->phone_number);
-  free(user->birth_date);
   g_free(user->passport);
   g_free(user->country_code);
   g_free(user->address);
-  free(user->account_creation);
   free(user);
 }
 
@@ -64,12 +61,12 @@ int parse_user_and_add_to_catalog(RowReader* reader, void* catalog) {
   char* user_name = reader_next_cell(reader);
   char* user_email = reader_next_cell(reader);
   char* user_phone_number = reader_next_cell(reader);
-  Timestamp* user_birth_date = parse_date(reader_next_cell(reader));
+  Timestamp user_birth_date = parse_date(reader_next_cell(reader));
   Sex user_sex = parse_sex(reader_next_cell(reader));
   char* user_passport = reader_next_cell(reader);
   char* user_country_code = reader_next_cell(reader);
   char* user_address = reader_next_cell(reader);
-  Timestamp* user_account_creation = parse_timestamp(reader_next_cell(reader));
+  Timestamp user_account_creation = parse_timestamp(reader_next_cell(reader));
   PayMethod user_pay_method = parse_payment_method(reader_next_cell(reader));
   AccountStatus user_account_status =
       parse_account_status(reader_next_cell(reader));

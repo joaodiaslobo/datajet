@@ -8,10 +8,10 @@ typedef struct flight Flight;
 
 Flight* create_flight(char* id, char* airline, char* plane_model,
                       int total_seats, char* origin, char* destination,
-                      Timestamp* schedule_departure_date,
-                      Timestamp* schedule_arrival_date,
-                      Timestamp* real_departure_date,
-                      Timestamp* real_arrival_date, char* pilot, char* copilot,
+                      Timestamp schedule_departure_date,
+                      Timestamp schedule_arrival_date,
+                      Timestamp real_departure_date,
+                      Timestamp real_arrival_date, char* pilot, char* copilot,
                       char* notes);
 
 void free_flight(void* flight_ptr);

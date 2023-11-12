@@ -5,15 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 
-int empty_error(char* error) {
-  if (error == NULL) {
-    return 0;
-  } else {
-    return 1;
-  }
-}
+bool is_empty_value(char* value) { return (strlen(value) == 0); }
 
-int invalid_date(char* date) {
+bool invalid_date(char* date) {
   char* temp = date;
   if (strlen(temp) == 10 && temp[4] == '/' && temp[7] == '/') {
     char* token;
@@ -36,7 +30,7 @@ int invalid_date(char* date) {
   return 1;
 }
 
-int invalid_timestamp(char* timestamp) {
+bool invalid_timestamp(char* timestamp) {
   if (strlen(timestamp) == 19 && timestamp[10] == ' ' && timestamp[13] == ':' &&
       timestamp[16] == ':') {
     char temp[11];
@@ -70,10 +64,34 @@ int invalid_timestamp(char* timestamp) {
   return 1;
 }
 
-int compare_date(char* start_date, char* end_date) {
-  return (parse_date(start_date) < (parse_date(end_date)));
+bool compare_date(char* start_date, char* end_date) {
+  return ((parse_date(start_date).date) < (parse_date(end_date).date));
 }
 
-int compare_timestamp(char* start_timestamp, char* end_timestamp) {
-  return (parse_timestamp(start_timestamp) < (parse_timestamp(end_timestamp)));
+bool compare_timestamp(char* start_timestamp, char* end_timestamp) {
+  return (((parse_timestamp(start_timestamp).date) <
+           (parse_timestamp(end_timestamp).date)) ||
+          (((parse_timestamp(start_timestamp).date) ==
+            (parse_timestamp(end_timestamp).date)) &&
+           ((parse_timestamp(start_timestamp).time) <
+            (parse_timestamp(end_timestamp).time))));
+}
+
+bool invalid_value_length(int length, char* value) {
+  return !((int)strlen(value) == length);
+}
+
+bool invalid_bool_value(char* value) {
+  for (int i = 0; i < (int)strlen(value); i++) tolower(value[i]);
+  return !(strcmp(value, "0") || strcmp(value, "f") || strcmp(value, "false") ||
+           strcmp(value, "1") || strcmp(value, "t") || strcmp(value, "true") ||
+           strcmp(value, ""));
+}
+
+bool invalid_positive_integer(char* value) {
+  int value_length = strlen(value);
+  for (int i = 0; i < value_length; i++) {
+    if (value[i] <= 48 || value[i] > 57) return 1;
+  }
+  return 0;
 }
