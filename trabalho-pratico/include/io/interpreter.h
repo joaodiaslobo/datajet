@@ -1,9 +1,10 @@
-#ifndef BATCH_H
-#define BATCH_H
+#ifndef INTERPRETER_H
+#define INTERPRETER_H
 
 #include "data/database.h"
 
-int batch_worker(char **argv, Database *database);
+#define OUTPUT_DIRECTORY "Resultados"
+#define OUTPUT_FILE_NAME "command%d_output.txt"
 
 void parse_and_execute_commands(char *query_commands_path, Database *database);
 

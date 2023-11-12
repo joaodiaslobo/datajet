@@ -4,3 +4,7 @@ programa-*
 
 # Datasets
 datasets/*
+dataset/*
+
+# Resultados
+Resultados/*
