@@ -4,7 +4,6 @@
 
 #include "data/catalogs/catalog_flight.h"
 #include "data/schemas/schema_data_types.h"
-#include "data/schemas/validation/flight_validation.h"
 #include "data/schemas/validation/generic_validation.h"
 #include "io/parsing/reader.h"
 

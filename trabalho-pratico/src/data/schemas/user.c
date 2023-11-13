@@ -5,6 +5,8 @@
 
 #include "data/catalogs/catalog_user.h"
 #include "data/schemas/schema_data_types.h"
+#include "data/schemas/validation/generic_validation.h"
+#include "data/schemas/validation/user_validation.h"
 #include "io/parsing/reader.h"
 
 struct user {
@@ -58,18 +60,48 @@ void free_user(void* user_ptr) {
 
 int parse_user_and_add_to_catalog(RowReader* reader, void* catalog) {
   char* user_id = reader_next_cell(reader);
+  if (is_empty_value(user_id)) return 1;
+
   char* user_name = reader_next_cell(reader);
+  if (is_empty_value(user_name)) return 1;
+
   char* user_email = reader_next_cell(reader);
+  if (invalid_email(user_email)) return 1;
+
   char* user_phone_number = reader_next_cell(reader);
-  Timestamp user_birth_date = parse_date(reader_next_cell(reader));
-  Sex user_sex = parse_sex(reader_next_cell(reader));
+  if (is_empty_value(user_phone_number)) return 1;
+
+  char* user_birth_date_string = reader_next_cell(reader);
+  if (invalid_date(user_birth_date_string)) return 1;
+  Timestamp user_birth_date = parse_date(user_birth_date_string);
+
+  char* user_sex_string = reader_next_cell(reader);
+  if (is_empty_value(user_sex_string)) return 1;
+  Sex user_sex = parse_sex(user_sex_string);
+
   char* user_passport = reader_next_cell(reader);
+  if (is_empty_value(user_passport)) return 1;
+
   char* user_country_code = reader_next_cell(reader);
+  if (invalid_value_length(2, user_country_code)) return 1;
+
   char* user_address = reader_next_cell(reader);
-  Timestamp user_account_creation = parse_timestamp(reader_next_cell(reader));
-  PayMethod user_pay_method = parse_payment_method(reader_next_cell(reader));
+  if (is_empty_value(user_address)) return 1;
+
+  char* user_account_creation_string = reader_next_cell(reader);
+  if (invalid_timestamp(user_account_creation_string)) return 1;
+  Timestamp user_account_creation =
+      parse_timestamp(user_account_creation_string);
+
+  char* user_pay_method_string = reader_next_cell(reader);
+  if (is_empty_value(user_pay_method_string)) return 1;
+  PayMethod user_pay_method = parse_payment_method(user_pay_method_string);
+
+  char* user_account_status_string = reader_next_cell(reader);
+  if (invalid_account_status(user_account_status_string)) return 1;
+
   AccountStatus user_account_status =
-      parse_account_status(reader_next_cell(reader));
+      parse_account_status(user_account_status_string);
 
   User* user = create_user(
       user_id, user_name, user_email, user_phone_number, user_birth_date,
