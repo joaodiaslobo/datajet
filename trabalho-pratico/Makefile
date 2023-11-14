@@ -1,3 +1,21 @@
+#START COPYRIGHT NOTICE
+
+#   Copyright 2023 Hélder Gomes, João Lobo, Rita Camacho
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
+#END COPYRIGHT NOTICE
+
 CC := gcc
 
 EXEC := programa-principal
@@ -8,6 +26,8 @@ FLAGS += $(shell pkg-config --cflags glib-2.0)
 
 SRC := $(shell find src/ -name "*.c")
 INCLUDES := $(shell find include/ -name "*.h")
+
+DOCS_DIRECTORY := docs
 
 BUILD_TYPE ?= release
 ifeq ($(BUILD_TYPE), debug)
@@ -51,8 +71,13 @@ $(BUILD_DIR_PATH)/%.o: %.c
 	@printf "$(BLUE)[COMPILER]$(WHITE) Compiling $(BLUE)$<$(WHITE).\n"
 	@$(CC) $(FLAGS) -c -o $@ $<
 
+.PHONY: clean-docs
+clean-docs:
+	@rm -rf $(DOCS_DIRECTORY)
+	@echo "$(GRAY)[CLEAN]$(WHITE) Documentation directory removed."
+
 .PHONY: clean
-clean:
+clean: clean-docs
 	@rm -rf build;
 	@rm -f programa-principal;
 	@printf "$(GRAY)[CLEAN]$(WHITE) Build directory removed.\n"
@@ -61,6 +86,12 @@ clean:
 format:
 	@clang-format --verbose -i $(SRC) $(INCLUDES)
 	@printf "$(PINK)[FORMATTER]$(WHITE) Formatted all available files.\n"
+
+.PHONY: docs
+docs:
+	@printf "$(PINK)[DOCS]$(WHITE) Generating documentation.\n"
+	@doxygen $(Doxyfile)
+	@printf "$(GREEN)[DOCS]$(WHITE) Documentation generated in $(GREEN)$(DOCDIR)/$(WHITE) directory.\n"
 
 place-build-on-root: build-release
 	@cp $(BUILD_DIR_PATH)/$(EXEC) programa-principal
