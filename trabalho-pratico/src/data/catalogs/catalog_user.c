@@ -3,28 +3,35 @@
 #include "data/schemas/user.h"
 
 struct catalogUser {
-  GPtrArray *users;
+  GHashTable *users;
 };
 
 CatalogUser *initialize_users_catalog() {
   CatalogUser *catalog = malloc(sizeof(struct catalogUser));
-  catalog->users = g_ptr_array_new_with_free_func(free_user);
+  catalog->users =
+      g_hash_table_new_full(g_str_hash, g_strcmp0, NULL, free_user);
 
   return catalog;
 }
 
 void free_users_catalog(CatalogUser *catalog) {
-  g_ptr_array_free(catalog->users, TRUE);
+  g_hash_table_destroy(catalog->users);
 
   free(catalog);
 }
 
-void insert_user(CatalogUser *catalog, User *user) {
-  g_ptr_array_add(catalog->users, user);
+void insert_user(CatalogUser *catalog, User *user, char *key) {
+  g_hash_table_insert(catalog->users, key, user);
 }
 
-int count_users(CatalogUser *catalog) { return catalog->users->len; }
+int count_users(CatalogUser *catalog) {
+  return g_hash_table_size(catalog->users);
+}
 
-User *catalog_get_user_by_id(CatalogUser *catalog, int user_id) {
-  return (User *)catalog->users->pdata[user_id];
+bool user_exists(CatalogUser *catalog, char *user_id) {
+  return g_hash_table_contains(catalog->users, user_id);
+}
+
+User *catalog_get_user_by_id(CatalogUser *catalog, char *user_id) {
+  return g_hash_table_lookup(catalog->users, user_id);
 }

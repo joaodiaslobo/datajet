@@ -18,7 +18,10 @@ Reservation* create_reservation(char* id, char* user_id, char* hotel_id,
 
 void free_reservation(void* reservation_ptr);
 
-int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog);
+int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog,
+                                         void* database);
+
+bool reservation_invalid_association(void* database, char* user_id);
 
 char* reservation_get_id(Reservation* reservation);
 

@@ -11,10 +11,12 @@ CatalogUser *initialize_users_catalog();
 
 void free_users_catalog(CatalogUser *catalog);
 
-void insert_user(CatalogUser *catalog, User *user);
+void insert_user(CatalogUser *catalog, User *user, char *key);
 
 int count_users(CatalogUser *catalog);
 
-User *catalog_get_user_by_id(CatalogUser *catalog, int user_id);
+bool user_exists(CatalogUser *catalog, char *user_id);
+
+User *catalog_get_user_by_id(CatalogUser *catalog, char *user_id);
 
 #endif

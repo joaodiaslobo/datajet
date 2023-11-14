@@ -8,6 +8,7 @@
 #include "data/schemas/schema_data_types.h"
 #include "data/schemas/validation/generic_validation.h"
 #include "data/schemas/validation/reservation_validation.h"
+#include "data/statistics/user_reservation.h"
 #include "io/parsing/reader.h"
 
 struct reservation {
@@ -53,12 +54,15 @@ Reservation* create_reservation(char* id, char* user_id, char* hotel_id,
   return reservation;
 }
 
-int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog) {
+int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog,
+                                         void* database) {
   char* reservation_id = reader_next_cell(reader);
   if (is_empty_value(reservation_id)) return 1;
 
   char* reservation_user_id = reader_next_cell(reader);
   if (is_empty_value(reservation_user_id)) return 1;
+
+  if (reservation_invalid_association(database, reservation_user_id)) return 1;
 
   char* reservation_hotel_id = reader_next_cell(reader);
   if (is_empty_value(reservation_hotel_id)) return 1;
@@ -115,6 +119,10 @@ int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog) {
   insert_reservation(catalog, reservation);
 
   return 0;
+}
+
+bool reservation_invalid_association(void* database, char* user_id) {
+  return !validate_reservation_user_association(database, user_id);
 }
 
 void free_reservation(void* reservation_ptr) {

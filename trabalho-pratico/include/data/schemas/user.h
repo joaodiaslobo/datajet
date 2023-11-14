@@ -15,7 +15,8 @@ User* create_user(char* id, char* name, char* email, char* phone_number,
 
 void free_user(void* user_ptr);
 
-int parse_user_and_add_to_catalog(RowReader* reader, void* catalog);
+int parse_user_and_add_to_catalog(RowReader* reader, void* catalog,
+                                  void* database);
 
 char* user_get_id(User* user);
 

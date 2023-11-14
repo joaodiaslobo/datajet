@@ -46,22 +46,11 @@ int csv_populate_database(Database *database, char *csv_dataset_path) {
   char *users_csv_path = build_full_file_path(csv_dataset_path, "users.csv");
   FILE *users_file = open_file(users_csv_path);
 
-  read_csv(users_file, parse_user_and_add_to_catalog, database->userCatalog);
+  read_csv(users_file, parse_user_and_add_to_catalog, database->userCatalog,
+           database);
 
   close_file(users_file);
   free(users_csv_path);
-
-  /* Load flights csv dataset */
-
-  char *flights_csv_path =
-      build_full_file_path(csv_dataset_path, "flights.csv");
-  FILE *flights_file = open_file(flights_csv_path);
-
-  read_csv(flights_file, parse_flight_and_add_to_catalog,
-           database->flightCatalog);
-
-  close_file(flights_file);
-  free(flights_csv_path);
 
   /* Load reservations csv dataset */
 
@@ -70,10 +59,22 @@ int csv_populate_database(Database *database, char *csv_dataset_path) {
   FILE *reservations_file = open_file(reservations_csv_path);
 
   read_csv(reservations_file, parse_reservation_and_add_to_catalog,
-           database->reservationCatalog);
+           database->reservationCatalog, database);
 
   close_file(reservations_file);
   free(reservations_csv_path);
+
+  /* Load flights csv dataset */
+
+  char *flights_csv_path =
+      build_full_file_path(csv_dataset_path, "flights.csv");
+  FILE *flights_file = open_file(flights_csv_path);
+
+  read_csv(flights_file, parse_flight_and_add_to_catalog,
+           database->flightCatalog, database);
+
+  close_file(flights_file);
+  free(flights_csv_path);
 
   /* Load passengers csv dataset */
 
@@ -82,7 +83,10 @@ int csv_populate_database(Database *database, char *csv_dataset_path) {
   FILE *passengers_file = open_file(passengers_csv_path);
 
   read_csv(passengers_file, parse_passenger_and_add_to_catalog,
-           database->passengerCatalog);
+           database->passengerCatalog, database);
+
+  /* Validate invalid field associations */
+  validate_flights(database->flightCatalog, database);
 
   close_file(passengers_file);
   free(passengers_csv_path);

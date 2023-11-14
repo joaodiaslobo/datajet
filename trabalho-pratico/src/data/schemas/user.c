@@ -58,7 +58,8 @@ void free_user(void* user_ptr) {
   free(user);
 }
 
-int parse_user_and_add_to_catalog(RowReader* reader, void* catalog) {
+int parse_user_and_add_to_catalog(RowReader* reader, void* catalog,
+                                  void* database) {
   char* user_id = reader_next_cell(reader);
   if (is_empty_value(user_id)) return 1;
 
@@ -93,6 +94,8 @@ int parse_user_and_add_to_catalog(RowReader* reader, void* catalog) {
   Timestamp user_account_creation =
       parse_timestamp(user_account_creation_string);
 
+  if (user_birth_date.date >= user_account_creation.date) return 1;
+
   char* user_pay_method_string = reader_next_cell(reader);
   if (is_empty_value(user_pay_method_string)) return 1;
   PayMethod user_pay_method = parse_payment_method(user_pay_method_string);
@@ -103,12 +106,15 @@ int parse_user_and_add_to_catalog(RowReader* reader, void* catalog) {
   AccountStatus user_account_status =
       parse_account_status(user_account_status_string);
 
+  char user_key[strlen(user_id) + 1];
+  strcpy(user_key, user_id);
+
   User* user = create_user(
       user_id, user_name, user_email, user_phone_number, user_birth_date,
       user_sex, user_passport, user_country_code, user_address,
       user_account_creation, user_pay_method, user_account_status);
 
-  insert_user(catalog, user);
+  insert_user(catalog, user, user_key);
 
   return 0;
 }

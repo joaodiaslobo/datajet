@@ -5,42 +5,31 @@
 
 #include "data/catalogs/catalog_passenger.h"
 #include "data/schemas/schema_data_types.h"
+#include "data/schemas/validation/generic_validation.h"
+#include "data/statistics/user_flight.h"
 #include "io/parsing/reader.h"
 
-struct passenger {
-  char* flight_id;
-  char* user_id;
-};
-
-Passenger* create_passenger(char* flight_id, char* user_id) {
-  Passenger* passenger = malloc(sizeof(struct passenger));
-
-  passenger->flight_id = g_strdup(flight_id);
-  passenger->user_id = g_strdup(user_id);
-
-  return passenger;
-}
-
-void free_passenger(void* passenger_ptr) {
-  Passenger* passenger = (Passenger*)passenger_ptr;
-  g_free(passenger->flight_id);
-  g_free(passenger->user_id);
-  free(passenger);
-}
-
-int parse_passenger_and_add_to_catalog(RowReader* reader, void* catalog) {
+int parse_passenger_and_add_to_catalog(RowReader* reader, void* catalog,
+                                       void* database) {
   char* passenger_flight_id = reader_next_cell(reader);
-  char* passenger_user_id = reader_next_cell(reader);
-  Passenger* passenger =
-      create_passenger(passenger_flight_id, passenger_user_id);
+  if (is_empty_value(passenger_flight_id)) return 1;
+  int flight_id_int = parse_number(passenger_flight_id);
 
-  insert_passenger(catalog, passenger);
+  char* passenger_user_id = reader_next_cell(reader);
+  if (is_empty_value(passenger_user_id)) return 1;
+
+  if (passenger_invalid_association(database, passenger_user_id, flight_id_int))
+    return 1;
+
+  char passenger_user_key[strlen(passenger_user_id) + 1];
+  strcpy(passenger_user_key, passenger_user_id);
+
+  insert_passenger(catalog, flight_id_int, passenger_user_key);
 
   return 0;
 }
 
-char* passenger_get_user_id(Passenger* passenger) { return passenger->user_id; }
-
-char* passenger_get_flight_id(Passenger* passenger) {
-  return passenger->flight_id;
+bool passenger_invalid_association(void* database, char* user_id,
+                                   int flight_id) {
+  return !validate_passenger_association(database, user_id, flight_id);
 }

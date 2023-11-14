@@ -8,7 +8,8 @@
 #define BUFFER_SIZE 1024
 #define DELIMITER ';'
 
-void read_csv(FILE *file, EntityLineParser *entity_line_parser, void *catalog) {
+void read_csv(FILE *file, EntityLineParser *entity_line_parser, void *catalog,
+              void *database) {
   char buffer[BUFFER_SIZE];
 
   if (fgets(buffer, BUFFER_SIZE, file) == NULL) return;
@@ -23,7 +24,7 @@ void read_csv(FILE *file, EntityLineParser *entity_line_parser, void *catalog) {
 
     reader_set_row(reader, buffer);
 
-    entity_line_parser(reader, catalog);
+    entity_line_parser(reader, catalog, database);
   }
 
   free_row_reader(reader);

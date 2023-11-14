@@ -16,7 +16,10 @@ Flight* create_flight(char* id, char* airline, char* plane_model,
 
 void free_flight(void* flight_ptr);
 
-int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog);
+int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog,
+                                    void* database);
+
+void validate_flights(void* catalog, void* database);
 
 char* flight_get_id(Flight* flight);
 

@@ -32,7 +32,7 @@ Timestamp parse_timestamp(char *timestamp_string) {
   date += (timestamp_string[5] - '0') * 1000;
   date += (timestamp_string[6] - '0') * 100;
 
-  date = (timestamp_string[8] - '0') * 10;
+  date += (timestamp_string[8] - '0') * 10;
   date += (timestamp_string[9] - '0');
 
   time += (timestamp_string[11] - '0') * 100000;
@@ -58,7 +58,7 @@ Timestamp parse_date(char *date_string) {
   date += (date_string[5] - '0') * 1000;
   date += (date_string[6] - '0') * 100;
 
-  date = (date_string[8] - '0') * 10;
+  date += (date_string[8] - '0') * 10;
   date += (date_string[9] - '0');
 
   return (Timestamp){.date = date, .time = 0};

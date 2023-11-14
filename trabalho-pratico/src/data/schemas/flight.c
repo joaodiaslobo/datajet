@@ -5,6 +5,7 @@
 #include "data/catalogs/catalog_flight.h"
 #include "data/schemas/schema_data_types.h"
 #include "data/schemas/validation/generic_validation.h"
+#include "data/statistics/user_flight.h"
 #include "io/parsing/reader.h"
 
 struct flight {
@@ -62,9 +63,12 @@ void free_flight(void* flight_ptr) {
   free(flight);
 }
 
-int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog) {
+int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog,
+                                    void* database) {
   char* flight_id = reader_next_cell(reader);
   if (is_empty_value(flight_id)) return 1;
+  int flight_id_int = parse_number(flight_id);
+  gpointer flight_key = GINT_TO_POINTER(flight_id_int);
 
   char* flight_airline = reader_next_cell(reader);
   if (is_empty_value(flight_airline)) return 1;
@@ -73,6 +77,7 @@ int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog) {
   if (is_empty_value(flight_plane_model)) return 1;
 
   char* flight_total_seats_string = reader_next_cell(reader);
+  if (invalid_positive_integer(flight_total_seats_string)) return 1;
   int flight_total_seats = parse_number(flight_total_seats_string);
 
   char* flight_origin = reader_next_cell(reader);
@@ -128,10 +133,15 @@ int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog) {
       flight_schedule_arrival_date, flight_real_departure_date,
       flight_real_arrival_date, flight_pilot, flight_copilot, flight_notes);
 
-  insert_flight(catalog, flight);
-
+  insert_flight(catalog, flight, flight_key);
   return 0;
 }
+
+void validate_flights(void* catalog, void* database) {
+  foreach_flight_remove(catalog, validate_flight_passenger_count, database);
+}
+
+int flight_get_total_seats(Flight* flight) { return flight->total_seats; }
 
 char* flight_get_id(Flight* flight) { return g_strdup(flight->id); }
 
@@ -140,5 +150,3 @@ char* flight_get_airline(Flight* flight) { return g_strdup(flight->airline); }
 char* flight_get_plane_model(Flight* flight) {
   return g_strdup(flight->plane_model);
 }
-
-int flight_get_total_seats(Flight* flight) { return flight->total_seats; }
