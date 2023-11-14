@@ -91,13 +91,12 @@ void write_entity_table(RowWriter *writer, int fields, va_list args) {
 
   sprintf(line + strlen(line), "--- %d ---\n", writer->row + 1);
   for (int i = 0; i < fields; i++) {
-    if (i > 0) strcat(line, "\n");
-
     char value[VALUE_BUFFER_SIZE];
     sprintf(value, writer->format[i], va_arg(args, void *));
     strcat(line, writer->field_names[i]);
     strcat(line, ": ");
     strcat(line, value);
+    strcat(line, "\n");
   }
 
   writer->row++;

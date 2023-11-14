@@ -168,9 +168,9 @@ int query_reservation_parameters_by_id(RowWriter *writer, Database *database,
       g_strdup_printf("%.3f", reservation_total_price);
 
   char *format[] = {"%s", "%s", "%d", "%s", "%s", "%s", "%d", "%s"};
-  char *fields[] = {"hotel_id",         "hotel_name", "hotel_stars",
-                    "begin_date",       "end_date",   "includes_breakfast",
-                    "number_of_nights", "total_price"};
+  char *fields[] = {"hotel_id",   "hotel_name", "hotel_stars",
+                    "begin_date", "end_date",   "includes_breakfast",
+                    "nights",     "total_price"};
 
   row_writer_set_formatting(writer, format);
   row_writer_set_field_names(writer, fields);
