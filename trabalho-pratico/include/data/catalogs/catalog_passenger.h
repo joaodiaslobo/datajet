@@ -17,6 +17,8 @@ void insert_passenger(CatalogPassenger *catalog, int flight_id, char *user_id);
 
 int count_flight_users(CatalogPassenger *catalog, int flight_id);
 
+int count_user_flights(CatalogPassenger *catalog, char *user_id);
+
 void remove_passengers_by_user_id(CatalogPassenger *catalog, char *user_id);
 
 void remove_passengers_by_flight_id(CatalogPassenger *catalog, int flight_id);

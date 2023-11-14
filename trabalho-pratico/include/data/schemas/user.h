@@ -26,6 +26,20 @@ char* user_get_email(User* user);
 
 char* user_get_phone_number(User* user);
 
-char* user_country_code(User* user);
+Timestamp user_get_birth_date(User* user);
+
+Sex user_get_sex(User* user);
+
+char* user_get_passport(User* user);
+
+char* user_get_country_code(User* user);
+
+char* user_get_address(User* user);
+
+Timestamp user_get_account_creation(User* user);
+
+PayMethod user_get_pay_method(User* user);
+
+AccountStatus user_get_account_status(User* user);
 
 #endif

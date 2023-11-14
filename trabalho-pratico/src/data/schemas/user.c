@@ -127,4 +127,22 @@ char* user_get_email(User* user) { return g_strdup(user->email); }
 
 char* user_get_phone_number(User* user) { return g_strdup(user->phone_number); }
 
-char* user_country_code(User* user) { return g_strdup(user->country_code); }
+Timestamp user_get_birth_date(User* user) { return user->birth_date; }
+
+Sex user_get_sex(User* user) { return user->sex; }
+
+char* user_get_passport(User* user) { return g_strdup(user->passport); }
+
+char* user_get_country_code(User* user) { return g_strdup(user->country_code); }
+
+char* user_get_address(User* user) { return g_strdup(user->address); }
+
+Timestamp user_get_account_creation(User* user) {
+  return user->account_creation;
+}
+
+PayMethod user_get_pay_method(User* user) { return user->pay_method; }
+
+AccountStatus user_get_account_status(User* user) {
+  return user->account_status;
+}

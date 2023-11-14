@@ -141,8 +141,6 @@ void validate_flights(void* catalog, void* database) {
   foreach_flight_remove(catalog, validate_flight_passenger_count, database);
 }
 
-int flight_get_total_seats(Flight* flight) { return flight->total_seats; }
-
 char* flight_get_id(Flight* flight) { return g_strdup(flight->id); }
 
 char* flight_get_airline(Flight* flight) { return g_strdup(flight->airline); }
@@ -150,3 +148,33 @@ char* flight_get_airline(Flight* flight) { return g_strdup(flight->airline); }
 char* flight_get_plane_model(Flight* flight) {
   return g_strdup(flight->plane_model);
 }
+
+int flight_get_total_seats(Flight* flight) { return flight->total_seats; }
+
+char* flight_get_origin(Flight* flight) { return g_strdup(flight->origin); }
+
+char* flight_get_destination(Flight* flight) {
+  return g_strdup(flight->destination);
+}
+
+Timestamp flight_get_schedule_departure_date(Flight* flight) {
+  return flight->schedule_departure_date;
+}
+
+Timestamp flight_get_schedule_arrival_date(Flight* flight) {
+  return flight->schedule_arrival_date;
+}
+
+Timestamp flight_get_real_departure_date(Flight* flight) {
+  return flight->real_departure_date;
+}
+
+Timestamp flight_get_real_arrival_date(Flight* flight) {
+  return flight->real_arrival_date;
+}
+
+char* flight_get_pilot(Flight* flight) { return g_strdup(flight->pilot); }
+
+char* flight_get_copilot(Flight* flight) { return g_strdup(flight->copilot); }
+
+char* flight_get_notes(Flight* flight) { return g_strdup(flight->notes); }

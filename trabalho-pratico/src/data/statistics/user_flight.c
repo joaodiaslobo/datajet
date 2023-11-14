@@ -40,3 +40,13 @@ void remove_user_passengers(Database *database, char *user_id) {
   CatalogPassenger *catalog = database_get_passenger_catalog(database);
   remove_passengers_by_user_id(catalog, user_id);
 }
+
+int get_count_of_flights_belonging_to_user(Database *database, char *user_id) {
+  CatalogPassenger *catalog = database_get_passenger_catalog(database);
+  return count_user_flights(catalog, user_id);
+}
+
+int get_count_of_users_belonging_to_flight(Database *database, int flight_id) {
+  CatalogPassenger *catalog = database_get_passenger_catalog(database);
+  return count_flight_users(catalog, flight_id);
+}

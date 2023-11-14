@@ -100,4 +100,6 @@ bool invalid_bool_value(char* value);
  */
 bool invalid_positive_integer(char* value);
 
+bool invalid_integer(char* value);
+
 #endif

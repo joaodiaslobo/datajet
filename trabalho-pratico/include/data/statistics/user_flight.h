@@ -15,4 +15,8 @@ void remove_flight_passengers(Database *database, int flight_id);
 
 void remove_user_passengers(Database *database, char *user_id);
 
+int get_count_of_flights_belonging_to_user(Database *database, char *user_id);
+
+int get_count_of_users_belonging_to_flight(Database *database, int flight_id);
+
 #endif

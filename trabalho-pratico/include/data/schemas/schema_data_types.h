@@ -16,13 +16,27 @@ typedef enum account_status { ACTIVE = 0, INACTIVE = 1 } AccountStatus;
 
 Sex parse_sex(char *sex);
 
+char *sex_to_string(Sex sex);
+
 PayMethod parse_payment_method(char *payment);
 
 AccountStatus parse_account_status(char *status);
 
 Timestamp parse_timestamp(char *timestamp_string);
 
+char *timestamp_to_string(Timestamp timestamp);
+
+char *date_to_string(Timestamp timestamp);
+
 Timestamp parse_date(char *date_string);
+
+int timestamp_get_difference_in_days(Timestamp timestamp1,
+                                     Timestamp timestamp2);
+
+int difference_in_seconds_between_timestamps(Timestamp timestamp1,
+                                             Timestamp timestamp2);
+
+int difference_in_years_between_dates(int date1, int date2);
 
 int parse_number(char *number_string);
 

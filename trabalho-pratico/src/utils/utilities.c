@@ -1,6 +1,8 @@
 #include "utils/utilities.h"
 
-void trim_leading_whitespace(char* string) {
+#include <stdbool.h>
+
+void trim_leading_whitespace(char *string) {
   int index = 0;
   for (; string[index] == ' ' || string[index] == '\t' || string[index] == '\n';
        index++)
@@ -13,4 +15,9 @@ void trim_leading_whitespace(char* string) {
     }
     string[i] = '\0';
   }
+}
+
+bool starts_with(char *string, char *prefix) {
+  if (strncmp(string, prefix, strlen(prefix)) == 0) return 1;
+  return 0;
 }

@@ -59,6 +59,9 @@ int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog,
   char* reservation_id = reader_next_cell(reader);
   if (is_empty_value(reservation_id)) return 1;
 
+  int reservation_id_int = parse_number(reservation_id + 4);
+  gpointer reservation_key = GINT_TO_POINTER(reservation_id_int);
+
   char* reservation_user_id = reader_next_cell(reader);
   if (is_empty_value(reservation_user_id)) return 1;
 
@@ -116,7 +119,7 @@ int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog,
       reservation_price_per_night, reservation_includes_breakfast,
       reservation_room_details, reservation_rating, reservation_comment);
 
-  insert_reservation(catalog, reservation);
+  insert_reservation(catalog, reservation, reservation_key);
 
   return 0;
 }
@@ -141,6 +144,14 @@ char* reservation_get_id(Reservation* reservation) {
   return g_strdup(reservation->id);
 }
 
+char* reservation_get_user_id(Reservation* reservation) {
+  return g_strdup(reservation->user_id);
+}
+
+char* reservation_get_hotel_id(Reservation* reservation) {
+  return g_strdup(reservation->hotel_id);
+}
+
 char* reservation_get_hotel_name(Reservation* reservation) {
   return g_strdup(reservation->hotel_name);
 }
@@ -149,6 +160,57 @@ int reservation_get_hotel_stars(Reservation* reservation) {
   return reservation->hotel_stars;
 }
 
+int reservation_get_city_tax(Reservation* reservation) {
+  return reservation->city_tax;
+}
+
+char* reservation_get_address(Reservation* reservation) {
+  return g_strdup(reservation->address);
+}
+
+Timestamp reservation_get_begin_date(Reservation* reservation) {
+  return reservation->begin_date;
+}
+
+Timestamp reservation_get_end_date(Reservation* reservation) {
+  return reservation->end_date;
+}
+
 int reservation_get_price_per_night(Reservation* reservation) {
   return reservation->price_per_night;
+}
+
+bool reservation_get_includes_breakfast(Reservation* reservation) {
+  return reservation->includes_breakfast;
+}
+
+char* reservation_get_room_details(Reservation* reservation) {
+  return g_strdup(reservation->room_details);
+}
+
+int reservation_get_rating(Reservation* reservation) {
+  return reservation->rating;
+}
+
+char* reservation_get_comment(Reservation* reservation) {
+  return g_strdup(reservation->comment);
+}
+
+int reservation_get_number_of_nights(Reservation* reservation) {
+  return timestamp_get_difference_in_days(reservation->begin_date,
+                                          reservation->end_date);
+}
+
+double reservation_get_total_price(Reservation* reservation) {
+  int reservation_number_of_nights =
+      reservation_get_number_of_nights(reservation);
+  int reservation_price_per_night =
+      reservation_get_price_per_night(reservation);
+  int reservation_city_tax = reservation_get_city_tax(reservation);
+
+  double reservation_gross_price =
+      reservation_price_per_night * reservation_number_of_nights;
+
+  return reservation_gross_price +
+         (reservation_gross_price / 100) * reservation_city_tax;
 }

@@ -4,11 +4,19 @@
 #include "data/database.h"
 #include "io/writing/writer.h"
 
+#define SYSTEM_CURRENT_DATE 20231001
+
 int execute_query_and_save_result(RowWriter *writer, Database *database,
                                   int query_id, char *query_args);
 
-int query_find_entity_by_id(RowWriter *writer, Database *database,
-                            char *query_args);
+int query_entity_parameters_by_id(RowWriter *writer, Database *database,
+                                  char *query_args);
+
+int query_user_parameters_by_id(RowWriter *writer, Database *database,
+                                char *user_id);
+
+int query_flight_parameters_by_id(RowWriter *writer, Database *database,
+                                  char *query_args);
 
 int query_list_user_association(RowWriter *writer, Database *database,
                                 char *query_args);

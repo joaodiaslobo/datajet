@@ -116,3 +116,12 @@ bool invalid_positive_integer(char* value) {
   }
   return false;
 }
+
+bool invalid_integer(char* value) {
+  int value_length = strlen(value);
+
+  for (int i = 0; i < value_length; i++) {
+    if (value[i] < 48 || value[i] > 57) return true;
+  }
+  return false;
+}

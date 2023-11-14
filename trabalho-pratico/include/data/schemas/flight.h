@@ -29,4 +29,22 @@ char* flight_get_plane_model(Flight* flight);
 
 int flight_get_total_seats(Flight* flight);
 
+char* flight_get_origin(Flight* flight);
+
+char* flight_get_destination(Flight* flight);
+
+Timestamp flight_get_schedule_departure_date(Flight* flight);
+
+Timestamp flight_get_schedule_arrival_date(Flight* flight);
+
+Timestamp flight_get_real_departure_date(Flight* flight);
+
+Timestamp flight_get_real_arrival_date(Flight* flight);
+
+char* flight_get_pilot(Flight* flight);
+
+char* flight_get_copilot(Flight* flight);
+
+char* flight_get_notes(Flight* flight);
+
 #endif

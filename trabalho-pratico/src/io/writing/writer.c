@@ -68,15 +68,13 @@ void write_entity_csv(RowWriter *writer, int fields, va_list args) {
   char line[BUFFER_SIZE] = "";
   char formatting[BUFFER_SIZE] = "";
 
-  if (writer->row > 0) {
-    strcat(formatting, "\n");
-  }
-
   for (int i = 0; i < fields - 1; i++) {
     strcat(formatting, writer->format[i]);
     strcat(formatting, ";");
   }
+
   strcat(formatting, writer->format[fields - 1]);
+  strcat(formatting, "\n");
 
   vsnprintf(line, BUFFER_SIZE, formatting, args);
 

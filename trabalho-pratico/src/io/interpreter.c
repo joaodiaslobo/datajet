@@ -15,7 +15,7 @@ void parse_and_execute_commands(char *query_commands_path, Database *database) {
   int command_id = 0;
   if (commands_file == NULL) return;
 
-  char command[BUFFER_SIZE];
+  char command[BUFFER_SIZE] = "";
   while (fgets(command, BUFFER_SIZE, commands_file) != NULL) {
     int query_id;
     char command_args[BUFFER_SIZE] = " ";
