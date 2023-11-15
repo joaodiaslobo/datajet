@@ -86,7 +86,7 @@ void write_entity_csv(RowWriter *writer, int fields, va_list args) {
 void write_entity_table(RowWriter *writer, int fields, va_list args) {
   char line[BUFFER_SIZE] = "";
   if (writer->row > 0) {
-    strcat(line, "\n\n");
+    strcat(line, "\n");
   }
 
   sprintf(line + strlen(line), "--- %d ---\n", writer->row + 1);

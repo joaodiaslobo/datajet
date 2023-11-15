@@ -20,10 +20,14 @@ int count_reservations(CatalogReservation *catalog);
 
 int count_user_reservations(CatalogReservation *catalog, char *user_id);
 
+GPtrArray *get_hotel_reservations(CatalogReservation *catalog, char *hotel_id);
+
 Reservation *get_user_reservation_by_index(CatalogReservation *catalog,
                                            char *user_id, int index);
 
 Reservation *catalog_get_reservation_by_id(CatalogReservation *catalog,
                                            int reservation_id);
+
+int compare_reservations_array_elements_by_begin_date(gpointer a, gpointer b);
 
 #endif

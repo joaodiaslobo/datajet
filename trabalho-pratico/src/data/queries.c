@@ -1,5 +1,6 @@
 #include "data/queries.h"
 
+#include <glib.h>
 #include <stdio.h>
 
 #include "data/catalogs/catalog_reservation.h"
@@ -204,8 +205,47 @@ int query_calculate_average_hotel_rating(RowWriter *writer, Database *database,
 
 int query_list_hotel_reservations(RowWriter *writer, Database *database,
                                   char *query_args) {
-  printf("Query 4 not implemented.\n");
-  return -1;
+  char *format[] = {"%s", "%s", "%s", "%s", "%d", "%s"};
+  char *fields[] = {"id",      "begin_date", "end_date",
+                    "user_id", "rating",     "total_price"};
+
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  CatalogReservation *catalog = database_get_reservation_catalog(database);
+  GPtrArray *reservations = get_hotel_reservations(catalog, query_args);
+  int reservations_count = reservations->len;
+  g_ptr_array_sort(reservations,
+                   compare_reservations_array_elements_by_begin_date);
+
+  for (int i = 0; i < reservations_count; i++) {
+    Reservation *reservation = g_ptr_array_index(reservations, i);
+
+    char *reservation_id = reservation_get_id(reservation);
+    Timestamp reservation_begin_date = reservation_get_begin_date(reservation);
+    char *reservation_begin_date_string =
+        date_to_string(reservation_begin_date);
+    Timestamp reservation_end_date = reservation_get_end_date(reservation);
+    char *reservation_end_date_string = date_to_string(reservation_end_date);
+    char *reservation_user_id = reservation_get_user_id(reservation);
+    int reservation_rating = reservation_get_rating(reservation);
+    double reservation_total_price = reservation_get_total_price(reservation);
+    char *reservation_total_price_string =
+        g_strdup_printf("%.3f", reservation_total_price);
+
+    write_entity_values(writer, 6, reservation_id,
+                        reservation_begin_date_string,
+                        reservation_end_date_string, reservation_user_id,
+                        reservation_rating, reservation_total_price_string);
+
+    g_free(reservation_id);
+    g_free(reservation_begin_date_string);
+    g_free(reservation_end_date_string);
+    g_free(reservation_user_id);
+    g_free(reservation_total_price_string);
+  }
+
+  return 0;
 }
 
 int query_list_airport_flights_between_dates(RowWriter *writer,
