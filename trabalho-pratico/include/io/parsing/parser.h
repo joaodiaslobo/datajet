@@ -8,9 +8,11 @@
 
 typedef int(EntityLineParser)(RowReader *, void *, void *);
 
-typedef int(OnEntityParserValidationFailed)(RowReader *, Database *);
+typedef void(WriteEntityValidationOutput)(FILE *, char *);
 
-void read_csv(FILE *file, EntityLineParser *entity_line_parser, void *catalog,
-              void *database);
+void read_csv(FILE *input_file, FILE *output_file,
+              EntityLineParser *entity_line_parser,
+              WriteEntityValidationOutput *write_entity_validation_output,
+              void *catalog, void *database);
 
 #endif

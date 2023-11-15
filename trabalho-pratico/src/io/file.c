@@ -23,6 +23,19 @@ FILE *open_file(char *path) {
   return file;
 }
 
+void write_data_to_file(FILE *file, char *data) { fprintf(file, "%s", data); }
+
+FILE *create_file_to_append(char *path) {
+  // Create file if it doesn't exist, or clear file if it exists.
+  FILE *new_file = fopen(path, "w");
+  fputs("", new_file);
+  fclose(new_file);
+
+  // Open for appending.
+  FILE *file = fopen(path, "a");
+  return file;
+}
+
 void close_file(FILE *file) { fclose(file); }
 
 char *build_full_file_path(char *folder, char *file_name) {

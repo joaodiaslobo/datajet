@@ -7,6 +7,10 @@ typedef struct fileBuffer FileBuffer;
 
 FILE *open_file(char *path);
 
+FILE *create_file_to_append(char *path);
+
+void write_data_to_file(FILE *file, char *data);
+
 void close_file(FILE *file);
 
 char *build_full_file_path(char *folder, char *file_name);

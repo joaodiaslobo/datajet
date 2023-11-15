@@ -46,11 +46,17 @@ int csv_populate_database(Database *database, char *csv_dataset_path) {
   char *users_csv_path = build_full_file_path(csv_dataset_path, "users.csv");
   FILE *users_file = open_file(users_csv_path);
 
-  read_csv(users_file, parse_user_and_add_to_catalog, database->userCatalog,
-           database);
+  char *invalid_users_csv_path =
+      build_full_file_path(OUTPUT_DIRECTORY, "users_errors.csv");
+  FILE *invalid_users_file = create_file_to_append(invalid_users_csv_path);
+
+  read_csv(users_file, invalid_users_file, parse_user_and_add_to_catalog,
+           write_data_to_file, database->userCatalog, database);
 
   close_file(users_file);
+  close_file(invalid_users_file);
   free(users_csv_path);
+  free(invalid_users_csv_path);
 
   /* Load reservations csv dataset */
 
@@ -58,11 +64,19 @@ int csv_populate_database(Database *database, char *csv_dataset_path) {
       build_full_file_path(csv_dataset_path, "reservations.csv");
   FILE *reservations_file = open_file(reservations_csv_path);
 
-  read_csv(reservations_file, parse_reservation_and_add_to_catalog,
+  char *invalid_reservations_csv_path =
+      build_full_file_path(OUTPUT_DIRECTORY, "reservations_errors.csv");
+  FILE *invalid_reservations_file =
+      create_file_to_append(invalid_reservations_csv_path);
+
+  read_csv(reservations_file, invalid_reservations_file,
+           parse_reservation_and_add_to_catalog, write_data_to_file,
            database->reservationCatalog, database);
 
   close_file(reservations_file);
+  close_file(invalid_reservations_file);
   free(reservations_csv_path);
+  free(invalid_reservations_csv_path);
 
   /* Load flights csv dataset */
 
@@ -70,11 +84,17 @@ int csv_populate_database(Database *database, char *csv_dataset_path) {
       build_full_file_path(csv_dataset_path, "flights.csv");
   FILE *flights_file = open_file(flights_csv_path);
 
-  read_csv(flights_file, parse_flight_and_add_to_catalog,
-           database->flightCatalog, database);
+  char *invalid_flights_csv_path =
+      build_full_file_path(OUTPUT_DIRECTORY, "flights_errors.csv");
+  FILE *invalid_flights_file = create_file_to_append(invalid_flights_csv_path);
+
+  read_csv(flights_file, invalid_flights_file, parse_flight_and_add_to_catalog,
+           write_data_to_file, database->flightCatalog, database);
 
   close_file(flights_file);
+  close_file(invalid_flights_file);
   free(flights_csv_path);
+  free(invalid_flights_csv_path);
 
   /* Load passengers csv dataset */
 
@@ -82,14 +102,22 @@ int csv_populate_database(Database *database, char *csv_dataset_path) {
       build_full_file_path(csv_dataset_path, "passengers.csv");
   FILE *passengers_file = open_file(passengers_csv_path);
 
-  read_csv(passengers_file, parse_passenger_and_add_to_catalog,
+  char *invalid_passengers_csv_path =
+      build_full_file_path(OUTPUT_DIRECTORY, "passengers_errors.csv");
+  FILE *invalid_passengers_file =
+      create_file_to_append(invalid_passengers_csv_path);
+
+  read_csv(passengers_file, invalid_passengers_file,
+           parse_passenger_and_add_to_catalog, write_data_to_file,
            database->passengerCatalog, database);
+
+  close_file(passengers_file);
+  close_file(invalid_passengers_file);
+  free(passengers_csv_path);
+  free(invalid_passengers_csv_path);
 
   /* Validate invalid field associations */
   validate_flights(database->flightCatalog, database);
-
-  close_file(passengers_file);
-  free(passengers_csv_path);
 
   return 0;
 }

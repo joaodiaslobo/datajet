@@ -109,6 +109,7 @@ bool invalid_bool_value(char* value) {
 bool invalid_positive_integer(char* value) {
   int value_length = strlen(value);
 
+  if (value_length == 0) return true;
   if (value[0] == 48) return true;
 
   for (int i = 0; i < value_length; i++) {
@@ -120,6 +121,7 @@ bool invalid_positive_integer(char* value) {
 bool invalid_integer(char* value) {
   int value_length = strlen(value);
 
+  if (value_length == 0) return true;
   for (int i = 0; i < value_length; i++) {
     if (value[i] < 48 || value[i] > 57) return true;
   }

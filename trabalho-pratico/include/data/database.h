@@ -6,6 +6,8 @@
 #include "catalogs/catalog_reservation.h"
 #include "catalogs/catalog_user.h"
 
+#define OUTPUT_DIRECTORY "Resultados"
+
 typedef struct database Database;
 
 Database *initialize_database();
