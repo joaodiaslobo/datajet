@@ -3,6 +3,7 @@
 #include <glib.h>
 #include <stdio.h>
 
+#include "data/catalogs/catalog_passenger.h"
 #include "data/catalogs/catalog_reservation.h"
 #include "data/catalogs/catalog_user.h"
 #include "data/database.h"
@@ -18,7 +19,7 @@
 
 static int (*query_functions[])(RowWriter *, Database *, char *) = {
     query_entity_parameters_by_id,
-    query_list_user_association,
+    query_list_user_associations,
     query_calculate_average_hotel_rating,
     query_list_hotel_reservations,
     query_list_airport_flights_between_dates,
@@ -191,10 +192,179 @@ int query_reservation_parameters_by_id(RowWriter *writer, Database *database,
   return 0;
 }
 
-int query_list_user_association(RowWriter *writer, Database *database,
-                                char *query_args) {
-  printf("Query 2 not implemented.\n");
-  return -1;
+int query_list_user_associations(RowWriter *writer, Database *database,
+                                 char *query_args) {
+  if (ends_with(query_args, "flights")) {
+    query_args[strlen(query_args) - 8] = '\0';
+    return query_list_user_flights(writer, database, query_args);
+  } else if (ends_with(query_args, "reservations")) {
+    query_args[strlen(query_args) - 13] = '\0';
+    return query_list_user_reservations(writer, database, query_args);
+  }
+
+  char *format[] = {"%s", "%s", "%s"};
+  char *fields[] = {"id", "date", "type"};
+
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  CatalogPassenger *catalog_passengers =
+      database_get_passenger_catalog(database);
+  GPtrArray *flights = get_user_flights(catalog_passengers, query_args);
+  if (flights == NULL) return 1;
+  int flights_count = flights->len;
+  g_ptr_array_sort(flights,
+                   compare_flights_array_elements_by_schedule_departure_date);
+
+  CatalogReservation *catalog = database_get_reservation_catalog(database);
+  GPtrArray *reservations = get_user_reservations(catalog, query_args);
+  if (reservations == NULL) return 1;
+  int reservations_count = reservations->len;
+  g_ptr_array_sort(reservations,
+                   compare_reservations_array_elements_by_begin_date);
+
+  int index_flight = 0;
+  int index_reservation = 0;
+
+  while (index_flight < flights_count &&
+         index_reservation < reservations_count) {
+    Flight *flight = g_ptr_array_index(flights, index_flight);
+    Reservation *reservation =
+        g_ptr_array_index(reservations, index_reservation);
+
+    Timestamp flight_date = flight_get_schedule_departure_date(flight);
+    Timestamp reservation_date = reservation_get_begin_date(reservation);
+
+    if ((flight_date.date >= reservation_date.date)) {
+      char *flight_id = flight_get_id(flight);
+      Timestamp flight_schedule_departure_date =
+          flight_get_schedule_departure_date(flight);
+      char *flight_schedule_departure_date_string =
+          date_to_string(flight_schedule_departure_date);
+      write_entity_values(writer, 3, flight_id,
+                          flight_schedule_departure_date_string, "flight");
+
+      index_flight++;
+
+      g_free(flight_id);
+      g_free(flight_schedule_departure_date_string);
+    } else if (flight_date.date < reservation_date.date) {
+      char *reservation_id = reservation_get_id(reservation);
+      Timestamp reservation_begin_date =
+          reservation_get_begin_date(reservation);
+      char *reservation_begin_date_string =
+          date_to_string(reservation_begin_date);
+      write_entity_values(writer, 3, reservation_id,
+                          reservation_begin_date_string, "reservation");
+
+      index_reservation++;
+
+      g_free(reservation_id);
+      g_free(reservation_begin_date_string);
+    }
+  }
+
+  while (index_flight < flights_count) {
+    Flight *flight = g_ptr_array_index(flights, index_flight);
+    Timestamp flight_date = flight_get_schedule_departure_date(flight);
+
+    char *flight_id = flight_get_id(flight);
+    Timestamp flight_schedule_departure_date =
+        flight_get_schedule_departure_date(flight);
+    char *flight_schedule_departure_date_string =
+        date_to_string(flight_schedule_departure_date);
+    write_entity_values(writer, 3, flight_id,
+                        flight_schedule_departure_date_string, "flight");
+
+    index_flight++;
+
+    g_free(flight_id);
+    g_free(flight_schedule_departure_date_string);
+  }
+
+  while (index_reservation < reservations_count) {
+    Reservation *reservation =
+        g_ptr_array_index(reservations, index_reservation);
+    Timestamp reservation_date = reservation_get_begin_date(reservation);
+
+    char *reservation_id = reservation_get_id(reservation);
+    Timestamp reservation_begin_date = reservation_get_begin_date(reservation);
+    char *reservation_begin_date_string =
+        date_to_string(reservation_begin_date);
+    write_entity_values(writer, 3, reservation_id,
+                        reservation_begin_date_string, "reservation");
+
+    index_reservation++;
+
+    g_free(reservation_id);
+    g_free(reservation_begin_date_string);
+  }
+
+  return 0;
+}
+
+int query_list_user_flights(RowWriter *writer, Database *database,
+                            char *user_id) {
+  char *format[] = {"%s", "%s"};
+  char *fields[] = {"id", "date"};
+
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  CatalogPassenger *catalog_passengers =
+      database_get_passenger_catalog(database);
+  GPtrArray *flights = get_user_flights(catalog_passengers, user_id);
+  if (flights == NULL) return 1;
+  int flights_count = flights->len;
+  g_ptr_array_sort(flights,
+                   compare_flights_array_elements_by_schedule_departure_date);
+
+  for (int i = 0; i < flights_count; i++) {
+    Flight *flight = g_ptr_array_index(flights, i);
+    char *flight_id = flight_get_id(flight);
+    Timestamp flight_schedule_departure_date =
+        flight_get_schedule_departure_date(flight);
+    char *flight_schedule_departure_date_string =
+        date_to_string(flight_schedule_departure_date);
+    write_entity_values(writer, 2, flight_id,
+                        flight_schedule_departure_date_string);
+
+    g_free(flight_id);
+    g_free(flight_schedule_departure_date_string);
+  }
+
+  return 0;
+}
+
+int query_list_user_reservations(RowWriter *writer, Database *database,
+                                 char *user_id) {
+  char *format[] = {"%s", "%s"};
+  char *fields[] = {"id", "date"};
+
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  CatalogReservation *catalog = database_get_reservation_catalog(database);
+  GPtrArray *reservations = get_user_reservations(catalog, user_id);
+  if (reservations == NULL) return 1;
+  int reservations_count = reservations->len;
+  g_ptr_array_sort(reservations,
+                   compare_reservations_array_elements_by_begin_date);
+
+  for (int i = 0; i < reservations_count; i++) {
+    Reservation *reservation = g_ptr_array_index(reservations, i);
+    char *reservation_id = reservation_get_id(reservation);
+    Timestamp reservation_begin_date = reservation_get_begin_date(reservation);
+    char *reservation_begin_date_string =
+        date_to_string(reservation_begin_date);
+    write_entity_values(writer, 2, reservation_id,
+                        reservation_begin_date_string);
+
+    g_free(reservation_id);
+    g_free(reservation_begin_date_string);
+  }
+
+  return 0;
 }
 
 int query_calculate_average_hotel_rating(RowWriter *writer, Database *database,
@@ -234,6 +404,7 @@ int query_list_hotel_reservations(RowWriter *writer, Database *database,
 
   CatalogReservation *catalog = database_get_reservation_catalog(database);
   GPtrArray *reservations = get_hotel_reservations(catalog, query_args);
+  if (reservations == NULL) return 1;
   int reservations_count = reservations->len;
   g_ptr_array_sort(reservations,
                    compare_reservations_array_elements_by_begin_date);

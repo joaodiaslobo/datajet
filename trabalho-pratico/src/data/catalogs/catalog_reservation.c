@@ -95,6 +95,10 @@ GPtrArray *get_hotel_reservations(CatalogReservation *catalog, char *hotel_id) {
   return g_hash_table_lookup(catalog->hotel_reservations, hotel_id);
 }
 
+GPtrArray *get_user_reservations(CatalogReservation *catalog, char *user_id) {
+  return g_hash_table_lookup(catalog->user_reservations, user_id);
+}
+
 Reservation *catalog_get_reservation_by_id(CatalogReservation *catalog,
                                            int reservation_id) {
   return g_hash_table_lookup(catalog->reservations,

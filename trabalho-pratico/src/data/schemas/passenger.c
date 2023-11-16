@@ -24,7 +24,7 @@ int parse_passenger_and_add_to_catalog(RowReader* reader, void* catalog,
   char passenger_user_key[strlen(passenger_user_id) + 1];
   strcpy(passenger_user_key, passenger_user_id);
 
-  insert_passenger(catalog, flight_id_int, passenger_user_key);
+  create_passenger_association(database, passenger_user_key, flight_id_int);
 
   return 0;
 }

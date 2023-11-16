@@ -5,6 +5,9 @@
 
 #include "data/database.h"
 
+void create_passenger_association(Database *database, char *user_id,
+                                  int flight_id);
+
 bool validate_passenger_association(Database *database, char *user_id,
                                     int flight_id);
 

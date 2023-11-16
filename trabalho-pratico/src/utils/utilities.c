@@ -21,3 +21,15 @@ bool starts_with(char *string, char *prefix) {
   if (strncmp(string, prefix, strlen(prefix)) == 0) return 1;
   return 0;
 }
+
+bool ends_with(char *string, char *suffix) {
+  int string_length = strlen(string);
+  int suffix_length = strlen(suffix);
+
+  if (suffix_length > string_length) return 0;
+
+  if (strncmp(string + (string_length - suffix_length), suffix,
+              strlen(suffix)) == 0)
+    return 1;
+  return 0;
+}

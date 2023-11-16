@@ -46,3 +46,25 @@ int count_flights(CatalogFlight *catalog) {
 Flight *catalog_get_flight_by_id(CatalogFlight *catalog, int flight_id) {
   return g_hash_table_lookup(catalog->flights, GINT_TO_POINTER(flight_id));
 }
+
+int compare_flights_array_elements_by_schedule_departure_date(gpointer a,
+                                                              gpointer b) {
+  Flight *flight_a = *(Flight **)a;
+  Flight *flight_b = *(Flight **)b;
+
+  Timestamp schedule_departure_date_a =
+      flight_get_schedule_departure_date(flight_a);
+  Timestamp schedule_departure_date_b =
+      flight_get_schedule_departure_date(flight_b);
+
+  if (schedule_departure_date_a.date > schedule_departure_date_b.date)
+    return -1;
+  if (schedule_departure_date_a.date < schedule_departure_date_b.date) return 1;
+  if (schedule_departure_date_a.date == schedule_departure_date_b.date &&
+      schedule_departure_date_a.time > schedule_departure_date_b.time)
+    return -1;
+  if (schedule_departure_date_a.date == schedule_departure_date_b.date &&
+      schedule_departure_date_a.time < schedule_departure_date_b.time)
+    return 1;
+  return 0;
+}

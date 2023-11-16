@@ -22,6 +22,8 @@ int count_user_reservations(CatalogReservation *catalog, char *user_id);
 
 GPtrArray *get_hotel_reservations(CatalogReservation *catalog, char *hotel_id);
 
+GPtrArray *get_user_reservations(CatalogReservation *catalog, char *user_id);
+
 Reservation *get_user_reservation_by_index(CatalogReservation *catalog,
                                            char *user_id, int index);
 

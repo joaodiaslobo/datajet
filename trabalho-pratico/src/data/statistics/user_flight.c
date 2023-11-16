@@ -6,6 +6,22 @@
 
 // Association via passengers catalog
 
+void create_passenger_association(Database *database, char *user_id,
+                                  int flight_id) {
+  CatalogUser *users_catalog = database_get_user_catalog(database);
+  CatalogFlight *flight_catalog = database_get_flight_catalog(database);
+
+  User *user = catalog_get_user_by_id(users_catalog, user_id);
+  if (user == NULL) return;
+  Flight *flight = catalog_get_flight_by_id(flight_catalog, flight_id);
+  if (flight == NULL) return;
+
+  CatalogPassenger *passengers_catalog =
+      database_get_passenger_catalog(database);
+  insert_passenger(passengers_catalog, flight_id, user_id, (void *)flight,
+                   (void *)user);
+}
+
 bool validate_passenger_association(Database *database, char *user_id,
                                     int flight_id) {
   // Checks if the user and flight exist

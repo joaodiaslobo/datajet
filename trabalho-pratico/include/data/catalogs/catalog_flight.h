@@ -24,4 +24,7 @@ bool flight_exists(CatalogFlight *catalog, int flight_id);
 
 Flight *catalog_get_flight_by_id(CatalogFlight *catalog, int flight_id);
 
+int compare_flights_array_elements_by_schedule_departure_date(gpointer a,
+                                                              gpointer b);
+
 #endif

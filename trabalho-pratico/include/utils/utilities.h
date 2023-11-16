@@ -7,4 +7,6 @@ void trim_leading_whitespace(char *string);
 
 bool starts_with(char *string, char *prefix);
 
+bool ends_with(char *string, char *suffix);
+
 #endif

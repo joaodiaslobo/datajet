@@ -15,7 +15,7 @@ CatalogPassenger *initialize_passengers_catalog() {
   catalog->flight_users =
       g_hash_table_new_full(NULL, g_direct_equal, NULL, free_ptr_array);
   catalog->user_flights =
-      g_hash_table_new_full(g_str_hash, g_str_equal, NULL, free_ptr_array);
+      g_hash_table_new_full(g_str_hash, g_str_equal, g_free, free_ptr_array);
   catalog->count = 0;
 
   return catalog;
@@ -31,27 +31,30 @@ void free_passengers_catalog(CatalogPassenger *catalog) {
 }
 
 void insert_passenger(CatalogPassenger *catalog, int flight_id,
-                      char *user_id_unsafe) {
+                      char *user_id_unsafe, void *flight, void *user) {
   char *user_id = g_strdup(user_id_unsafe);
   GPtrArray *users =
       g_hash_table_lookup(catalog->flight_users, GINT_TO_POINTER(flight_id));
   if (users == NULL) {
-    users = g_ptr_array_new_with_free_func(g_free);
+    users = g_ptr_array_new();
     g_hash_table_insert(catalog->flight_users, GINT_TO_POINTER(flight_id),
                         users);
   }
-  g_ptr_array_add(users, user_id);
+  g_ptr_array_add(users, user);
 
   GPtrArray *flights = g_hash_table_lookup(catalog->user_flights, user_id);
   if (flights == NULL) {
     flights = g_ptr_array_new();
     g_hash_table_insert(catalog->user_flights, user_id, flights);
+  } else {
+    g_free(user_id);
   }
 
-  g_ptr_array_add(flights, GINT_TO_POINTER(flight_id));
+  g_ptr_array_add(flights, flight);
   catalog->count++;
 }
 
+// BROKEN
 void remove_passengers_by_user_id(CatalogPassenger *catalog, char *user_id) {
   GPtrArray *flights = g_hash_table_lookup(catalog->user_flights, user_id);
   if (flights == NULL) {
@@ -123,3 +126,7 @@ void remove_passengers_by_flight_id(CatalogPassenger *catalog, int flight_id) {
 }
 
 int count_passengers(CatalogPassenger *catalog) { return catalog->count; }
+
+GPtrArray *get_user_flights(CatalogPassenger *catalog, char *user_id) {
+  return g_hash_table_lookup(catalog->user_flights, user_id);
+}

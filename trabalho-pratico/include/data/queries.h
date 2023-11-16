@@ -18,8 +18,8 @@ int query_user_parameters_by_id(RowWriter *writer, Database *database,
 int query_flight_parameters_by_id(RowWriter *writer, Database *database,
                                   char *query_args);
 
-int query_list_user_association(RowWriter *writer, Database *database,
-                                char *query_args);
+int query_list_user_associations(RowWriter *writer, Database *database,
+                                 char *query_args);
 
 int query_calculate_average_hotel_rating(RowWriter *writer, Database *database,
                                          char *query_args);
