@@ -30,4 +30,6 @@ Reservation *catalog_get_reservation_by_id(CatalogReservation *catalog,
 
 int compare_reservations_array_elements_by_begin_date(gpointer a, gpointer b);
 
+int compare_users_array_elements_by_name(gpointer a, gpointer b);
+
 #endif

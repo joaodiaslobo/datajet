@@ -35,3 +35,7 @@ bool user_exists(CatalogUser *catalog, char *user_id) {
 User *catalog_get_user_by_id(CatalogUser *catalog, char *user_id) {
   return g_hash_table_lookup(catalog->users, user_id);
 }
+
+User *catalog_get_user_by_name(CatalogUser *catalog, char *user_name) {
+  return g_hash_table_lookup(catalog->users, user_name);
+}

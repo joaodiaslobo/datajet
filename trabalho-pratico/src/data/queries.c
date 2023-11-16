@@ -199,8 +199,28 @@ int query_list_user_association(RowWriter *writer, Database *database,
 
 int query_calculate_average_hotel_rating(RowWriter *writer, Database *database,
                                          char *query_args) {
-  printf("Query 3 not implemented.\n");
-  return -1;
+  char *format[] = {"%s"};
+  char *fields[] = {"rating"};
+
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  CatalogReservation *catalog = database_get_reservation_catalog(database);
+  GPtrArray *reservations = get_hotel_reservations(catalog, query_args);
+  int reservations_count = reservations->len;
+  double total_rating = 0;
+  for (int i = 0; i < reservations_count; i++) {
+    Reservation *reservation = g_ptr_array_index(reservations, i);
+    int reservation_rating = reservation_get_rating(reservation);
+    total_rating += reservation_rating;
+  }
+  double mean_rating = total_rating / reservations_count;
+  char *mean_rating_string = g_strdup_printf("%.3f", mean_rating);
+
+  write_entity_values(writer, 1, mean_rating_string);
+
+  g_free(mean_rating_string);
+  return 0;
 }
 
 int query_list_hotel_reservations(RowWriter *writer, Database *database,

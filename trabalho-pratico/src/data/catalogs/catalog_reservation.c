@@ -3,6 +3,7 @@
 #include <glib.h>
 
 #include "data/schemas/reservation.h"
+#include "data/schemas/user.h"
 
 struct catalogReservation {
   GHashTable *reservations;

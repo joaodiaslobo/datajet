@@ -41,6 +41,7 @@ void free_database(Database *database) {
 }
 
 int csv_populate_database(Database *database, char *csv_dataset_path) {
+  create_directory_if_doesnt_exist(OUTPUT_DIRECTORY);
   /* Load users csv dataset */
 
   char *users_csv_path = build_full_file_path(csv_dataset_path, "users.csv");
