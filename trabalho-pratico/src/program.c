@@ -1,5 +1,6 @@
 #include "program.h"
 
+#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,6 +15,9 @@ Program *initialize_program(ProgramMode programMode) {
   Program *program = malloc(sizeof(Program));
   program->mode = programMode;
   program->database = initialize_database();
+
+  setlocale(LC_COLLATE, "en_US.UTF-8");
+
   return program;
 }
 

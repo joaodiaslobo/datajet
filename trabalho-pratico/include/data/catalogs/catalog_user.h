@@ -21,4 +21,8 @@ User *catalog_get_user_by_id(CatalogUser *catalog, char *user_id);
 
 User *catalog_get_user_by_name(CatalogUser *catalog, char *user_name);
 
+GPtrArray *get_users(CatalogUser *catalog);
+
+int compare_users_array_elements_by_name(gpointer a, gpointer b);
+
 #endif
