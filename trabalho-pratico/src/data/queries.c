@@ -202,6 +202,11 @@ int query_list_user_associations(RowWriter *writer, Database *database,
     return query_list_user_reservations(writer, database, query_args);
   }
 
+  CatalogUser *catalog_users = database_get_user_catalog(database);
+  User *user = catalog_get_user_by_id(catalog_users, query_args);
+  if (user == NULL) return 1;
+  if (user_get_account_status(user) == INACTIVE) return 1;
+
   char *format[] = {"%s", "%s", "%s"};
   char *fields[] = {"id", "date", "type"};
 
@@ -216,8 +221,10 @@ int query_list_user_associations(RowWriter *writer, Database *database,
   g_ptr_array_sort(flights,
                    compare_flights_array_elements_by_schedule_departure_date);
 
-  CatalogReservation *catalog = database_get_reservation_catalog(database);
-  GPtrArray *reservations = get_user_reservations(catalog, query_args);
+  CatalogReservation *catalog_reservations =
+      database_get_reservation_catalog(database);
+  GPtrArray *reservations =
+      get_user_reservations(catalog_reservations, query_args);
   if (reservations == NULL) return 1;
   int reservations_count = reservations->len;
   g_ptr_array_sort(reservations,
@@ -305,6 +312,11 @@ int query_list_user_associations(RowWriter *writer, Database *database,
 
 int query_list_user_flights(RowWriter *writer, Database *database,
                             char *user_id) {
+  CatalogUser *catalog_users = database_get_user_catalog(database);
+  User *user = catalog_get_user_by_id(catalog_users, user_id);
+  if (user == NULL) return 1;
+  if (user_get_account_status(user) == INACTIVE) return 1;
+
   char *format[] = {"%s", "%s"};
   char *fields[] = {"id", "date"};
 
@@ -338,14 +350,21 @@ int query_list_user_flights(RowWriter *writer, Database *database,
 
 int query_list_user_reservations(RowWriter *writer, Database *database,
                                  char *user_id) {
+  CatalogUser *catalog_users = database_get_user_catalog(database);
+  User *user = catalog_get_user_by_id(catalog_users, user_id);
+  if (user == NULL) return 1;
+  if (user_get_account_status(user) == INACTIVE) return 1;
+
   char *format[] = {"%s", "%s"};
   char *fields[] = {"id", "date"};
 
   row_writer_set_formatting(writer, format);
   row_writer_set_field_names(writer, fields);
 
-  CatalogReservation *catalog = database_get_reservation_catalog(database);
-  GPtrArray *reservations = get_user_reservations(catalog, user_id);
+  CatalogReservation *catalog_reservations =
+      database_get_reservation_catalog(database);
+  GPtrArray *reservations =
+      get_user_reservations(catalog_reservations, user_id);
   if (reservations == NULL) return 1;
   int reservations_count = reservations->len;
   g_ptr_array_sort(reservations,
