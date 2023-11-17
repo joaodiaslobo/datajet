@@ -549,7 +549,8 @@ int query_list_users_where_name_starts_with_prefix(RowWriter *writer,
 
   CatalogUser *catalog = database_get_user_catalog(database);
   GPtrArray *users = get_users(catalog);
-  int users_count = count_users(users);
+  int users_count = count_users(catalog);
+
   g_ptr_array_sort(users, compare_users_array_elements_by_name);
   int prefix_len = strlen(query_args);
   if (prefix_len >= 2 && query_args[0] == '"' &&
@@ -561,8 +562,6 @@ int query_list_users_where_name_starts_with_prefix(RowWriter *writer,
   }
   for (int i = 0; i < users_count; i++) {
     User *user = g_ptr_array_index(users, i);
-
-    if (user == NULL) return 0;
 
     char *user_name = user_get_name(user);
     AccountStatus status = user_get_account_status(user);
