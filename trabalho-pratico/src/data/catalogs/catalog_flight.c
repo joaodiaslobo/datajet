@@ -6,27 +6,43 @@
 
 struct catalogFlight {
   GHashTable *flights;
+  GPtrArray *flight_array;
 };
 
 CatalogFlight *initialize_flights_catalog() {
   CatalogFlight *catalog = malloc(sizeof(struct catalogFlight));
   catalog->flights =
       g_hash_table_new_full(NULL, g_direct_equal, NULL, free_flight);
+  catalog->flight_array = g_ptr_array_new();
 
   return catalog;
 }
 
 void free_flights_catalog(CatalogFlight *catalog) {
   g_hash_table_destroy(catalog->flights);
+  g_ptr_array_free(catalog->flight_array, TRUE);
 
   free(catalog);
 }
 
 void insert_flight(CatalogFlight *catalog, Flight *flight, gpointer key) {
   g_hash_table_insert(catalog->flights, key, flight);
+  g_ptr_array_add(catalog->flight_array, flight);
 }
 
 void remove_flight(CatalogFlight *catalog, int flight_id) {
+  int flight_count = count_flights(catalog);
+  int removed = 0;
+  for (int i = 0; i < flight_count && !removed; i++) {
+    Flight *flight = g_ptr_array_index(catalog->flight_array, i);
+    char *id_str = flight_get_id(flight);
+    int id = parse_number(id_str);
+    g_free(id_str);
+    if (id == flight_id) {
+      g_ptr_array_remove_index(catalog->flight_array, i);
+    }
+  }
+
   g_hash_table_remove(catalog->flights, GINT_TO_POINTER(flight_id));
 }
 
@@ -67,4 +83,8 @@ int compare_flights_array_elements_by_schedule_departure_date(gpointer a,
       schedule_departure_date_a.time < schedule_departure_date_b.time)
     return 1;
   return 0;
+}
+
+GPtrArray *get_flights_array(CatalogFlight *catalog) {
+  return catalog->flight_array;
 }

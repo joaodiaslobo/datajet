@@ -442,8 +442,60 @@ int query_list_hotel_reservations(RowWriter *writer, Database *database,
 int query_list_airport_flights_between_dates(RowWriter *writer,
                                              Database *database,
                                              char *query_args) {
-  printf("Query 5 not implemented.\n");
-  return -1;
+  char *format[] = {"%s", "%s", "%s", "%s", "%s"};
+  char *fields[] = {"id", "schedule_departure_date", "destination", "airline",
+                    "plane_model"};
+
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  query_args[46] = '\0';
+  char *upper_limit_string = query_args + 27;
+  Timestamp upper_limit = parse_timestamp(upper_limit_string);
+  query_args[24] = '\0';
+  char *lower_limit_string = query_args + 5;
+  Timestamp lower_limit = parse_timestamp(lower_limit_string);
+  query_args[3] = '\0';
+
+  CatalogFlight *catalog = database_get_flight_catalog(database);
+  GPtrArray *flights = get_flights_array(catalog);
+  if (flights == NULL) return 1;
+  int flights_count = flights->len;
+  g_ptr_array_sort(flights,
+                   compare_flights_array_elements_by_schedule_departure_date);
+  for (int i = 0; i < flights_count; i++) {
+    Flight *flight = g_ptr_array_index(flights, i);
+    char *flight_origin = flight_get_origin(flight);
+
+    if (strcmp(flight_origin, query_args) == 0) {
+      Timestamp flight_schedule_departure_date =
+          flight_get_schedule_departure_date(flight);
+
+      if (is_timestamp_between_dates(flight_schedule_departure_date,
+                                     lower_limit, upper_limit)) {
+        char *flight_id = flight_get_id(flight);
+        char *flight_schedule_departure_date_string =
+            timestamp_to_string(flight_schedule_departure_date);
+        char *flight_destination = flight_get_destination(flight);
+        char *flight_airline = flight_get_airline(flight);
+        char *flight_plane_model = flight_get_plane_model(flight);
+
+        write_entity_values(
+            writer, 5, flight_id, flight_schedule_departure_date_string,
+            flight_destination, flight_airline, flight_plane_model);
+
+        g_free(flight_id);
+        g_free(flight_schedule_departure_date_string);
+        g_free(flight_destination);
+        g_free(flight_airline);
+        g_free(flight_plane_model);
+      }
+    }
+
+    g_free(flight_origin);
+  }
+
+  return 0;
 }
 
 int query_list_top_aiports_by_passengers_in_year(RowWriter *writer,

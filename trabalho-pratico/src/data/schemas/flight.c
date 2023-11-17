@@ -82,9 +82,11 @@ int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog,
 
   char* flight_origin = reader_next_cell(reader);
   if (invalid_value_length(3, flight_origin)) return 1;
+  string_to_upper(flight_origin);
 
   char* flight_destination = reader_next_cell(reader);
   if (invalid_value_length(3, flight_destination)) return 1;
+  string_to_upper(flight_destination);
 
   char* flight_schedule_departure_date_string = reader_next_cell(reader);
   if (invalid_timestamp(flight_schedule_departure_date_string)) return 1;

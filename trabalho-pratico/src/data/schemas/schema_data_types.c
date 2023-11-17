@@ -175,6 +175,18 @@ int difference_in_years_between_dates(int date1, int date2) {
   return yearDiff;
 }
 
+bool is_timestamp_between_dates(Timestamp timestamp, Timestamp begin_date,
+                                Timestamp end_date) {
+  return (
+      (timestamp.date > begin_date.date && timestamp.date < end_date.date) ||
+      (timestamp.date == begin_date.date && timestamp.date < end_date.date &&
+       timestamp.time >= begin_date.time) ||
+      (timestamp.date > begin_date.date && timestamp.date == end_date.date &&
+       timestamp.time <= end_date.time) ||
+      (timestamp.date == begin_date.date && timestamp.date == end_date.date &&
+       timestamp.time >= begin_date.time && timestamp.time <= end_date.time));
+}
+
 int parse_number(char *number_string) {
   int number = 0;
   for (int i = 0; number_string[i] != '\0'; i++) {
