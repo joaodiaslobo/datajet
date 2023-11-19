@@ -6,3 +6,10 @@ OUTPUT_DIRECTORY       = docs/
 HTML_OUTPUT            = html/
 GENERATE_HTML          = YES
 GENERATE_LATEX         = NO
+PROJECT_NAME           = Projeto LI3 
+
+GENERATE_TREEVIEW      = YES
+DISABLE_INDEX = NO
+FULL_SIDEBAR = NO
+HTML_EXTRA_STYLESHEET  = docs/styles/doxygen-awesome.css
+HTML_COLORSTYLE        = LIGHT

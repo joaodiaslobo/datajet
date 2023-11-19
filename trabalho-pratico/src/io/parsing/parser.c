@@ -5,9 +5,6 @@
 
 #include "io/parsing/reader.h"
 
-#define BUFFER_SIZE 1024
-#define DELIMITER ';'
-
 void read_csv(FILE *input_file, FILE *output_file,
               EntityLineParser *entity_line_parser,
               WriteEntityValidationOutput *write_entity_validation_output,

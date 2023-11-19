@@ -6,5 +6,8 @@ programa-*
 datasets/*
 dataset/*
 
-# Resultados
+# Output
 Resultados/*
+
+# Documentation
+docs/*

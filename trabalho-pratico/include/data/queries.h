@@ -1,3 +1,7 @@
+/**
+ * @file queries.h
+ * @brief Implementation of queries available for the application database.
+ */
 #ifndef QUERIES_H
 #define QUERIES_H
 
@@ -6,17 +10,71 @@
 
 #define SYSTEM_CURRENT_DATE 20231001
 
+/**
+ * @brief Executes a query and saves the result.
+ * @details Executes a query and saves the result to a file.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param query_id Query id.
+ * @param query_args Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed and -1 if the query
+ * hasn't been implemented.
+ */
 int execute_query_and_save_result(RowWriter *writer, Database *database,
                                   int query_id, char *query_args);
 
+/**
+ * @brief Lists general information about an entity.
+ * @details Lists general information about an entity associated with the
+ * identifier passed in the query arguments.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param query_args Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_entity_parameters_by_id(RowWriter *writer, Database *database,
                                   char *query_args);
 
+/**
+ * @brief Lists general information about a user.
+ * @details Lists general information about a user associated with the
+ * identifier passed in the query arguments.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param query_args Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_user_parameters_by_id(RowWriter *writer, Database *database,
                                 char *user_id);
 
+/**
+ * @brief Lists general information about a flight.
+ * @details Lists general information about a flight associated with the
+ * identifier passed in the query arguments.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param query_args Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_flight_parameters_by_id(RowWriter *writer, Database *database,
                                   char *query_args);
+
+/**
+ * @brief Lists general information about a reservation.
+ * @details Lists general information about a reservation associated with the
+ * identifier passed in the query arguments.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param query_args Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
+int query_reservation_parameters_by_id(RowWriter *writer, Database *database,
+                                       char *query_args);
 
 int query_list_user_associations(RowWriter *writer, Database *database,
                                  char *query_args);
@@ -24,6 +82,16 @@ int query_list_user_associations(RowWriter *writer, Database *database,
 int query_calculate_average_hotel_rating(RowWriter *writer, Database *database,
                                          char *query_args);
 
+/**
+ * @brief Lists all reservations associated with a hotel.
+ * @details Lists all reservations associated with a hotel based on the
+ * identifier passed in the query arguments.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param query_args Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_list_hotel_reservations(RowWriter *writer, Database *database,
                                   char *query_args);
 
