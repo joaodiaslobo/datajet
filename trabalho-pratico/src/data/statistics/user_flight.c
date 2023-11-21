@@ -1,3 +1,5 @@
+#include "data/statistics/user_flight.h"
+
 #include <stdbool.h>
 
 #include "data/catalogs/catalog_flight.h"

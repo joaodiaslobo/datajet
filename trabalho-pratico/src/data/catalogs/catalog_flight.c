@@ -35,9 +35,7 @@ void remove_flight(CatalogFlight *catalog, int flight_id) {
   int removed = 0;
   for (int i = 0; i < flight_count && !removed; i++) {
     Flight *flight = g_ptr_array_index(catalog->flight_array, i);
-    char *id_str = flight_get_id(flight);
-    int id = parse_number(id_str);
-    g_free(id_str);
+    int id = (int)flight_get_id(flight);
     if (id == flight_id) {
       g_ptr_array_remove_index(catalog->flight_array, i);
     }

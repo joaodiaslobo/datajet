@@ -53,7 +53,7 @@ FileBuffer *initialize_file_buffer(char *name) {
   buffer->name = name;
   buffer->content = malloc(sizeof(char) * DEFAULT_BUFFER_SIZE);
   buffer->content[0] = '\0';
-  buffer->content_size = 0;
+  buffer->content_size = 1;
   buffer->size = DEFAULT_BUFFER_SIZE;
 
   return buffer;

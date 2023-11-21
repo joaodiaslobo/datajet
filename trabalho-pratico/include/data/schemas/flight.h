@@ -6,7 +6,7 @@
 
 typedef struct flight Flight;
 
-Flight* create_flight(char* id, char* airline, char* plane_model,
+Flight* create_flight(unsigned short id, char* airline, char* plane_model,
                       int total_seats, char* origin, char* destination,
                       Timestamp schedule_departure_date,
                       Timestamp schedule_arrival_date,
@@ -21,7 +21,7 @@ int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog,
 
 void validate_flights(void* catalog, void* database);
 
-char* flight_get_id(Flight* flight);
+unsigned short flight_get_id(Flight* flight);
 
 char* flight_get_airline(Flight* flight);
 

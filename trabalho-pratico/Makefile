@@ -1,25 +1,7 @@
-#START COPYRIGHT NOTICE
-
-#   Copyright 2023 Hélder Gomes, João Lobo, Rita Camacho
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-
-#END COPYRIGHT NOTICE
-
 CC := gcc
 
 EXEC := programa-principal
-FLAGS := -Wall -Wextra -Werror=pedantic -Wfatal-errors
+FLAGS := -Wall -Wextra -Werror=pedantic -Wfatal-errors -Wno-unused-variable -Wno-unused-parameter
 
 LIBS := $(shell pkg-config --libs glib-2.0)
 FLAGS += $(shell pkg-config --cflags glib-2.0)
@@ -29,6 +11,7 @@ INCLUDES := $(shell find include/ -name "*.h")
 
 DOCS_DIRECTORY := docs
 
+# Defines flags depending on the build type
 BUILD_TYPE ?= release
 ifeq ($(BUILD_TYPE), debug)
 	FLAGS += -g -O0
@@ -42,12 +25,22 @@ endif
 
 OBJ := $(addprefix $(BUILD_DIR_PATH)/, $(SRC:.c=.o))
 
-RED := \033[1;31m
-WHITE := \033[0m
-BLUE := \033[1;34m
-GREEN := \033[1;32m
-PINK := \033[1;35m
-GRAY := \033[1;30m
+# Colors used for output
+ifneq (,$(findstring xterm,${TERM}))
+	RED := $(shell tput -Txterm setaf 1)
+	WHITE := $(shell tput -Txterm setaf 7)
+	BLUE := $(shell tput -Txterm setaf 6)
+	GREEN := $(shell tput -Txterm setaf 2)
+	PINK := $(shell tput -Txterm setaf 5)
+	GRAY := $(shell tput -Txterm setaf 6)
+else
+	RED := ""
+	WHITE := ""
+	BLUE := ""
+	GREEN := ""
+	PINK := ""
+	GRAY := ""
+endif
 
 .PHONY: all
 all: build-release place-build-on-root

@@ -1,6 +1,7 @@
 #include "utils/utilities.h"
 
 #include <stdbool.h>
+#include <string.h>
 
 void trim_leading_whitespace(char *string) {
   int index = 0;

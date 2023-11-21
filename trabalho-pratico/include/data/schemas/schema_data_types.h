@@ -38,6 +38,9 @@ int difference_in_seconds_between_timestamps(Timestamp timestamp1,
 
 int difference_in_years_between_dates(int date1, int date2);
 
+bool is_timestamp_between_dates(Timestamp timestamp, Timestamp begin_date,
+                                Timestamp end_date);
+
 int parse_number(char *number_string);
 
 bool parse_boolean(char *boolean_string);

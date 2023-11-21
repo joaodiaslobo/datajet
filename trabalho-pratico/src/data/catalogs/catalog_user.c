@@ -10,7 +10,7 @@ struct catalogUser {
 CatalogUser *initialize_users_catalog() {
   CatalogUser *catalog = malloc(sizeof(struct catalogUser));
   catalog->users =
-      g_hash_table_new_full(g_str_hash, g_strcmp0, NULL, free_user);
+      g_hash_table_new_full(g_str_hash, (GEqualFunc)g_strcmp0, NULL, free_user);
   catalog->users_array = g_ptr_array_new();
 
   return catalog;

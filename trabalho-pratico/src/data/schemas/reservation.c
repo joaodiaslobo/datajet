@@ -12,7 +12,7 @@
 #include "io/parsing/reader.h"
 
 struct reservation {
-  char* id;
+  unsigned short id;
   char* user_id;
   char* hotel_id;
   char* hotel_name;
@@ -28,15 +28,15 @@ struct reservation {
   char* comment;
 };
 
-Reservation* create_reservation(char* id, char* user_id, char* hotel_id,
-                                char* hotel_name, int hotel_stars, int city_tax,
-                                char* address, Timestamp begin_date,
-                                Timestamp end_date, int price_per_night,
-                                bool includes_breakfast, char* room_details,
-                                int rating, char* comment) {
+Reservation* create_reservation(unsigned short id, char* user_id,
+                                char* hotel_id, char* hotel_name,
+                                int hotel_stars, int city_tax, char* address,
+                                Timestamp begin_date, Timestamp end_date,
+                                int price_per_night, bool includes_breakfast,
+                                char* room_details, int rating, char* comment) {
   Reservation* reservation = malloc(sizeof(struct reservation));
 
-  reservation->id = g_strdup(id);
+  reservation->id = id;
   reservation->user_id = g_strdup(user_id);
   reservation->hotel_id = g_strdup(hotel_id);
   reservation->hotel_stars = hotel_stars;
@@ -56,11 +56,13 @@ Reservation* create_reservation(char* id, char* user_id, char* hotel_id,
 
 int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog,
                                          void* database) {
-  char* reservation_id = reader_next_cell(reader);
-  if (is_empty_value(reservation_id)) return 1;
+  char* reservation_id_string = reader_next_cell(reader);
+  if (is_empty_value(reservation_id_string)) return 1;
 
-  int reservation_id_int = parse_number(reservation_id + 4);
+  int reservation_id_int = parse_number(reservation_id_string + 4);
   gpointer reservation_key = GINT_TO_POINTER(reservation_id_int);
+
+  unsigned short reservation_id = (unsigned short)reservation_id_int;
 
   char* reservation_user_id = reader_next_cell(reader);
   if (is_empty_value(reservation_user_id)) return 1;
@@ -130,7 +132,6 @@ bool reservation_invalid_association(void* database, char* user_id) {
 
 void free_reservation(void* reservation_ptr) {
   Reservation* reservation = (Reservation*)reservation_ptr;
-  g_free(reservation->id);
   g_free(reservation->user_id);
   g_free(reservation->hotel_id);
   g_free(reservation->hotel_name);
@@ -140,8 +141,8 @@ void free_reservation(void* reservation_ptr) {
   free(reservation);
 }
 
-char* reservation_get_id(Reservation* reservation) {
-  return g_strdup(reservation->id);
+unsigned short reservation_get_id(Reservation* reservation) {
+  return reservation->id;
 }
 
 char* reservation_get_user_id(Reservation* reservation) {

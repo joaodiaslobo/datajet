@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <glib.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -89,18 +90,18 @@ char *timestamp_to_string(Timestamp timestamp) {
   int date = timestamp.date;
   int time = timestamp.time;
 
-  int year = date / 10000;
-  int month = (date / 100) % 100;
-  int day = date % 100;
+  unsigned short year = date / 10000;
+  unsigned short month = (date / 100) % 100;
+  unsigned short day = date % 100;
 
-  int hour = time / 10000;
-  int minute = (time / 100) % 100;
-  int second = time % 100;
+  unsigned short hour = time / 10000;
+  unsigned short minute = (time / 100) % 100;
+  unsigned short second = time % 100;
 
   char *timestamp_string = (char *)malloc(20 * sizeof(char));
 
-  sprintf(timestamp_string, "%04d/%02d/%02d %02d:%02d:%02d", year, month, day,
-          hour, minute, second);
+  sprintf(timestamp_string, "%04hu/%02hu/%02hu %02hu:%02hu:%02hu", year, month,
+          day, hour, minute, second);
 
   return timestamp_string;
 }

@@ -9,12 +9,12 @@
 
 typedef struct reservation Reservation;
 
-Reservation* create_reservation(char* id, char* user_id, char* hotel_id,
-                                char* hotel_name, int hotel_stars, int city_tax,
-                                char* address, Timestamp begin_date,
-                                Timestamp end_date, int price_per_night,
-                                bool includes_breakfast, char* room_details,
-                                int rating, char* comment);
+Reservation* create_reservation(unsigned short id, char* user_id,
+                                char* hotel_id, char* hotel_name,
+                                int hotel_stars, int city_tax, char* address,
+                                Timestamp begin_date, Timestamp end_date,
+                                int price_per_night, bool includes_breakfast,
+                                char* room_details, int rating, char* comment);
 
 void free_reservation(void* reservation_ptr);
 
@@ -23,7 +23,7 @@ int parse_reservation_and_add_to_catalog(RowReader* reader, void* catalog,
 
 bool reservation_invalid_association(void* database, char* user_id);
 
-char* reservation_get_id(Reservation* reservation);
+unsigned short reservation_get_id(Reservation* reservation);
 
 char* reservation_get_user_id(Reservation* reservation);
 

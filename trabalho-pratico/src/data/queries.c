@@ -218,8 +218,9 @@ int query_list_user_associations(RowWriter *writer, Database *database,
   GPtrArray *flights = get_user_flights(catalog_passengers, query_args);
   if (flights == NULL) return 1;
   int flights_count = flights->len;
-  g_ptr_array_sort(flights,
-                   compare_flights_array_elements_by_schedule_departure_date);
+  g_ptr_array_sort(
+      flights,
+      (GCompareFunc)compare_flights_array_elements_by_schedule_departure_date);
 
   CatalogReservation *catalog_reservations =
       database_get_reservation_catalog(database);
@@ -227,8 +228,9 @@ int query_list_user_associations(RowWriter *writer, Database *database,
       get_user_reservations(catalog_reservations, query_args);
   if (reservations == NULL) return 1;
   int reservations_count = reservations->len;
-  g_ptr_array_sort(reservations,
-                   compare_reservations_array_elements_by_begin_date);
+  g_ptr_array_sort(
+      reservations,
+      (GCompareFunc)compare_reservations_array_elements_by_begin_date);
 
   int index_flight = 0;
   int index_reservation = 0;
@@ -243,7 +245,8 @@ int query_list_user_associations(RowWriter *writer, Database *database,
     Timestamp reservation_date = reservation_get_begin_date(reservation);
 
     if ((flight_date.date >= reservation_date.date)) {
-      char *flight_id = flight_get_id(flight);
+      unsigned short flight_id_short = flight_get_id(flight);
+      char *flight_id = g_strdup_printf("%010hu", flight_id_short);
       Timestamp flight_schedule_departure_date =
           flight_get_schedule_departure_date(flight);
       char *flight_schedule_departure_date_string =
@@ -256,7 +259,9 @@ int query_list_user_associations(RowWriter *writer, Database *database,
       g_free(flight_id);
       g_free(flight_schedule_departure_date_string);
     } else if (flight_date.date < reservation_date.date) {
-      char *reservation_id = reservation_get_id(reservation);
+      unsigned short reservation_id_short = reservation_get_id(reservation);
+      char *reservation_id =
+          g_strdup_printf("Book%010hu", reservation_id_short);
       Timestamp reservation_begin_date =
           reservation_get_begin_date(reservation);
       char *reservation_begin_date_string =
@@ -275,7 +280,8 @@ int query_list_user_associations(RowWriter *writer, Database *database,
     Flight *flight = g_ptr_array_index(flights, index_flight);
     Timestamp flight_date = flight_get_schedule_departure_date(flight);
 
-    char *flight_id = flight_get_id(flight);
+    unsigned short flight_id_short = flight_get_id(flight);
+    char *flight_id = g_strdup_printf("%010hu", flight_id_short);
     Timestamp flight_schedule_departure_date =
         flight_get_schedule_departure_date(flight);
     char *flight_schedule_departure_date_string =
@@ -294,7 +300,8 @@ int query_list_user_associations(RowWriter *writer, Database *database,
         g_ptr_array_index(reservations, index_reservation);
     Timestamp reservation_date = reservation_get_begin_date(reservation);
 
-    char *reservation_id = reservation_get_id(reservation);
+    unsigned short reservation_id_short = reservation_get_id(reservation);
+    char *reservation_id = g_strdup_printf("Book%010hu", reservation_id_short);
     Timestamp reservation_begin_date = reservation_get_begin_date(reservation);
     char *reservation_begin_date_string =
         date_to_string(reservation_begin_date);
@@ -317,7 +324,7 @@ int query_list_user_flights(RowWriter *writer, Database *database,
   if (user == NULL) return 1;
   if (user_get_account_status(user) == INACTIVE) return 1;
 
-  char *format[] = {"%s", "%s"};
+  char *format[] = {"%010hu", "%s"};
   char *fields[] = {"id", "date"};
 
   row_writer_set_formatting(writer, format);
@@ -328,12 +335,13 @@ int query_list_user_flights(RowWriter *writer, Database *database,
   GPtrArray *flights = get_user_flights(catalog_passengers, user_id);
   if (flights == NULL) return 1;
   int flights_count = flights->len;
-  g_ptr_array_sort(flights,
-                   compare_flights_array_elements_by_schedule_departure_date);
+  g_ptr_array_sort(
+      flights,
+      (GCompareFunc)compare_flights_array_elements_by_schedule_departure_date);
 
   for (int i = 0; i < flights_count; i++) {
     Flight *flight = g_ptr_array_index(flights, i);
-    char *flight_id = flight_get_id(flight);
+    unsigned short flight_id = flight_get_id(flight);
     Timestamp flight_schedule_departure_date =
         flight_get_schedule_departure_date(flight);
     char *flight_schedule_departure_date_string =
@@ -341,7 +349,6 @@ int query_list_user_flights(RowWriter *writer, Database *database,
     write_entity_values(writer, 2, flight_id,
                         flight_schedule_departure_date_string);
 
-    g_free(flight_id);
     g_free(flight_schedule_departure_date_string);
   }
 
@@ -367,12 +374,14 @@ int query_list_user_reservations(RowWriter *writer, Database *database,
       get_user_reservations(catalog_reservations, user_id);
   if (reservations == NULL) return 1;
   int reservations_count = reservations->len;
-  g_ptr_array_sort(reservations,
-                   compare_reservations_array_elements_by_begin_date);
+  g_ptr_array_sort(
+      reservations,
+      (GCompareFunc)compare_reservations_array_elements_by_begin_date);
 
   for (int i = 0; i < reservations_count; i++) {
     Reservation *reservation = g_ptr_array_index(reservations, i);
-    char *reservation_id = reservation_get_id(reservation);
+    unsigned short reservation_id_short = reservation_get_id(reservation);
+    char *reservation_id = g_strdup_printf("Book%010hu", reservation_id_short);
     Timestamp reservation_begin_date = reservation_get_begin_date(reservation);
     char *reservation_begin_date_string =
         date_to_string(reservation_begin_date);
@@ -425,13 +434,15 @@ int query_list_hotel_reservations(RowWriter *writer, Database *database,
   GPtrArray *reservations = get_hotel_reservations(catalog, query_args);
   if (reservations == NULL) return 1;
   int reservations_count = reservations->len;
-  g_ptr_array_sort(reservations,
-                   compare_reservations_array_elements_by_begin_date);
+  g_ptr_array_sort(
+      reservations,
+      (GCompareFunc)compare_reservations_array_elements_by_begin_date);
 
   for (int i = 0; i < reservations_count; i++) {
     Reservation *reservation = g_ptr_array_index(reservations, i);
 
-    char *reservation_id = reservation_get_id(reservation);
+    unsigned short reservation_id_short = reservation_get_id(reservation);
+    char *reservation_id = g_strdup_printf("Book%010hu", reservation_id_short);
     Timestamp reservation_begin_date = reservation_get_begin_date(reservation);
     char *reservation_begin_date_string =
         date_to_string(reservation_begin_date);
@@ -461,7 +472,7 @@ int query_list_hotel_reservations(RowWriter *writer, Database *database,
 int query_list_airport_flights_between_dates(RowWriter *writer,
                                              Database *database,
                                              char *query_args) {
-  char *format[] = {"%s", "%s", "%s", "%s", "%s"};
+  char *format[] = {"%010hu", "%s", "%s", "%s", "%s"};
   char *fields[] = {"id", "schedule_departure_date", "destination", "airline",
                     "plane_model"};
 
@@ -480,8 +491,9 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
   GPtrArray *flights = get_flights_array(catalog);
   if (flights == NULL) return 1;
   int flights_count = flights->len;
-  g_ptr_array_sort(flights,
-                   compare_flights_array_elements_by_schedule_departure_date);
+  g_ptr_array_sort(
+      flights,
+      (GCompareFunc)compare_flights_array_elements_by_schedule_departure_date);
   for (int i = 0; i < flights_count; i++) {
     Flight *flight = g_ptr_array_index(flights, i);
     char *flight_origin = flight_get_origin(flight);
@@ -492,7 +504,7 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
 
       if (is_timestamp_between_dates(flight_schedule_departure_date,
                                      lower_limit, upper_limit)) {
-        char *flight_id = flight_get_id(flight);
+        unsigned short flight_id = flight_get_id(flight);
         char *flight_schedule_departure_date_string =
             timestamp_to_string(flight_schedule_departure_date);
         char *flight_destination = flight_get_destination(flight);
@@ -503,7 +515,6 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
             writer, 5, flight_id, flight_schedule_departure_date_string,
             flight_destination, flight_airline, flight_plane_model);
 
-        g_free(flight_id);
         g_free(flight_schedule_departure_date_string);
         g_free(flight_destination);
         g_free(flight_airline);
@@ -551,7 +562,7 @@ int query_list_users_where_name_starts_with_prefix(RowWriter *writer,
   GPtrArray *users = get_users(catalog);
   int users_count = count_users(catalog);
 
-  g_ptr_array_sort(users, compare_users_array_elements_by_name);
+  g_ptr_array_sort(users, (GCompareFunc)compare_users_array_elements_by_name);
   int prefix_len = strlen(query_args);
   if (prefix_len >= 2 && query_args[0] == '"' &&
       query_args[prefix_len - 1] == '"') {
