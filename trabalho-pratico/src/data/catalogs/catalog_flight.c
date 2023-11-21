@@ -30,6 +30,10 @@ void insert_flight(CatalogFlight *catalog, Flight *flight, gpointer key) {
   g_ptr_array_add(catalog->flight_array, flight);
 }
 
+int count_flights(CatalogFlight *catalog) {
+  return g_hash_table_size(catalog->flights);
+}
+
 void remove_flight(CatalogFlight *catalog, int flight_id) {
   int flight_count = count_flights(catalog);
   int removed = 0;
@@ -51,10 +55,6 @@ void foreach_flight_remove(CatalogFlight *catalog, GHRFunc function,
 
 bool flight_exists(CatalogFlight *catalog, int flight_id) {
   return g_hash_table_contains(catalog->flights, GINT_TO_POINTER(flight_id));
-}
-
-int count_flights(CatalogFlight *catalog) {
-  return g_hash_table_size(catalog->flights);
 }
 
 Flight *catalog_get_flight_by_id(CatalogFlight *catalog, int flight_id) {
