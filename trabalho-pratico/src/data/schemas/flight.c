@@ -33,19 +33,19 @@ Flight* create_flight(unsigned short id, char* airline, char* plane_model,
                       char* notes) {
   Flight* flight = malloc(sizeof(struct flight));
 
-  flight->id = id;
-  flight->airline = g_strdup(airline);
-  flight->plane_model = g_strdup(plane_model);
-  flight->total_seats = total_seats;
-  flight->origin = g_strdup(origin);
-  flight->destination = g_strdup(destination);
-  flight->schedule_departure_date = schedule_departure_date;
-  flight->schedule_arrival_date = schedule_arrival_date;
-  flight->real_departure_date = real_departure_date;
-  flight->real_arrival_date = real_arrival_date;
-  flight->pilot = g_strdup(pilot);
-  flight->copilot = g_strdup(copilot);
-  flight->notes = g_strdup(notes);
+  flight_set_id(flight, id);
+  flight_set_airline(flight, airline);
+  flight_set_plane_model(flight, plane_model);
+  flight_set_total_seats(flight, total_seats);
+  flight_set_origin(flight, origin);
+  flight_set_destination(flight, destination);
+  flight_set_schedule_departure_date(flight, schedule_departure_date);
+  flight_set_schedule_arrival_date(flight, schedule_arrival_date);
+  flight_set_real_departure_date(flight, real_departure_date);
+  flight_set_real_arrival_date(flight, real_arrival_date);
+  flight_set_pilot(flight, pilot);
+  flight_set_copilot(flight, copilot);
+  flight_set_notes(flight, notes);
 
   return flight;
 }
@@ -146,38 +146,91 @@ void validate_flights(void* catalog, void* database) {
 
 unsigned short flight_get_id(Flight* flight) { return flight->id; }
 
+void flight_set_id(Flight* flight, unsigned short id) { flight->id = id; }
+
 char* flight_get_airline(Flight* flight) { return g_strdup(flight->airline); }
+
+void flight_set_airline(Flight* flight, char* airline) {
+  flight->airline = g_strdup(airline);
+}
 
 char* flight_get_plane_model(Flight* flight) {
   return g_strdup(flight->plane_model);
 }
 
+void flight_set_plane_model(Flight* flight, char* plane_model) {
+  flight->plane_model = g_strdup(plane_model);
+}
+
 int flight_get_total_seats(Flight* flight) { return flight->total_seats; }
+
+void flight_set_total_seats(Flight* flight, int total_seats) {
+  flight->total_seats = total_seats;
+}
 
 char* flight_get_origin(Flight* flight) { return g_strdup(flight->origin); }
 
+void flight_set_origin(Flight* flight, char* origin) {
+  flight->origin = g_strdup(origin);
+}
+
 char* flight_get_destination(Flight* flight) {
   return g_strdup(flight->destination);
+}
+
+void flight_set_destination(Flight* flight, char* destination) {
+  flight->destination = g_strdup(destination);
 }
 
 Timestamp flight_get_schedule_departure_date(Flight* flight) {
   return flight->schedule_departure_date;
 }
 
+void flight_set_schedule_departure_date(Flight* flight,
+                                        Timestamp schedule_departure_date) {
+  flight->schedule_departure_date = schedule_departure_date;
+}
+
 Timestamp flight_get_schedule_arrival_date(Flight* flight) {
   return flight->schedule_arrival_date;
+}
+
+void flight_set_schedule_arrival_date(Flight* flight,
+                                      Timestamp schedule_arrival_date) {
+  flight->schedule_arrival_date = schedule_arrival_date;
 }
 
 Timestamp flight_get_real_departure_date(Flight* flight) {
   return flight->real_departure_date;
 }
 
+void flight_set_real_departure_date(Flight* flight,
+                                    Timestamp real_departure_date) {
+  flight->real_departure_date = real_departure_date;
+}
+
 Timestamp flight_get_real_arrival_date(Flight* flight) {
   return flight->real_arrival_date;
 }
 
+void flight_set_real_arrival_date(Flight* flight, Timestamp real_arrival_date) {
+  flight->real_arrival_date = real_arrival_date;
+}
+
 char* flight_get_pilot(Flight* flight) { return g_strdup(flight->pilot); }
+
+void flight_set_pilot(Flight* flight, char* pilot) {
+  flight->pilot = g_strdup(pilot);
+}
 
 char* flight_get_copilot(Flight* flight) { return g_strdup(flight->copilot); }
 
+void flight_set_copilot(Flight* flight, char* copilot) {
+  flight->copilot = g_strdup(copilot);
+}
+
 char* flight_get_notes(Flight* flight) { return g_strdup(flight->notes); }
+
+void flight_set_notes(Flight* flight, char* notes) {
+  flight->notes = g_strdup(notes);
+}

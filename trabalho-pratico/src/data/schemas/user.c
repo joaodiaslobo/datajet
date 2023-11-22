@@ -30,18 +30,18 @@ User* create_user(char* id, char* name, char* email, char* phone_number,
                   PayMethod pay_method, AccountStatus account_status) {
   User* user = malloc(sizeof(struct user));
 
-  user->id = g_strdup(id);
-  user->name = g_strdup(name);
-  user->email = g_strdup(email);
-  user->phone_number = g_strdup(phone_number);
-  user->birth_date = birth_date;
-  user->sex = sex;
-  user->passport = g_strdup(passport);
-  user->country_code = g_strdup(country_code);
-  user->address = g_strdup(address);
-  user->account_creation = account_creation;
-  user->pay_method = pay_method;
-  user->account_status = account_status;
+  user_set_id(user, id);
+  user_set_name(user, name);
+  user_set_email(user, email);
+  user_set_phone_number(user, phone_number);
+  user_set_birth_date(user, birth_date);
+  user_set_sex(user, sex);
+  user_set_passport(user, passport);
+  user_set_country_code(user, country_code);
+  user_set_address(user, address);
+  user_set_account_creation(user, account_creation);
+  user_set_pay_method(user, pay_method);
+  user_set_account_status(user, account_status);
 
   return user;
 }
@@ -121,28 +121,68 @@ int parse_user_and_add_to_catalog(RowReader* reader, void* catalog,
 
 char* user_get_id(User* user) { return g_strdup(user->id); }
 
+void user_set_id(User* user, char* id) { user->id = g_strdup(id); }
+
 char* user_get_name(User* user) { return g_strdup(user->name); }
+
+void user_set_name(User* user, char* name) { user->name = g_strdup(name); }
 
 char* user_get_email(User* user) { return g_strdup(user->email); }
 
+void user_set_email(User* user, char* email) { user->email = g_strdup(email); }
+
 char* user_get_phone_number(User* user) { return g_strdup(user->phone_number); }
+
+void user_set_phone_number(User* user, char* phone_number) {
+  user->phone_number = g_strdup(phone_number);
+}
 
 Timestamp user_get_birth_date(User* user) { return user->birth_date; }
 
+void user_set_birth_date(User* user, Timestamp birth_date) {
+  user->birth_date = birth_date;
+}
+
 Sex user_get_sex(User* user) { return user->sex; }
+
+void user_set_sex(User* user, Sex sex) { user->sex = sex; }
 
 char* user_get_passport(User* user) { return g_strdup(user->passport); }
 
+void user_set_passport(User* user, char* passport) {
+  user->passport = g_strdup(passport);
+}
+
 char* user_get_country_code(User* user) { return g_strdup(user->country_code); }
 
+void user_set_country_code(User* user, char* country_code) {
+  user->country_code = g_strdup(country_code);
+}
+
 char* user_get_address(User* user) { return g_strdup(user->address); }
+
+void user_set_address(User* user, char* address) {
+  user->address = g_strdup(address);
+}
 
 Timestamp user_get_account_creation(User* user) {
   return user->account_creation;
 }
 
+void user_set_account_creation(User* user, Timestamp account_creation) {
+  user->account_creation = account_creation;
+}
+
 PayMethod user_get_pay_method(User* user) { return user->pay_method; }
+
+void user_set_pay_method(User* user, PayMethod pay_method) {
+  user->pay_method = pay_method;
+}
 
 AccountStatus user_get_account_status(User* user) {
   return user->account_status;
+}
+
+void user_set_account_status(User* user, AccountStatus account_status) {
+  user->account_status = account_status;
 }

@@ -36,20 +36,20 @@ Reservation* create_reservation(unsigned short id, char* user_id,
                                 char* room_details, int rating, char* comment) {
   Reservation* reservation = malloc(sizeof(struct reservation));
 
-  reservation->id = id;
-  reservation->user_id = g_strdup(user_id);
-  reservation->hotel_id = g_strdup(hotel_id);
-  reservation->hotel_stars = hotel_stars;
-  reservation->hotel_name = g_strdup(hotel_name);
-  reservation->city_tax = city_tax;
-  reservation->address = g_strdup(address);
-  reservation->begin_date = begin_date;
-  reservation->end_date = end_date;
-  reservation->price_per_night = price_per_night;
-  reservation->includes_breakfast = includes_breakfast;
-  reservation->room_details = g_strdup(room_details);
-  reservation->rating = rating;
-  reservation->comment = g_strdup(comment);
+  reservation_set_id(reservation, id);
+  reservation_set_user_id(reservation, user_id);
+  reservation_set_hotel_id(reservation, hotel_id);
+  reservation_set_hotel_stars(reservation, hotel_stars);
+  reservation_set_hotel_name(reservation, hotel_name);
+  reservation_set_city_tax(reservation, city_tax);
+  reservation_set_address(reservation, address);
+  reservation_set_begin_date(reservation, begin_date);
+  reservation_set_end_date(reservation, end_date);
+  reservation_set_price_per_night(reservation, price_per_night);
+  reservation_set_includes_breakfast(reservation, includes_breakfast);
+  reservation_set_room_details(reservation, room_details);
+  reservation_set_rating(reservation, rating);
+  reservation_set_comment(reservation, comment);
 
   return reservation;
 }
@@ -145,56 +145,116 @@ unsigned short reservation_get_id(Reservation* reservation) {
   return reservation->id;
 }
 
+void reservation_set_id(Reservation* reservation, unsigned short id) {
+  reservation->id = id;
+}
+
 char* reservation_get_user_id(Reservation* reservation) {
   return g_strdup(reservation->user_id);
+}
+
+void reservation_set_user_id(Reservation* reservation, char* user_id) {
+  reservation->user_id = g_strdup(user_id);
 }
 
 char* reservation_get_hotel_id(Reservation* reservation) {
   return g_strdup(reservation->hotel_id);
 }
 
+void reservation_set_hotel_id(Reservation* reservation, char* hotel_id) {
+  reservation->hotel_id = g_strdup(hotel_id);
+}
+
 char* reservation_get_hotel_name(Reservation* reservation) {
   return g_strdup(reservation->hotel_name);
+}
+
+void reservation_set_hotel_name(Reservation* reservation, char* hotel_name) {
+  reservation->hotel_name = g_strdup(hotel_name);
 }
 
 int reservation_get_hotel_stars(Reservation* reservation) {
   return reservation->hotel_stars;
 }
 
+void reservation_set_hotel_stars(Reservation* reservation, int hotel_stars) {
+  reservation->hotel_stars = hotel_stars;
+}
+
 int reservation_get_city_tax(Reservation* reservation) {
   return reservation->city_tax;
+}
+
+void reservation_set_city_tax(Reservation* reservation, int city_tax) {
+  reservation->city_tax = city_tax;
 }
 
 char* reservation_get_address(Reservation* reservation) {
   return g_strdup(reservation->address);
 }
 
+void reservation_set_address(Reservation* reservation, char* address) {
+  reservation->address = g_strdup(address);
+}
+
 Timestamp reservation_get_begin_date(Reservation* reservation) {
   return reservation->begin_date;
+}
+
+void reservation_set_begin_date(Reservation* reservation,
+                                Timestamp begin_date) {
+  reservation->begin_date = begin_date;
 }
 
 Timestamp reservation_get_end_date(Reservation* reservation) {
   return reservation->end_date;
 }
 
+void reservation_set_end_date(Reservation* reservation, Timestamp end_date) {
+  reservation->end_date = end_date;
+}
+
 int reservation_get_price_per_night(Reservation* reservation) {
   return reservation->price_per_night;
+}
+
+void reservation_set_price_per_night(Reservation* reservation,
+                                     int price_per_night) {
+  reservation->price_per_night = price_per_night;
 }
 
 bool reservation_get_includes_breakfast(Reservation* reservation) {
   return reservation->includes_breakfast;
 }
 
+void reservation_set_includes_breakfast(Reservation* reservation,
+                                        bool includes_breakfast) {
+  reservation->includes_breakfast = includes_breakfast;
+}
+
 char* reservation_get_room_details(Reservation* reservation) {
   return g_strdup(reservation->room_details);
+}
+
+void reservation_set_room_details(Reservation* reservation,
+                                  char* room_details) {
+  reservation->room_details = g_strdup(room_details);
 }
 
 int reservation_get_rating(Reservation* reservation) {
   return reservation->rating;
 }
 
+void reservation_set_rating(Reservation* reservation, int rating) {
+  reservation->rating = rating;
+}
+
 char* reservation_get_comment(Reservation* reservation) {
   return g_strdup(reservation->comment);
+}
+
+void reservation_set_comment(Reservation* reservation, char* comment) {
+  reservation->comment = g_strdup(comment);
 }
 
 int reservation_get_number_of_nights(Reservation* reservation) {

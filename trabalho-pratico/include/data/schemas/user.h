@@ -59,11 +59,25 @@ int parse_user_and_add_to_catalog(RowReader* reader, void* catalog,
 char* user_get_id(User* user);
 
 /**
+ * @brief Sets user's id.
+ * @param user User.
+ * @param id Id.
+ */
+void user_set_id(User* user, char* id);
+
+/**
  * @brief Gets user's name.
  * @param user User.
  * @return User's name.
  */
 char* user_get_name(User* user);
+
+/**
+ * @brief Sets user's name.
+ * @param user User.
+ * @param name Name.
+ */
+void user_set_name(User* user, char* name);
 
 /**
  * @brief Gets user's email.
@@ -73,11 +87,25 @@ char* user_get_name(User* user);
 char* user_get_email(User* user);
 
 /**
+ * @brief Sets user's email.
+ * @param user User.
+ * @param email Email.
+ */
+void user_set_email(User* user, char* email);
+
+/**
  * @brief Gets user's phone number.
  * @param user User.
  * @return User's phone number.
  */
 char* user_get_phone_number(User* user);
+
+/**
+ * @brief Sets user's phone number.
+ * @param user User.
+ * @param phone_number Phone number.
+ */
+void user_set_phone_number(User* user, char* phone_number);
 
 /**
  * @brief Gets user's birth date.
@@ -87,11 +115,25 @@ char* user_get_phone_number(User* user);
 Timestamp user_get_birth_date(User* user);
 
 /**
+ * @brief Sets user's birth date.
+ * @param user User.
+ * @param birth_date Birth date.
+ */
+void user_set_birth_date(User* user, Timestamp birth_date);
+
+/**
  * @brief Gets user's sex.
  * @param user User.
  * @return User's sex.
  */
 Sex user_get_sex(User* user);
+
+/**
+ * @brief Sets user's sex.
+ * @param user User.
+ * @param sex Sex.
+ */
+void user_set_sex(User* user, Sex sex);
 
 /**
  * @brief Gets user's passport.
@@ -101,11 +143,25 @@ Sex user_get_sex(User* user);
 char* user_get_passport(User* user);
 
 /**
+ * @brief Sets user's passport.
+ * @param user User.
+ * @param passport Passport.
+ */
+void user_set_passport(User* user, char* passport);
+
+/**
  * @brief Gets user's country code.
  * @param user User.
  * @return User's country code.
  */
 char* user_get_country_code(User* user);
+
+/**
+ * @brief Sets user's country code.
+ * @param user User.
+ * @param country_code Country code.
+ */
+void user_set_country_code(User* user, char* country_code);
 
 /**
  * @brief Gets user's address.
@@ -115,11 +171,25 @@ char* user_get_country_code(User* user);
 char* user_get_address(User* user);
 
 /**
+ * @brief Sets user's address.
+ * @param user User.
+ * @param address Address.
+ */
+void user_set_address(User* user, char* address);
+
+/**
  * @brief Gets user's account creation time.
  * @param user User.
  * @return User's account creation time.
  */
 Timestamp user_get_account_creation(User* user);
+
+/**
+ * @brief Sets user's account creation.
+ * @param user User.
+ * @param account_creation Account creation.
+ */
+void user_set_account_creation(User* user, Timestamp account_creation);
 
 /**
  * @brief Gets user's pay method.
@@ -129,10 +199,24 @@ Timestamp user_get_account_creation(User* user);
 PayMethod user_get_pay_method(User* user);
 
 /**
+ * @brief Sets user's pay method.
+ * @param user User.
+ * @param pay_method Pay method.
+ */
+void user_set_pay_method(User* user, PayMethod pay_method);
+
+/**
  * @brief Gets user's account status.
  * @param user User.
  * @return User's account status.
  */
 AccountStatus user_get_account_status(User* user);
+
+/**
+ * @brief Sets user's account status.
+ * @param user User.
+ * @param account_status Account status.
+ */
+void user_set_account_status(User* user, AccountStatus account_status);
 
 #endif
