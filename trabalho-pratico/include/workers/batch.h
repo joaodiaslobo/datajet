@@ -3,7 +3,6 @@
  * @brief Responsible for triggering batch mode logic such as populating the
  * database and executing the commands.
  */
-
 #ifndef BATCH_H
 #define BATCH_H
 

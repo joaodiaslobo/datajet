@@ -1,3 +1,7 @@
+/**
+ * @file catalog_flight.h
+ * @brief Flights catalog.
+ */
 #ifndef CATALOG_FLIGHT_H
 #define CATALOG_FLIGHT_H
 
@@ -45,8 +49,8 @@ int count_flights(CatalogFlight *catalog);
 
 /**
  * @brief Remove a flight from the catalog by flight ID
- * @details Searches for a flight with the specified ID in the CatalogFlight structure
- * and removes it from both the flight array and hash table.
+ * @details Searches for a flight with the specified ID in the CatalogFlight
+ * structure and removes it from both the flight array and hash table.
  *
  * @param catalog A pointer to the CatalogFlight structure.
  * @param flight_id The ID of the flight to be removed.
@@ -54,11 +58,13 @@ int count_flights(CatalogFlight *catalog);
 void remove_flight(CatalogFlight *catalog, int flight_id);
 
 /**
- * @brief Iterate through flights in the catalog and remove those that meet a specified condition
+ * @brief Iterate through flights in the catalog and remove those that meet a
+ * specified condition
  *
  * @param catalog A pointer to the CatalogFlight structure.
- * @param function A callback function that takes a flight and user-defined data as parameters
- *                 and returns TRUE if the flight should be removed, FALSE otherwise.
+ * @param function A callback function that takes a flight and user-defined data
+ * as parameters and returns TRUE if the flight should be removed, FALSE
+ * otherwise.
  * @param data User-defined data to be passed to the callback function.
  */
 void foreach_flight_remove(CatalogFlight *catalog, GHRFunc function,
@@ -66,8 +72,8 @@ void foreach_flight_remove(CatalogFlight *catalog, GHRFunc function,
 
 /**
  * @brief Check if a flight with a given ID exists in the catalog
- * @details Checks whether the flight hash table of the provided CatalogFlight structure
- * contains a flight with the specified ID.
+ * @details Checks whether the flight hash table of the provided CatalogFlight
+ * structure contains a flight with the specified ID.
  *
  * @param catalog A pointer to the CatalogFlight structure.
  * @param flight_id The ID of the flight to check for existence.
@@ -77,8 +83,9 @@ bool flight_exists(CatalogFlight *catalog, int flight_id);
 
 /**
  * @brief Retrieve a flight from the catalog by flight ID
- * @details Looks up and returns the Flight structure associated with the specified
- * flight ID in the flight hash table of the provided CatalogFlight structure.
+ * @details Looks up and returns the Flight structure associated with the
+ * specified flight ID in the flight hash table of the provided CatalogFlight
+ * structure.
  *
  * @param catalog A pointer to the CatalogFlight structure.
  * @param flight_id The ID of the flight to retrieve.
@@ -87,14 +94,16 @@ bool flight_exists(CatalogFlight *catalog, int flight_id);
 Flight *catalog_get_flight_by_id(CatalogFlight *catalog, int flight_id);
 
 /**
- * @brief Compare function for sorting Flight elements in an array by schedule departure date
- * @details Compares two Flight elements based on their schedule departure dates,
- * allowing for sorting Flight elements in an array in descending order by date and time.
+ * @brief Compare function for sorting Flight elements in an array by schedule
+ * departure date
+ * @details Compares two Flight elements based on their schedule departure
+ * dates, allowing for sorting Flight elements in an array in descending order
+ * by date and time.
  *
  * @param a A pointer to the first Flight element.
  * @param b A pointer to the second Flight element.
- * @return Negative value if the schedule departure date of 'a' is later than 'b',
- *         positive value if 'a' is earlier than 'b', and zero if they are equal.
+ * @return Negative value if the schedule departure date of 'a' is later than
+ * 'b', positive value if 'a' is earlier than 'b', and zero if they are equal.
  */
 int compare_flights_array_elements_by_schedule_departure_date(gpointer a,
                                                               gpointer b);

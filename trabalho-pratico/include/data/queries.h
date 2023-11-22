@@ -76,15 +76,54 @@ int query_flight_parameters_by_id(RowWriter *writer, Database *database,
 int query_reservation_parameters_by_id(RowWriter *writer, Database *database,
                                        char *query_args);
 
+/**
+ * @brief Lists user associations.
+ * @details Lists all user associations organized by date (most recent to
+ * oldest) of certain type(s) depending on the second argument.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param query_args Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_list_user_associations(RowWriter *writer, Database *database,
                                  char *query_args);
 
+/**
+ * @brief Lists user flights.
+ * @details Lists all flights organized by date (most recent to oldest) of an
+ * user.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param user_id User id.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_list_user_flights(RowWriter *writer, Database *database,
                             char *user_id);
 
+/**
+ * @brief Lists user reservations.
+ * @details Lists all reservations organized by date (most recent to oldest) of
+ * an user.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param user_id User id.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_list_user_reservations(RowWriter *writer, Database *database,
                                  char *user_id);
 
+/**
+ * @brief Calculates average hotel rating.
+ * @details Calculates the average rating of a hotel.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param query_args Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_calculate_average_hotel_rating(RowWriter *writer, Database *database,
                                          char *query_args);
 
@@ -101,6 +140,16 @@ int query_calculate_average_hotel_rating(RowWriter *writer, Database *database,
 int query_list_hotel_reservations(RowWriter *writer, Database *database,
                                   char *query_args);
 
+/**
+ * @brief Lists airport flights between dates.
+ * @details Lists flights that departed from a certain origin airport between
+ * two dates.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param user_id Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_list_airport_flights_between_dates(RowWriter *writer,
                                              Database *database,
                                              char *query_args);
@@ -117,6 +166,15 @@ int query_calculate_total_hotel_revenue_between_dates(RowWriter *writer,
                                                       Database *database,
                                                       char *query_args);
 
+/**
+ * @brief Lists users where name starts with prefix.
+ * @details Lists all users whose names starts with a certain prefix.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param query_args Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_list_users_where_name_starts_with_prefix(RowWriter *writer,
                                                    Database *database,
                                                    char *query_args);

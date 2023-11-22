@@ -2,7 +2,6 @@
  * @file utilities.h
  * @brief General utilities.
  */
-
 #ifndef UTILITIES_H
 #define UTILITIES_H
 

@@ -1,15 +1,14 @@
 /**
  * @file generic_validation.h
- * @brief Generic data validation
+ * @brief Generic data validation.
  */
-
 #ifndef GENERIC_VALIDATION_H
 #define GENERIC_VALIDATION_H
 
 #include "data/schemas/schema_data_types.h"
 
 /**
- * @brief Verify if the receiving value is empty
+ * @brief Verify if the receiving value is empty.
  * @details Checks if the given string is empty or null.
  *
  * @param value The input string to be checked.
@@ -80,10 +79,18 @@ bool invalid_bool_value(char* value);
  * @details Allows only non-zero positive integers.
  *
  * @param value The input string to be checked.
- * @return true if the string is an invalid positive integer, false otherwise.
+ * @return true if the string is an invalid non-zero positive integer, false
+ * otherwise.
  */
 bool invalid_positive_integer(char* value);
 
+/**
+ * @brief Check if the given string represents a valid integer.
+ * @details Allows only integers.
+ *
+ * @param value The input string to be checked.
+ * @return true if the string is an invalid integer, false otherwise.
+ */
 bool invalid_integer(char* value);
 
 #endif

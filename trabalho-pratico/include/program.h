@@ -2,7 +2,6 @@
  * @file program.h
  * @brief Responsible for mantaining the program state.
  */
-
 #ifndef PROGRAM_H
 #define PROGRAM_H
 

@@ -2,7 +2,6 @@
  * @file parser.h
  * @brief Generic parser for csv formatted entity data.
  */
-
 #ifndef PARSER_H
 #define PARSER_H
 

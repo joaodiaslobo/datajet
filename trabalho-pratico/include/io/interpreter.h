@@ -2,7 +2,6 @@
  * @file interpreter.h
  * @brief Responsible for parsing and executing commands.
  */
-
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
 

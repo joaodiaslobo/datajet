@@ -2,7 +2,6 @@
  * @file reader.h
  * @brief Used by the parser to traverse a csv formatted line.
  */
-
 #ifndef READER_H
 #define READER_H
 

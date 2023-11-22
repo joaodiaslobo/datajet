@@ -1,8 +1,7 @@
 /**
  * @file user_validation.h
- * @brief Validation of the user data
+ * @brief Validation of the user data.
  */
-
 #ifndef USER_VALIDATION_H
 #define USER_VALIDATION_H
 

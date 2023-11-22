@@ -1,3 +1,7 @@
+/**
+ * @file catalog_passenger.h
+ * @brief Passengers catalog.
+ */
 #ifndef CATALOG_PASSENGER_H
 #define CATALOG_PASSENGER_H
 
@@ -9,8 +13,8 @@ typedef struct catalogPassenger CatalogPassenger;
 
 /**
  * @brief Initialize a catalog for managing passenger information
- * @details Allocates memory for a new CatalogPassenger structure, initializes its
- * internal data structures, and returns a pointer to the created catalog.
+ * @details Allocates memory for a new CatalogPassenger structure, initializes
+ * its internal data structures, and returns a pointer to the created catalog.
  *
  * @return A pointer to the newly initialized CatalogPassenger structure.
  */
@@ -35,23 +39,28 @@ void free_passengers_catalog(CatalogPassenger *catalog);
 
 /**
  * @brief Insert passenger information into the catalog
- * @details Inserts the provided user and flight information into the CatalogPassenger structure,
- * associating them with the specified flight ID and user ID. If the flight ID or user ID
- * does not exist in the catalog, new entries are created.
+ * @details Inserts the provided user and flight information into the
+ * CatalogPassenger structure, associating them with the specified flight ID and
+ * user ID. If the flight ID or user ID does not exist in the catalog, new
+ * entries are created.
  *
  * @param catalog A pointer to the CatalogPassenger structure.
  * @param flight_id The ID of the flight to associate the passenger with.
  * @param user_id_unsafe The unsafe pointer to the user ID string.
- * @param flight A pointer to the flight information to be associated with the passenger.
- * @param user A pointer to the user information to be associated with the passenger.
+ * @param flight A pointer to the flight information to be associated with the
+ * passenger.
+ * @param user A pointer to the user information to be associated with the
+ * passenger.
  */
 void insert_passenger(CatalogPassenger *catalog, int flight_id,
                       char *user_id_unsafe, void *flight, void *user);
 
 /**
- * @brief Count the number of users associated with a specific flight in the catalog
+ * @brief Count the number of users associated with a specific flight in the
+ * catalog
  * @details Retrieves the list of users associated with the specified flight ID
- * from the CatalogPassenger structure and returns the number of users in the list.
+ * from the CatalogPassenger structure and returns the number of users in the
+ * list.
  *
  * @param catalog A pointer to the CatalogPassenger structure.
  * @param flight_id The ID of the flight for which to count associated users.
@@ -60,9 +69,11 @@ void insert_passenger(CatalogPassenger *catalog, int flight_id,
 int count_flight_users(CatalogPassenger *catalog, int flight_id);
 
 /**
- * @brief Count the number of flights associated with a specific user in the catalog
+ * @brief Count the number of flights associated with a specific user in the
+ * catalog
  * @details Retrieves the list of flights associated with the specified user ID
- * from the CatalogPassenger structure and returns the number of flights in the list.
+ * from the CatalogPassenger structure and returns the number of flights in the
+ * list.
  *
  * @param catalog A pointer to the CatalogPassenger structure.
  * @param user_id The ID of the user for which to count associated flights.
@@ -71,10 +82,11 @@ int count_flight_users(CatalogPassenger *catalog, int flight_id);
 int count_user_flights(CatalogPassenger *catalog, char *user_id);
 
 /**
- * @brief Remove all passenger information associated with a user ID from the catalog
- * @details Removes all passenger information associated with the specified user ID
- * from the CatalogPassenger structure, including user information from flight user lists
- * and flight information from the user flight list.
+ * @brief Remove all passenger information associated with a user ID from the
+ * catalog
+ * @details Removes all passenger information associated with the specified user
+ * ID from the CatalogPassenger structure, including user information from
+ * flight user lists and flight information from the user flight list.
  *
  * @param catalog A pointer to the CatalogPassenger structure.
  * @param user_id The user ID for which passenger information is to be removed.
@@ -82,19 +94,22 @@ int count_user_flights(CatalogPassenger *catalog, char *user_id);
 void remove_passengers_by_user_id(CatalogPassenger *catalog, char *user_id);
 
 /**
- * @brief Remove all passenger information associated with a flight ID from the catalog
- * @details Removes all passenger information associated with the specified flight ID
- * from the CatalogPassenger structure, including user information from flight user lists
- * and flight information from user flight lists.
+ * @brief Remove all passenger information associated with a flight ID from the
+ * catalog
+ * @details Removes all passenger information associated with the specified
+ * flight ID from the CatalogPassenger structure, including user information
+ * from flight user lists and flight information from user flight lists.
  *
  * @param catalog A pointer to the CatalogPassenger structure.
- * @param flight_id The ID of the flight for which passenger information is to be removed.
+ * @param flight_id The ID of the flight for which passenger information is to
+ * be removed.
  */
 void remove_passengers_by_flight_id(CatalogPassenger *catalog, int flight_id);
 
 /**
  * @brief Get the total count of passengers in the catalog
- * @details Returns the total count of passengers stored in the CatalogPassenger structure.
+ * @details Returns the total count of passengers stored in the CatalogPassenger
+ * structure.
  *
  * @param catalog A pointer to the CatalogPassenger structure.
  * @return The total count of passengers in the catalog.
@@ -102,13 +117,15 @@ void remove_passengers_by_flight_id(CatalogPassenger *catalog, int flight_id);
 int count_passengers(CatalogPassenger *catalog);
 
 /**
- * @brief Retrieve the list of flights associated with a specific user in the catalog
- * @details Returns a pointer to the GPtrArray containing flight information associated
- * with the specified user ID in the CatalogPassenger structure.
+ * @brief Retrieve the list of flights associated with a specific user in the
+ * catalog
+ * @details Returns a pointer to the GPtrArray containing flight information
+ * associated with the specified user ID in the CatalogPassenger structure.
  *
  * @param catalog A pointer to the CatalogPassenger structure.
  * @param user_id The ID of the user for which to retrieve associated flights.
- * @return A pointer to the GPtrArray containing flight information associated with the user ID.
+ * @return A pointer to the GPtrArray containing flight information associated
+ * with the user ID.
  */
 GPtrArray *get_user_flights(CatalogPassenger *catalog, char *user_id);
 

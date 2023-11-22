@@ -1,8 +1,3 @@
-/**
- * @file user_validation.c
- * @brief Validation of the user data
- */
-
 #include "data/schemas/validation/user_validation.h"
 
 #include <ctype.h>

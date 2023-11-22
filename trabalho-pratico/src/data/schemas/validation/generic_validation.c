@@ -1,8 +1,3 @@
-/**
- * @file generic_validation.c
- * @brief Generic data validation
- */
-
 #include "data/schemas/validation/generic_validation.h"
 
 #include <ctype.h>
