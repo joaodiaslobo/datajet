@@ -52,7 +52,7 @@ void free_passengers_catalog(CatalogPassenger *catalog);
  * @param user A pointer to the user information to be associated with the
  * passenger.
  */
-void insert_passenger(CatalogPassenger *catalog, int flight_id,
+void insert_passenger(CatalogPassenger *catalog, unsigned int flight_id,
                       char *user_id_unsafe, void *flight, void *user);
 
 /**
@@ -66,7 +66,7 @@ void insert_passenger(CatalogPassenger *catalog, int flight_id,
  * @param flight_id The ID of the flight for which to count associated users.
  * @return The number of users associated with the specified flight ID.
  */
-int count_flight_users(CatalogPassenger *catalog, int flight_id);
+int count_flight_users(CatalogPassenger *catalog, unsigned int flight_id);
 
 /**
  * @brief Count the number of flights associated with a specific user in the
@@ -104,7 +104,8 @@ void remove_passengers_by_user_id(CatalogPassenger *catalog, char *user_id);
  * @param flight_id The ID of the flight for which passenger information is to
  * be removed.
  */
-void remove_passengers_by_flight_id(CatalogPassenger *catalog, int flight_id);
+void remove_passengers_by_flight_id(CatalogPassenger *catalog,
+                                    unsigned int flight_id);
 
 /**
  * @brief Get the total count of passengers in the catalog

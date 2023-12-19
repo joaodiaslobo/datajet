@@ -100,9 +100,9 @@ GPtrArray *get_user_reservations(CatalogReservation *catalog, char *user_id) {
 }
 
 Reservation *catalog_get_reservation_by_id(CatalogReservation *catalog,
-                                           int reservation_id) {
+                                           unsigned int reservation_id) {
   return g_hash_table_lookup(catalog->reservations,
-                             GINT_TO_POINTER(reservation_id));
+                             GUINT_TO_POINTER(reservation_id));
 }
 
 int compare_reservations_array_elements_by_begin_date(gpointer a, gpointer b) {

@@ -9,7 +9,7 @@
 // Association via passengers catalog
 
 void create_passenger_association(Database *database, char *user_id,
-                                  int flight_id) {
+                                  unsigned int flight_id) {
   CatalogUser *users_catalog = database_get_user_catalog(database);
   CatalogFlight *flight_catalog = database_get_flight_catalog(database);
 
@@ -25,7 +25,7 @@ void create_passenger_association(Database *database, char *user_id,
 }
 
 bool validate_passenger_association(Database *database, char *user_id,
-                                    int flight_id) {
+                                    unsigned int flight_id) {
   // Checks if the user and flight exist
   CatalogUser *users_catalog = database_get_user_catalog(database);
   CatalogFlight *flight_catalog = database_get_flight_catalog(database);
@@ -36,7 +36,7 @@ bool validate_passenger_association(Database *database, char *user_id,
 bool validate_flight_passenger_count(gpointer key, Flight *flight,
                                      void *database) {
   int total_seats = flight_get_total_seats(flight);
-  int flight_id = GPOINTER_TO_INT(key);
+  unsigned int flight_id = GPOINTER_TO_UINT(key);
   CatalogPassenger *catalog = database_get_passenger_catalog(database);
 
   int actual_seats = count_flight_users(catalog, flight_id);
@@ -49,7 +49,7 @@ bool validate_flight_passenger_count(gpointer key, Flight *flight,
   return false;
 }
 
-void remove_flight_passengers(Database *database, int flight_id) {
+void remove_flight_passengers(Database *database, unsigned int flight_id) {
   CatalogPassenger *catalog = database_get_passenger_catalog(database);
   remove_passengers_by_flight_id(catalog, flight_id);
 }
@@ -64,7 +64,8 @@ int get_count_of_flights_belonging_to_user(Database *database, char *user_id) {
   return count_user_flights(catalog, user_id);
 }
 
-int get_count_of_users_belonging_to_flight(Database *database, int flight_id) {
+int get_count_of_users_belonging_to_flight(Database *database,
+                                           unsigned int flight_id) {
   CatalogPassenger *catalog = database_get_passenger_catalog(database);
   return count_flight_users(catalog, flight_id);
 }

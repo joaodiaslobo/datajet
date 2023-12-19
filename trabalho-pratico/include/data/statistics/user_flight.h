@@ -18,7 +18,7 @@
  * @param flight_id Flight id.
  */
 void create_passenger_association(Database *database, char *user_id,
-                                  int flight_id);
+                                  unsigned int flight_id);
 
 /**
  * @brief Validates a passenger association.
@@ -30,7 +30,7 @@ void create_passenger_association(Database *database, char *user_id,
  * @return true if the association is valid.
  */
 bool validate_passenger_association(Database *database, char *user_id,
-                                    int flight_id);
+                                    unsigned int flight_id);
 
 /**
  * @brief Validates the passenger count of a flight.
@@ -51,7 +51,7 @@ bool validate_flight_passenger_count(gpointer key, Flight *flight,
  * @param database Main database.
  * @param flight_id Flight id.
  */
-void remove_flight_passengers(Database *database, int flight_id);
+void remove_flight_passengers(Database *database, unsigned int flight_id);
 
 /**
  * @brief Removes all passengers from a user.
@@ -80,6 +80,7 @@ int get_count_of_flights_belonging_to_user(Database *database, char *user_id);
  * @param flight_id Flight id.
  * @return Count of users belonging to a flight.
  */
-int get_count_of_users_belonging_to_flight(Database *database, int flight_id);
+int get_count_of_users_belonging_to_flight(Database *database,
+                                           unsigned int flight_id);
 
 #endif

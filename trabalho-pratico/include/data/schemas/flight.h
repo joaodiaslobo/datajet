@@ -29,7 +29,7 @@ typedef struct flight Flight;
  * @param notes Notes.
  * @return New flight.
  */
-Flight* create_flight(unsigned short id, char* airline, char* plane_model,
+Flight* create_flight(unsigned int id, char* airline, char* plane_model,
                       int total_seats, char* origin, char* destination,
                       Timestamp schedule_departure_date,
                       Timestamp schedule_arrival_date,
@@ -64,14 +64,14 @@ void validate_flights(void* catalog, void* database);
  * @param flight Flight.
  * @return Flight's id.
  */
-unsigned short flight_get_id(Flight* flight);
+unsigned int flight_get_id(Flight* flight);
 
 /**
  * @brief Sets flight's id.
  * @param flight Flight.
  * @param id Id.
  */
-void flight_set_id(Flight* flight, unsigned short id);
+void flight_set_id(Flight* flight, unsigned int id);
 
 /**
  * @brief Gets flight's airline.

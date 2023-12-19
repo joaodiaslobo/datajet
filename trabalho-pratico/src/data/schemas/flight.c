@@ -9,7 +9,7 @@
 #include "io/parsing/reader.h"
 
 struct flight {
-  unsigned short id;
+  unsigned int id;
   char* airline;
   char* plane_model;
   int total_seats;
@@ -24,7 +24,7 @@ struct flight {
   char* notes;
 };
 
-Flight* create_flight(unsigned short id, char* airline, char* plane_model,
+Flight* create_flight(unsigned int id, char* airline, char* plane_model,
                       int total_seats, char* origin, char* destination,
                       Timestamp schedule_departure_date,
                       Timestamp schedule_arrival_date,
@@ -66,8 +66,8 @@ int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog,
                                     void* database) {
   char* flight_id_string = reader_next_cell(reader);
   if (is_empty_value(flight_id_string)) return 1;
-  int flight_id = parse_number(flight_id_string);
-  gpointer flight_key = GINT_TO_POINTER(flight_id);
+  unsigned int flight_id = parse_unsigned_integer(flight_id_string);
+  gpointer flight_key = GUINT_TO_POINTER(flight_id);
 
   char* flight_airline = reader_next_cell(reader);
   if (is_empty_value(flight_airline)) return 1;
@@ -129,11 +129,10 @@ int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog,
   char* flight_notes = reader_next_cell(reader);
 
   Flight* flight = create_flight(
-      (unsigned short)flight_id, flight_airline, flight_plane_model,
-      flight_total_seats, flight_origin, flight_destination,
-      flight_schedule_departure_date, flight_schedule_arrival_date,
-      flight_real_departure_date, flight_real_arrival_date, flight_pilot,
-      flight_copilot, flight_notes);
+      flight_id, flight_airline, flight_plane_model, flight_total_seats,
+      flight_origin, flight_destination, flight_schedule_departure_date,
+      flight_schedule_arrival_date, flight_real_departure_date,
+      flight_real_arrival_date, flight_pilot, flight_copilot, flight_notes);
 
   insert_flight(catalog, flight, flight_key);
   return 0;
@@ -144,9 +143,9 @@ void validate_flights(void* catalog, void* database) {
                         database);
 }
 
-unsigned short flight_get_id(Flight* flight) { return flight->id; }
+unsigned int flight_get_id(Flight* flight) { return flight->id; }
 
-void flight_set_id(Flight* flight, unsigned short id) { flight->id = id; }
+void flight_set_id(Flight* flight, unsigned int id) { flight->id = id; }
 
 char* flight_get_airline(Flight* flight) { return g_strdup(flight->airline); }
 

@@ -30,6 +30,6 @@ int parse_passenger_and_add_to_catalog(RowReader* reader, void* catalog,
  * @return true if invalid, false if valid.
  */
 bool passenger_invalid_association(void* database, char* user_id,
-                                   int flight_id);
+                                   unsigned int flight_id);
 
 #endif

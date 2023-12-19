@@ -197,6 +197,15 @@ int parse_number(char *number_string) {
   return number;
 }
 
+unsigned int parse_unsigned_integer(char *int_string) {
+  unsigned int number = 0;
+  for (int i = 0; int_string[i] != '\0'; i++) {
+    number *= 10;
+    number += int_string[i] - '0';
+  }
+  return number;
+}
+
 bool parse_boolean(char *boolean_string) {
   string_to_upper(boolean_string);
   return boolean_string[0] == 'T' || boolean_string[0] == '1';

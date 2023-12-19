@@ -118,6 +118,13 @@ bool is_timestamp_between_dates(Timestamp timestamp, Timestamp begin_date,
 int parse_number(char *number_string);
 
 /**
+ * @brief Parses number to an unsigned integer.
+ * @param number_string Number string.
+ * @return Parsed unsigned integer.
+ */
+unsigned int parse_unsigned_integer(char *int_string);
+
+/**
  * @brief Parses boolean.
  * @param boolean_string Boolean string.
  * @return Parsed boolean.

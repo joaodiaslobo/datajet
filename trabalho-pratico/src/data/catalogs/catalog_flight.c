@@ -34,18 +34,18 @@ int count_flights(CatalogFlight *catalog) {
   return g_hash_table_size(catalog->flights);
 }
 
-void remove_flight(CatalogFlight *catalog, int flight_id) {
+void remove_flight(CatalogFlight *catalog, unsigned int flight_id) {
   int flight_count = count_flights(catalog);
   int removed = 0;
   for (int i = 0; i < flight_count && !removed; i++) {
     Flight *flight = g_ptr_array_index(catalog->flight_array, i);
-    int id = (int)flight_get_id(flight);
+    unsigned int id = flight_get_id(flight);
     if (id == flight_id) {
       g_ptr_array_remove_index(catalog->flight_array, i);
     }
   }
 
-  g_hash_table_remove(catalog->flights, GINT_TO_POINTER(flight_id));
+  g_hash_table_remove(catalog->flights, GUINT_TO_POINTER(flight_id));
 }
 
 void foreach_flight_remove(CatalogFlight *catalog, GHRFunc function,
@@ -53,12 +53,13 @@ void foreach_flight_remove(CatalogFlight *catalog, GHRFunc function,
   g_hash_table_foreach_remove(catalog->flights, function, data);
 }
 
-bool flight_exists(CatalogFlight *catalog, int flight_id) {
-  return g_hash_table_contains(catalog->flights, GINT_TO_POINTER(flight_id));
+bool flight_exists(CatalogFlight *catalog, unsigned int flight_id) {
+  return g_hash_table_contains(catalog->flights, GUINT_TO_POINTER(flight_id));
 }
 
-Flight *catalog_get_flight_by_id(CatalogFlight *catalog, int flight_id) {
-  return g_hash_table_lookup(catalog->flights, GINT_TO_POINTER(flight_id));
+Flight *catalog_get_flight_by_id(CatalogFlight *catalog,
+                                 unsigned int flight_id) {
+  return g_hash_table_lookup(catalog->flights, GUINT_TO_POINTER(flight_id));
 }
 
 int compare_flights_array_elements_by_schedule_departure_date(gpointer a,

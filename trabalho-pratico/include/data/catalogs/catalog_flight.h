@@ -55,7 +55,7 @@ int count_flights(CatalogFlight *catalog);
  * @param catalog A pointer to the CatalogFlight structure.
  * @param flight_id The ID of the flight to be removed.
  */
-void remove_flight(CatalogFlight *catalog, int flight_id);
+void remove_flight(CatalogFlight *catalog, unsigned int flight_id);
 
 /**
  * @brief Iterate through flights in the catalog and remove those that meet a
@@ -79,7 +79,7 @@ void foreach_flight_remove(CatalogFlight *catalog, GHRFunc function,
  * @param flight_id The ID of the flight to check for existence.
  * @return TRUE if a flight with the specified ID exists, FALSE otherwise.
  */
-bool flight_exists(CatalogFlight *catalog, int flight_id);
+bool flight_exists(CatalogFlight *catalog, unsigned int flight_id);
 
 /**
  * @brief Retrieve a flight from the catalog by flight ID
@@ -91,7 +91,8 @@ bool flight_exists(CatalogFlight *catalog, int flight_id);
  * @param flight_id The ID of the flight to retrieve.
  * @return A pointer to the Flight structure if found, or NULL if not found.
  */
-Flight *catalog_get_flight_by_id(CatalogFlight *catalog, int flight_id);
+Flight *catalog_get_flight_by_id(CatalogFlight *catalog,
+                                 unsigned int flight_id);
 
 /**
  * @brief Compare function for sorting Flight elements in an array by schedule

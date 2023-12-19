@@ -134,7 +134,7 @@ Reservation *get_user_reservation_by_index(CatalogReservation *catalog,
  * reservation ID, or NULL if the reservation ID is not found.
  */
 Reservation *catalog_get_reservation_by_id(CatalogReservation *catalog,
-                                           int reservation_id);
+                                           unsigned int reservation_id);
 
 /**
  * @brief Compare two reservation elements based on their begin dates

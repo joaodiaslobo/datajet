@@ -97,7 +97,7 @@ int query_user_parameters_by_id(RowWriter *writer, Database *database,
 int query_flight_parameters_by_id(RowWriter *writer, Database *database,
                                   char *query_args) {
   CatalogFlight *catalog = database_get_flight_catalog(database);
-  int flight_id = parse_number(query_args);
+  unsigned int flight_id = parse_unsigned_integer(query_args);
   Flight *flight = catalog_get_flight_by_id(catalog, flight_id);
   if (flight == NULL) return 1;
 
@@ -150,7 +150,7 @@ int query_flight_parameters_by_id(RowWriter *writer, Database *database,
 int query_reservation_parameters_by_id(RowWriter *writer, Database *database,
                                        char *query_args) {
   CatalogReservation *catalog = database_get_reservation_catalog(database);
-  int reservation_id = parse_number(query_args + 4);
+  unsigned int reservation_id = parse_unsigned_integer(query_args + 4);
   Reservation *reservation =
       catalog_get_reservation_by_id(catalog, reservation_id);
   if (reservation == NULL) return 1;
@@ -245,8 +245,8 @@ int query_list_user_associations(RowWriter *writer, Database *database,
     Timestamp reservation_date = reservation_get_begin_date(reservation);
 
     if ((flight_date.date >= reservation_date.date)) {
-      unsigned short flight_id_short = flight_get_id(flight);
-      char *flight_id = g_strdup_printf("%010hu", flight_id_short);
+      unsigned int flight_id_int = flight_get_id(flight);
+      char *flight_id = g_strdup_printf("%010u", flight_id_int);
       Timestamp flight_schedule_departure_date =
           flight_get_schedule_departure_date(flight);
       char *flight_schedule_departure_date_string =
@@ -259,9 +259,8 @@ int query_list_user_associations(RowWriter *writer, Database *database,
       g_free(flight_id);
       g_free(flight_schedule_departure_date_string);
     } else if (flight_date.date < reservation_date.date) {
-      unsigned short reservation_id_short = reservation_get_id(reservation);
-      char *reservation_id =
-          g_strdup_printf("Book%010hu", reservation_id_short);
+      unsigned int reservation_id_int = reservation_get_id(reservation);
+      char *reservation_id = g_strdup_printf("Book%010u", reservation_id_int);
       Timestamp reservation_begin_date =
           reservation_get_begin_date(reservation);
       char *reservation_begin_date_string =
@@ -280,8 +279,8 @@ int query_list_user_associations(RowWriter *writer, Database *database,
     Flight *flight = g_ptr_array_index(flights, index_flight);
     Timestamp flight_date = flight_get_schedule_departure_date(flight);
 
-    unsigned short flight_id_short = flight_get_id(flight);
-    char *flight_id = g_strdup_printf("%010hu", flight_id_short);
+    unsigned int flight_id_int = flight_get_id(flight);
+    char *flight_id = g_strdup_printf("%010u", flight_id_int);
     Timestamp flight_schedule_departure_date =
         flight_get_schedule_departure_date(flight);
     char *flight_schedule_departure_date_string =
@@ -300,8 +299,8 @@ int query_list_user_associations(RowWriter *writer, Database *database,
         g_ptr_array_index(reservations, index_reservation);
     Timestamp reservation_date = reservation_get_begin_date(reservation);
 
-    unsigned short reservation_id_short = reservation_get_id(reservation);
-    char *reservation_id = g_strdup_printf("Book%010hu", reservation_id_short);
+    unsigned int reservation_id_int = reservation_get_id(reservation);
+    char *reservation_id = g_strdup_printf("Book%010u", reservation_id_int);
     Timestamp reservation_begin_date = reservation_get_begin_date(reservation);
     char *reservation_begin_date_string =
         date_to_string(reservation_begin_date);
@@ -324,7 +323,7 @@ int query_list_user_flights(RowWriter *writer, Database *database,
   if (user == NULL) return 1;
   if (user_get_account_status(user) == INACTIVE) return 1;
 
-  char *format[] = {"%010hu", "%s"};
+  char *format[] = {"%010u", "%s"};
   char *fields[] = {"id", "date"};
 
   row_writer_set_formatting(writer, format);
@@ -341,7 +340,7 @@ int query_list_user_flights(RowWriter *writer, Database *database,
 
   for (int i = 0; i < flights_count; i++) {
     Flight *flight = g_ptr_array_index(flights, i);
-    unsigned short flight_id = flight_get_id(flight);
+    unsigned int flight_id = flight_get_id(flight);
     Timestamp flight_schedule_departure_date =
         flight_get_schedule_departure_date(flight);
     char *flight_schedule_departure_date_string =
@@ -380,8 +379,8 @@ int query_list_user_reservations(RowWriter *writer, Database *database,
 
   for (int i = 0; i < reservations_count; i++) {
     Reservation *reservation = g_ptr_array_index(reservations, i);
-    unsigned short reservation_id_short = reservation_get_id(reservation);
-    char *reservation_id = g_strdup_printf("Book%010hu", reservation_id_short);
+    unsigned int reservation_id_int = reservation_get_id(reservation);
+    char *reservation_id = g_strdup_printf("Book%010u", reservation_id_int);
     Timestamp reservation_begin_date = reservation_get_begin_date(reservation);
     char *reservation_begin_date_string =
         date_to_string(reservation_begin_date);
@@ -441,8 +440,8 @@ int query_list_hotel_reservations(RowWriter *writer, Database *database,
   for (int i = 0; i < reservations_count; i++) {
     Reservation *reservation = g_ptr_array_index(reservations, i);
 
-    unsigned short reservation_id_short = reservation_get_id(reservation);
-    char *reservation_id = g_strdup_printf("Book%010hu", reservation_id_short);
+    unsigned int reservation_id_int = reservation_get_id(reservation);
+    char *reservation_id = g_strdup_printf("Book%010u", reservation_id_int);
     Timestamp reservation_begin_date = reservation_get_begin_date(reservation);
     char *reservation_begin_date_string =
         date_to_string(reservation_begin_date);
@@ -472,7 +471,7 @@ int query_list_hotel_reservations(RowWriter *writer, Database *database,
 int query_list_airport_flights_between_dates(RowWriter *writer,
                                              Database *database,
                                              char *query_args) {
-  char *format[] = {"%010hu", "%s", "%s", "%s", "%s"};
+  char *format[] = {"%010u", "%s", "%s", "%s", "%s"};
   char *fields[] = {"id", "schedule_departure_date", "destination", "airline",
                     "plane_model"};
 
@@ -504,7 +503,7 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
 
       if (is_timestamp_between_dates(flight_schedule_departure_date,
                                      lower_limit, upper_limit)) {
-        unsigned short flight_id = flight_get_id(flight);
+        unsigned int flight_id = flight_get_id(flight);
         char *flight_schedule_departure_date_string =
             timestamp_to_string(flight_schedule_departure_date);
         char *flight_destination = flight_get_destination(flight);
