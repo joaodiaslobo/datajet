@@ -1,3 +1,6 @@
 # IDEs
 /.idea/
 /.vscode/
+
+# Temporary files from testing scripts
+tools/temp
