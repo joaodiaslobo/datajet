@@ -37,14 +37,18 @@ def build_and_run_program(source_directory, program_name, destination_directory,
 def validate_output(output_path, expected_output_path, input):
     output_files = os.listdir(output_path)
     query_lines = open(input, "r").read().split("\n")
+    output_files.sort()
+    wrong_files = 0
     for file in output_files:
         if file.endswith(".txt"):
             if not filecmp.cmp(os.path.join(output_path, file), os.path.join(expected_output_path, file)):
                 command_id = int(re.search(r'\d+', file)[0])
                 query = query_lines[command_id - 1]
                 print("Output file " + file + " is not correct (QUERY " + re.search(r'\d+', query)[0] + ") -> " + query)
+                wrong_files += 1
                 #for line in difflib.unified_diff(open(os.path.join(expected_output_path, file)).read().split("\n"), open(os.path.join(output_path, file)).read().split("\n"), fromfile='file1', tofile='file2', lineterm=''):
                 #    print(line)
+    print("Total wrong outputs: " + str(wrong_files))
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
@@ -60,4 +64,4 @@ if __name__ == '__main__':
 
     validate_output(os.path.join(temp_directory, "Resultados"), os.path.abspath(sys.argv[2] + "/outputs"), os.path.abspath(sys.argv[2] + "/input.txt"))
 
-    #shutil.rmtree(temp_directory)
+    shutil.rmtree(temp_directory)

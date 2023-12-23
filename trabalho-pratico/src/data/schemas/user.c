@@ -106,8 +106,7 @@ int parse_user_and_add_to_catalog(RowReader* reader, void* catalog,
   AccountStatus user_account_status =
       parse_account_status(user_account_status_string);
 
-  char user_key[strlen(user_id) + 1];
-  strcpy(user_key, user_id);
+  char* user_key = g_strdup(user_id);
 
   User* user = create_user(
       user_id, user_name, user_email, user_phone_number, user_birth_date,
