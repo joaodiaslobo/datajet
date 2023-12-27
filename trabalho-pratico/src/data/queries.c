@@ -490,9 +490,7 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
   GPtrArray *flights = get_flights_array(catalog);
   if (flights == NULL) return 1;
   int flights_count = flights->len;
-  g_ptr_array_sort(
-      flights,
-      (GCompareFunc)compare_flights_array_elements_by_schedule_departure_date);
+  catalog_sort_flights_by_schedule_departure_date(catalog);
   for (int i = 0; i < flights_count; i++) {
     Flight *flight = g_ptr_array_index(flights, i);
     char *flight_origin = flight_get_origin(flight);
@@ -561,7 +559,8 @@ int query_list_users_where_name_starts_with_prefix(RowWriter *writer,
   GPtrArray *users = get_users(catalog);
   int users_count = count_users(catalog);
 
-  g_ptr_array_sort(users, (GCompareFunc)compare_users_array_elements_by_name);
+  catalog_sort_users_by_name(catalog);
+
   int prefix_len = strlen(query_args);
   if (prefix_len >= 2 && query_args[0] == '"' &&
       query_args[prefix_len - 1] == '"') {

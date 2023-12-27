@@ -7,6 +7,7 @@
 struct catalogFlight {
   GHashTable *flights;
   GPtrArray *flight_array;
+  bool flight_array_sorted;
 };
 
 CatalogFlight *initialize_flights_catalog() {
@@ -14,6 +15,7 @@ CatalogFlight *initialize_flights_catalog() {
   catalog->flights =
       g_hash_table_new_full(NULL, g_direct_equal, NULL, free_flight);
   catalog->flight_array = g_ptr_array_new();
+  catalog->flight_array_sorted = false;
 
   return catalog;
 }
@@ -25,9 +27,18 @@ void free_flights_catalog(CatalogFlight *catalog) {
   free(catalog);
 }
 
+static bool have_flights_been_sorted(CatalogFlight *catalog) {
+  return catalog->flight_array_sorted;
+}
+
+static void set_flights_sorting(CatalogFlight *catalog, bool value) {
+  catalog->flight_array_sorted = value;
+}
+
 void insert_flight(CatalogFlight *catalog, Flight *flight, gpointer key) {
   g_hash_table_insert(catalog->flights, key, flight);
   g_ptr_array_add(catalog->flight_array, flight);
+  set_flights_sorting(catalog, false);
 }
 
 int count_flights(CatalogFlight *catalog) {
@@ -60,6 +71,16 @@ bool flight_exists(CatalogFlight *catalog, unsigned int flight_id) {
 Flight *catalog_get_flight_by_id(CatalogFlight *catalog,
                                  unsigned int flight_id) {
   return g_hash_table_lookup(catalog->flights, GUINT_TO_POINTER(flight_id));
+}
+
+void catalog_sort_flights_by_schedule_departure_date(CatalogFlight *catalog) {
+  if (!have_flights_been_sorted(catalog)) {
+    qsort_g_ptr_array(
+        catalog->flight_array,
+        (GCompareFunc)
+            compare_flights_array_elements_by_schedule_departure_date);
+    set_flights_sorting(catalog, true);
+  }
 }
 
 int compare_flights_array_elements_by_schedule_departure_date(gpointer a,

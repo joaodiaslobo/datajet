@@ -95,6 +95,15 @@ Flight *catalog_get_flight_by_id(CatalogFlight *catalog,
                                  unsigned int flight_id);
 
 /**
+ * @brief Sort the list of flights in the catalog by schedule departure date
+ * @details Sorts the list of flights in the CatalogFlight structure by name
+ * using the qsort_g_ptr_array function.
+ *
+ * @param catalog A pointer to the CatalogFlight structure.
+ */
+void catalog_sort_flights_by_schedule_departure_date(CatalogFlight *catalog);
+
+/**
  * @brief Compare function for sorting Flight elements in an array by schedule
  * departure date
  * @details Compares two Flight elements based on their schedule departure

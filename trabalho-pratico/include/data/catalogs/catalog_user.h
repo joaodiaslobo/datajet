@@ -101,6 +101,15 @@ User *catalog_get_user_by_name(CatalogUser *catalog, char *user_name);
 GPtrArray *get_users(CatalogUser *catalog);
 
 /**
+ * @brief Sort the list of users in the user catalog by name
+ * @details Sorts the list of users in the CatalogUser structure by name using
+ * the qsort_g_ptr_array function.
+ *
+ * @param catalog A pointer to the CatalogUser structure.
+ */
+void catalog_sort_users_by_name(CatalogUser *catalog);
+
+/**
  * @brief Compare two user elements based on their names
  * @details Compares two user elements based on their names. If the names are
  * equal, the function further compares the user IDs. Returns a negative value
