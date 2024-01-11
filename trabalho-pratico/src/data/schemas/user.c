@@ -28,20 +28,29 @@ User* create_user(char* id, char* name, char* email, char* phone_number,
                   Timestamp birth_date, Sex sex, char* passport,
                   char* country_code, char* address, Timestamp account_creation,
                   PayMethod pay_method, AccountStatus account_status) {
-  User* user = malloc(sizeof(struct user));
+  User* user = initialize_user();
 
   user_set_id(user, id);
   user_set_name(user, name);
-  user_set_email(user, email);
-  user_set_phone_number(user, phone_number);
   user_set_birth_date(user, birth_date);
   user_set_sex(user, sex);
   user_set_passport(user, passport);
   user_set_country_code(user, country_code);
-  user_set_address(user, address);
   user_set_account_creation(user, account_creation);
-  user_set_pay_method(user, pay_method);
   user_set_account_status(user, account_status);
+
+  return user;
+}
+
+User* initialize_user() {
+  User* user = malloc(sizeof(struct user));
+  user->id = NULL;
+  user->name = NULL;
+  user->email = NULL;
+  user->phone_number = NULL;
+  user->passport = NULL;
+  user->country_code = NULL;
+  user->address = NULL;
 
   return user;
 }

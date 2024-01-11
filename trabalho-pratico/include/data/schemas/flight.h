@@ -30,12 +30,18 @@ typedef struct flight Flight;
  * @return New flight.
  */
 Flight* create_flight(unsigned int id, char* airline, char* plane_model,
-                      int total_seats, char* origin, char* destination,
-                      Timestamp schedule_departure_date,
+                      unsigned short total_seats, char* origin,
+                      char* destination, Timestamp schedule_departure_date,
                       Timestamp schedule_arrival_date,
                       Timestamp real_departure_date,
                       Timestamp real_arrival_date, char* pilot, char* copilot,
                       char* notes);
+
+/**
+ * @brief Initializes flight.
+ * @return Flight.
+ */
+Flight* initialize_flight();
 
 /**
  * @brief Frees flight.
@@ -106,14 +112,14 @@ void flight_set_plane_model(Flight* flight, char* plane_model);
  * @param flight Flight.
  * @return Flight's total seats.
  */
-int flight_get_total_seats(Flight* flight);
+unsigned short flight_get_total_seats(Flight* flight);
 
 /**
  * @brief Sets flight's total seats.
  * @param flight Flight.
  * @param total_seats Total seats.
  */
-void flight_set_total_seats(Flight* flight, int total_seats);
+void flight_set_total_seats(Flight* flight, unsigned short total_seats);
 
 /**
  * @brief Gets flight's origin airport.

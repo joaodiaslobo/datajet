@@ -35,7 +35,7 @@ bool validate_passenger_association(Database *database, char *user_id,
 
 bool validate_flight_passenger_count(gpointer key, Flight *flight,
                                      void *database) {
-  int total_seats = flight_get_total_seats(flight);
+  int total_seats = (int)flight_get_total_seats(flight);
   unsigned int flight_id = GPOINTER_TO_UINT(key);
   CatalogPassenger *catalog = database_get_passenger_catalog(database);
 

@@ -36,6 +36,12 @@ User* create_user(char* id, char* name, char* email, char* phone_number,
                   PayMethod pay_method, AccountStatus account_status);
 
 /**
+ * @brief Initializes user.
+ * @return User.
+ */
+User* initialize_user();
+
+/**
  * @brief Frees user.
  * @param user_ptr User pointer.
  */

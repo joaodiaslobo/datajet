@@ -33,12 +33,19 @@ typedef struct reservation Reservation;
  * @param comment Comment.
  * @return New reservation.
  */
-Reservation* create_reservation(unsigned int id, char* user_id, char* hotel_id,
-                                char* hotel_name, int hotel_stars, int city_tax,
-                                char* address, Timestamp begin_date,
-                                Timestamp end_date, int price_per_night,
+Reservation* create_reservation(unsigned int id, char* user_id,
+                                unsigned short hotel_id, char* hotel_name,
+                                char hotel_stars, char city_tax, char* address,
+                                Timestamp begin_date, Timestamp end_date,
+                                unsigned short price_per_night,
                                 bool includes_breakfast, char* room_details,
-                                int rating, char* comment);
+                                char rating, char* comment);
+
+/**
+ * @brief Initializes reservation.
+ * @return Reservation.
+ */
+Reservation* initialize_reservation();
 
 /**
  * @brief Frees reservation.
@@ -96,14 +103,15 @@ void reservation_set_user_id(Reservation* reservation, char* user_id);
  * @param reservation Reservation.
  * @return Reservation's hotel id.
  */
-char* reservation_get_hotel_id(Reservation* reservation);
+unsigned short reservation_get_hotel_id(Reservation* reservation);
 
 /**
  * @brief Sets reservation's hotel id.
  * @param reservation Reservation.
  * @param hotel_id Hotel id.
  */
-void reservation_set_hotel_id(Reservation* reservation, char* hotel_id);
+void reservation_set_hotel_id(Reservation* reservation,
+                              unsigned short hotel_id);
 
 /**
  * @brief Gets reservation's hotel name.
@@ -124,28 +132,28 @@ void reservation_set_hotel_name(Reservation* reservation, char* hotel_name);
  * @param reservation Reservation.
  * @return Reservation's hotel stars.
  */
-int reservation_get_hotel_stars(Reservation* reservation);
+char reservation_get_hotel_stars(Reservation* reservation);
 
 /**
  * @brief Sets reservation's hotel stars.
  * @param reservation Reservation.
  * @param hotel_stars Hotel stars.
  */
-void reservation_set_hotel_stars(Reservation* reservation, int hotel_stars);
+void reservation_set_hotel_stars(Reservation* reservation, char hotel_stars);
 
 /**
  * @brief Gets reservation's city tax.
  * @param reservation Reservation.
  * @return Reservation's city tax.
  */
-int reservation_get_city_tax(Reservation* reservation);
+char reservation_get_city_tax(Reservation* reservation);
 
 /**
  * @brief Sets reservation's city tax.
  * @param reservation Reservation.
  * @param city_tax City tax.
  */
-void reservation_set_city_tax(Reservation* reservation, int city_tax);
+void reservation_set_city_tax(Reservation* reservation, char city_tax);
 
 /**
  * @brief Gets reservation's address.
@@ -194,7 +202,7 @@ void reservation_set_end_date(Reservation* reservation, Timestamp end_date);
  * @param reservation Reservation.
  * @return Reservation's price per night.
  */
-int reservation_get_price_per_night(Reservation* reservation);
+unsigned short reservation_get_price_per_night(Reservation* reservation);
 
 /**
  * @brief Sets reservation's price per night.
@@ -202,7 +210,7 @@ int reservation_get_price_per_night(Reservation* reservation);
  * @param price_per_night Price per night.
  */
 void reservation_set_price_per_night(Reservation* reservation,
-                                     int price_per_night);
+                                     unsigned short price_per_night);
 
 /**
  * @brief Gets reservation's includes breakfast bool.
@@ -238,14 +246,14 @@ void reservation_set_room_details(Reservation* reservation, char* room_details);
  * @param reservation Reservation.
  * @return Reservation's rating.
  */
-int reservation_get_rating(Reservation* reservation);
+char reservation_get_rating(Reservation* reservation);
 
 /**
  * @brief Sets reservation's rating.
  * @param reservation Reservation.
  * @param rating Rating.
  */
-void reservation_set_rating(Reservation* reservation, int rating);
+void reservation_set_rating(Reservation* reservation, char rating);
 
 /**
  * @brief Gets reservation's comment.

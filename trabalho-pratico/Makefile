@@ -18,7 +18,7 @@ ifeq ($(BUILD_TYPE), debug)
 	BUILD_DIR_PATH := build/debug
 	FLAGS += -Iinclude/
 else ifeq ($(BUILD_TYPE), release)
-	FLAGS += -O3
+	FLAGS += -O3 -flto -funroll-loops
 	BUILD_DIR_PATH := build/release
 	FLAGS += -Iinclude/
 endif

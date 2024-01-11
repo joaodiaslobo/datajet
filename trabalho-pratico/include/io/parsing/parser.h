@@ -13,7 +13,7 @@
 /**
  * @brief Maximum size for a line in the csv file.
  */
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 512
 
 /**
  * @brief Delimiter used in the csv file.

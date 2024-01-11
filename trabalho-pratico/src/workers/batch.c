@@ -18,6 +18,7 @@ int batch_worker(char **argv, Database *database) {
   char *dataset_folder_path = argv[0];
   char *query_commands_path = argv[1];
 
+  printf("== POPULATING DATABASE ==\n");
   csv_populate_database(database, dataset_folder_path);
 
   CatalogUser *userCatalog = database_get_user_catalog(database);
@@ -38,9 +39,10 @@ int batch_worker(char **argv, Database *database) {
       count_passengers(database_get_passenger_catalog(database));
   printf("\n== PASSENGERS (%d) ==\n", passenger_count);
 
-  printf("\n== FREEING DATA ==\n");
+  printf("\n== EXECUTING QUERY COMMANDS ==\n");
 
   parse_and_execute_commands(query_commands_path, database);
 
+  printf("\n== FREEING DATA ==\n");
   return 0;
 }

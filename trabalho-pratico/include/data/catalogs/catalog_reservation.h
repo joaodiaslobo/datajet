@@ -90,7 +90,8 @@ int count_user_reservations(CatalogReservation *catalog, char *user_id);
  * @return A pointer to the GPtrArray containing reservation information
  * associated with the hotel ID.
  */
-GPtrArray *get_hotel_reservations(CatalogReservation *catalog, char *hotel_id);
+GPtrArray *get_hotel_reservations(CatalogReservation *catalog,
+                                  unsigned short hotel_id);
 
 /**
  * @brief Retrieve the list of reservations associated with a specific user in

@@ -6,7 +6,7 @@
 
 #include "io/file.h"
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 512
 #define VALUE_BUFFER_SIZE 128
 
 struct rowWriter {

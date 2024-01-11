@@ -125,6 +125,20 @@ int parse_number(char *number_string);
 unsigned int parse_unsigned_integer(char *int_string);
 
 /**
+ * @brief Parses number to an unsigned short.
+ * @param number_string Number string.
+ * @return Parsed unsigned short.
+ */
+unsigned short parse_unsigned_short(char *short_string);
+
+/**
+ * @brief Parses number to a char.
+ * @param number_string Number string.
+ * @return Parsed char.
+ */
+char parse_char(char *char_string);
+
+/**
  * @brief Parses boolean.
  * @param boolean_string Boolean string.
  * @return Parsed boolean.

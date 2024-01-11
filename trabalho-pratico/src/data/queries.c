@@ -49,8 +49,7 @@ int query_user_parameters_by_id(RowWriter *writer, Database *database,
                                 char *query_params) {
   CatalogUser *catalog = database_get_user_catalog(database);
   User *user = catalog_get_user_by_id(catalog, query_params);
-  if (user == NULL) return 1;
-  if (user_get_account_status(user) == INACTIVE) return 1;
+  if (user == NULL || user_get_account_status(user) == INACTIVE) return 1;
 
   char *user_id = user_get_id(user);
   char *user_name = user_get_name(user);
@@ -155,9 +154,11 @@ int query_reservation_parameters_by_id(RowWriter *writer, Database *database,
       catalog_get_reservation_by_id(catalog, reservation_id);
   if (reservation == NULL) return 1;
 
-  char *reservation_hotel_id = reservation_get_hotel_id(reservation);
+  unsigned short reservation_hotel_id = reservation_get_hotel_id(reservation);
+  char *reservation_hotel_id_string =
+      g_strdup_printf("HTL%hu", reservation_hotel_id);
   char *reservation_hotel_name = reservation_get_hotel_name(reservation);
-  int reservation_hotel_stars = reservation_get_hotel_stars(reservation);
+  char reservation_hotel_stars = reservation_get_hotel_stars(reservation);
   Timestamp reservation_begin_date = reservation_get_begin_date(reservation);
   char *reservation_begin_date_string = date_to_string(reservation_begin_date);
   Timestamp reservation_end_date = reservation_get_end_date(reservation);
@@ -177,13 +178,14 @@ int query_reservation_parameters_by_id(RowWriter *writer, Database *database,
   row_writer_set_formatting(writer, format);
   row_writer_set_field_names(writer, fields);
 
-  write_entity_values(writer, 8, reservation_hotel_id, reservation_hotel_name,
-                      reservation_hotel_stars, reservation_begin_date_string,
+  write_entity_values(writer, 8, reservation_hotel_id_string,
+                      reservation_hotel_name, reservation_hotel_stars,
+                      reservation_begin_date_string,
                       reservation_end_date_string,
                       reservation_includes_breakfast ? "True" : "False",
                       reservation_nights, reservation_hotel_price_string);
 
-  g_free(reservation_hotel_id);
+  g_free(reservation_hotel_id_string);
   g_free(reservation_hotel_name);
   g_free(reservation_begin_date_string);
   g_free(reservation_end_date_string);
@@ -204,8 +206,7 @@ int query_list_user_associations(RowWriter *writer, Database *database,
 
   CatalogUser *catalog_users = database_get_user_catalog(database);
   User *user = catalog_get_user_by_id(catalog_users, query_args);
-  if (user == NULL) return 1;
-  if (user_get_account_status(user) == INACTIVE) return 1;
+  if (user == NULL || user_get_account_status(user) == INACTIVE) return 1;
 
   char *format[] = {"%s", "%s", "%s"};
   char *fields[] = {"id", "date", "type"};
@@ -403,12 +404,13 @@ int query_calculate_average_hotel_rating(RowWriter *writer, Database *database,
   row_writer_set_field_names(writer, fields);
 
   CatalogReservation *catalog = database_get_reservation_catalog(database);
-  GPtrArray *reservations = get_hotel_reservations(catalog, query_args);
+  unsigned short hotel_id = parse_unsigned_short(query_args + 3);
+  GPtrArray *reservations = get_hotel_reservations(catalog, hotel_id);
   int reservations_count = reservations->len;
   double total_rating = 0;
   for (int i = 0; i < reservations_count; i++) {
     Reservation *reservation = g_ptr_array_index(reservations, i);
-    int reservation_rating = reservation_get_rating(reservation);
+    char reservation_rating = reservation_get_rating(reservation);
     total_rating += reservation_rating;
   }
   double mean_rating = total_rating / reservations_count;
@@ -430,7 +432,8 @@ int query_list_hotel_reservations(RowWriter *writer, Database *database,
   row_writer_set_field_names(writer, fields);
 
   CatalogReservation *catalog = database_get_reservation_catalog(database);
-  GPtrArray *reservations = get_hotel_reservations(catalog, query_args);
+  unsigned short hotel_id = parse_unsigned_short(query_args + 3);
+  GPtrArray *reservations = get_hotel_reservations(catalog, hotel_id);
   if (reservations == NULL) return 1;
   int reservations_count = reservations->len;
   g_ptr_array_sort(
@@ -448,7 +451,7 @@ int query_list_hotel_reservations(RowWriter *writer, Database *database,
     Timestamp reservation_end_date = reservation_get_end_date(reservation);
     char *reservation_end_date_string = date_to_string(reservation_end_date);
     char *reservation_user_id = reservation_get_user_id(reservation);
-    int reservation_rating = reservation_get_rating(reservation);
+    char reservation_rating = reservation_get_rating(reservation);
     double reservation_total_price = reservation_get_total_price(reservation);
     char *reservation_total_price_string =
         g_strdup_printf("%.3f", reservation_total_price);
@@ -528,21 +531,21 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
 int query_list_top_aiports_by_passengers_in_year(RowWriter *writer,
                                                  Database *database,
                                                  char *query_args) {
-  printf("Query 6 not implemented.\n");
+  printf("[WARN] Query 6 not implemented.\n");
   return -1;
 }
 
 int query_list_top_aiports_by_delay_median(RowWriter *writer,
                                            Database *database,
                                            char *query_args) {
-  printf("Query 7 not implemented.\n");
+  printf("[WARN] Query 7 not implemented.\n");
   return -1;
 }
 
 int query_calculate_total_hotel_revenue_between_dates(RowWriter *writer,
                                                       Database *database,
                                                       char *query_args) {
-  printf("Query 8 not implemented.\n");
+  printf("[WARN] Query 8 not implemented.\n");
   return -1;
 }
 
@@ -586,6 +589,6 @@ int query_list_users_where_name_starts_with_prefix(RowWriter *writer,
 
 int query_database_metrics(RowWriter *writer, Database *database,
                            char *query_args) {
-  printf("Query 10 not implemented.\n");
+  printf("[WARN] Query 10 not implemented.\n");
   return -1;
 }

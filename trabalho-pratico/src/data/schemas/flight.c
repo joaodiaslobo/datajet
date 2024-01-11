@@ -12,7 +12,7 @@ struct flight {
   unsigned int id;
   char* airline;
   char* plane_model;
-  int total_seats;
+  unsigned short total_seats;
   char* origin;
   char* destination;
   Timestamp schedule_departure_date;
@@ -25,13 +25,13 @@ struct flight {
 };
 
 Flight* create_flight(unsigned int id, char* airline, char* plane_model,
-                      int total_seats, char* origin, char* destination,
-                      Timestamp schedule_departure_date,
+                      unsigned short total_seats, char* origin,
+                      char* destination, Timestamp schedule_departure_date,
                       Timestamp schedule_arrival_date,
                       Timestamp real_departure_date,
                       Timestamp real_arrival_date, char* pilot, char* copilot,
                       char* notes) {
-  Flight* flight = malloc(sizeof(struct flight));
+  Flight* flight = initialize_flight();
 
   flight_set_id(flight, id);
   flight_set_airline(flight, airline);
@@ -43,9 +43,19 @@ Flight* create_flight(unsigned int id, char* airline, char* plane_model,
   flight_set_schedule_arrival_date(flight, schedule_arrival_date);
   flight_set_real_departure_date(flight, real_departure_date);
   flight_set_real_arrival_date(flight, real_arrival_date);
-  flight_set_pilot(flight, pilot);
-  flight_set_copilot(flight, copilot);
-  flight_set_notes(flight, notes);
+
+  return flight;
+}
+
+Flight* initialize_flight() {
+  Flight* flight = malloc(sizeof(struct flight));
+  flight->airline = NULL;
+  flight->plane_model = NULL;
+  flight->origin = NULL;
+  flight->destination = NULL;
+  flight->pilot = NULL;
+  flight->copilot = NULL;
+  flight->notes = NULL;
 
   return flight;
 }
@@ -77,7 +87,8 @@ int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog,
 
   char* flight_total_seats_string = reader_next_cell(reader);
   if (invalid_positive_integer(flight_total_seats_string)) return 1;
-  int flight_total_seats = parse_number(flight_total_seats_string);
+  unsigned short flight_total_seats =
+      parse_unsigned_short(flight_total_seats_string);
 
   char* flight_origin = reader_next_cell(reader);
   if (invalid_value_length(3, flight_origin)) return 1;
@@ -161,9 +172,11 @@ void flight_set_plane_model(Flight* flight, char* plane_model) {
   flight->plane_model = g_strdup(plane_model);
 }
 
-int flight_get_total_seats(Flight* flight) { return flight->total_seats; }
+unsigned short flight_get_total_seats(Flight* flight) {
+  return flight->total_seats;
+}
 
-void flight_set_total_seats(Flight* flight, int total_seats) {
+void flight_set_total_seats(Flight* flight, unsigned short total_seats) {
   flight->total_seats = total_seats;
 }
 

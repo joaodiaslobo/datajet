@@ -18,7 +18,7 @@ CatalogReservation *initialize_reservations_catalog() {
   catalog->user_reservations = g_hash_table_new_full(
       g_str_hash, g_str_equal, g_free, free_reservation_ptr_array);
   catalog->hotel_reservations = g_hash_table_new_full(
-      g_str_hash, g_str_equal, g_free, free_reservation_ptr_array);
+      NULL, g_direct_equal, NULL, free_reservation_ptr_array);
 
   return catalog;
 }
@@ -52,15 +52,14 @@ void insert_reservation(CatalogReservation *catalog, Reservation *reservation,
   g_ptr_array_add(user_reservations, reservation);
 
   /* Insert reservation into hotel reservations association Hash Table */
-  char *hotel_id_key = reservation_get_hotel_id(reservation);
+  gpointer hotel_id_key =
+      GUINT_TO_POINTER(reservation_get_hotel_id(reservation));
   GPtrArray *hotel_reservations =
       g_hash_table_lookup(catalog->hotel_reservations, hotel_id_key);
   if (hotel_reservations == NULL) {
     hotel_reservations = g_ptr_array_new();
     g_hash_table_insert(catalog->hotel_reservations, hotel_id_key,
                         hotel_reservations);
-  } else {
-    g_free(hotel_id_key);
   }
 
   g_ptr_array_add(hotel_reservations, reservation);
@@ -91,8 +90,10 @@ Reservation *get_user_reservation_by_index(CatalogReservation *catalog,
   return g_ptr_array_index(reservations, index);
 }
 
-GPtrArray *get_hotel_reservations(CatalogReservation *catalog, char *hotel_id) {
-  return g_hash_table_lookup(catalog->hotel_reservations, hotel_id);
+GPtrArray *get_hotel_reservations(CatalogReservation *catalog,
+                                  unsigned short hotel_id) {
+  return g_hash_table_lookup(catalog->hotel_reservations,
+                             GUINT_TO_POINTER(hotel_id));
 }
 
 GPtrArray *get_user_reservations(CatalogReservation *catalog, char *user_id) {

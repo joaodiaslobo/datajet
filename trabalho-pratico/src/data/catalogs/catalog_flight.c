@@ -2,6 +2,7 @@
 
 #include <glib.h>
 
+#include "data/procedures/sorting.h"
 #include "data/schemas/flight.h"
 
 struct catalogFlight {

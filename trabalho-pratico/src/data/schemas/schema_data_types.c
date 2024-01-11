@@ -206,6 +206,27 @@ unsigned int parse_unsigned_integer(char *int_string) {
   return number;
 }
 
+unsigned short parse_unsigned_short(char *short_string) {
+  unsigned short number = 0;
+  for (int i = 0; short_string[i] != '\0'; i++) {
+    number *= 10;
+    number += short_string[i] - '0';
+  }
+  return number;
+}
+
+/*
+  Used to save memory on saving small values.
+*/
+char parse_char(char *char_string) {
+  char number = 0;
+  for (int i = 0; char_string[i] != '\0'; i++) {
+    number *= 10;
+    number += char_string[i] - '0';
+  }
+  return number;
+}
+
 bool parse_boolean(char *boolean_string) {
   string_to_upper(boolean_string);
   return boolean_string[0] == 'T' || boolean_string[0] == '1';
