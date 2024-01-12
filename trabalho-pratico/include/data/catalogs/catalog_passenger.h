@@ -8,6 +8,7 @@
 #include <glib.h>
 
 #include "data/schemas/passenger.h"
+#include "data/schemas/schema_data_types.h"
 
 typedef struct catalogPassenger CatalogPassenger;
 
@@ -27,6 +28,14 @@ CatalogPassenger *initialize_passengers_catalog();
  * @param array A pointer to the GPtrArray to be freed.
  */
 void free_ptr_array(void *array);
+
+/**
+ * @brief Free a GHashTable and its elements
+ * @details Frees the memory occupied by a GHashTable and its elements.
+ *
+ * @param hash_table A pointer to the GHashTable to be freed.
+ */
+void free_hash_table(void *hash_table);
 
 /**
  * @brief Free memory occupied by a CatalogPassenger structure
@@ -54,6 +63,47 @@ void free_passengers_catalog(CatalogPassenger *catalog);
  */
 void insert_passenger(CatalogPassenger *catalog, unsigned int flight_id,
                       char *user_id_unsafe, void *flight, void *user);
+
+/**
+ * @brief Increment the aggregate of passengers by date
+ * @details Increments the aggregate of passengers by date in the provided
+ * CatalogPassenger structure, associating it with the specified key.
+ *
+ * @param catalog A pointer to the CatalogPassenger structure.
+ * @param schedule_departure_date The date to associate with the incremented
+ * aggregate.
+ */
+void increment_passengers_date_aggregate(CatalogPassenger *catalog,
+                                         Timestamp schedule_departure_date);
+
+/**
+ * @brief Increment the aggregate of unique passengers by date
+ * @details Increments the aggregate of unique passengers by date in the
+ * provided CatalogPassenger structure, associating it with the specified key.
+ *
+ * @param catalog A pointer to the CatalogPassenger structure.
+ * @param schedule_departure_date The date to associate with the incremented
+ * aggregate
+ * @param user_id The user id to associate with the current incremented
+ * aggregate.
+ */
+void increment_unique_passengers_date_aggregate(
+    CatalogPassenger *catalog, Timestamp schedule_departure_date,
+    char *user_id);
+
+/**
+ * @brief Increments the aggregate of an entity by date
+ * @details Increments the aggregate of an entity by date in the provided
+ * GHashTable structure, associating it with the specified key and recording its
+ * uniqueness.
+ *
+ * @param hash_table A pointer to the GHashTable structure.
+ * @param timestamp_key The date to associate with the incremented aggregate.
+ * @param user_id The user id to associate with the current incremented
+ * aggregate.
+ */
+void increment_hash_aggregate(GHashTable *hash_table,
+                              unsigned int timestamp_key, char *user_id);
 
 /**
  * @brief Count the number of users associated with a specific flight in the
@@ -116,6 +166,12 @@ void remove_passengers_by_flight_id(CatalogPassenger *catalog,
  * @return The total count of passengers in the catalog.
  */
 int count_passengers(CatalogPassenger *catalog);
+
+int catalog_get_passenger_count_by_timestamp_key(CatalogPassenger *catalog,
+                                                 int timestamp_key);
+
+int catalog_get_unique_passenger_count_by_timestamp_key(
+    CatalogPassenger *catalog, int timestamp_key);
 
 /**
  * @brief Retrieve the list of flights associated with a specific user in the

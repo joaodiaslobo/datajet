@@ -1,7 +1,9 @@
 #include "data/catalogs/catalog_flight.h"
 
 #include <glib.h>
+#include <stdlib.h>
 
+#include "data/procedures/aggregates.h"
 #include "data/procedures/sorting.h"
 #include "data/schemas/flight.h"
 
@@ -9,6 +11,7 @@ struct catalogFlight {
   GHashTable *flights;
   GPtrArray *flight_array;
   bool flight_array_sorted;
+  GHashTable *date_flights_aggregate;
 };
 
 CatalogFlight *initialize_flights_catalog() {
@@ -17,6 +20,8 @@ CatalogFlight *initialize_flights_catalog() {
       g_hash_table_new_full(NULL, g_direct_equal, NULL, free_flight);
   catalog->flight_array = g_ptr_array_new();
   catalog->flight_array_sorted = false;
+  catalog->date_flights_aggregate =
+      g_hash_table_new_full(NULL, g_direct_equal, NULL, free);
 
   return catalog;
 }
@@ -24,6 +29,7 @@ CatalogFlight *initialize_flights_catalog() {
 void free_flights_catalog(CatalogFlight *catalog) {
   g_hash_table_destroy(catalog->flights);
   g_ptr_array_free(catalog->flight_array, TRUE);
+  g_hash_table_destroy(catalog->date_flights_aggregate);
 
   free(catalog);
 }
@@ -40,6 +46,19 @@ void insert_flight(CatalogFlight *catalog, Flight *flight, gpointer key) {
   g_hash_table_insert(catalog->flights, key, flight);
   g_ptr_array_add(catalog->flight_array, flight);
   set_flights_sorting(catalog, false);
+
+  increment_flights_date_aggregate(catalog,
+                                   flight_get_schedule_departure_date(flight));
+}
+
+void increment_flights_date_aggregate(CatalogFlight *catalog,
+                                      Timestamp schedule_departure_date) {
+  increment_entity_aggregate(catalog->date_flights_aggregate,
+                             schedule_departure_date.date);
+  increment_entity_aggregate(catalog->date_flights_aggregate,
+                             schedule_departure_date.date / 100);
+  increment_entity_aggregate(catalog->date_flights_aggregate,
+                             schedule_departure_date.date / 10000);
 }
 
 int count_flights(CatalogFlight *catalog) {
@@ -82,6 +101,14 @@ void catalog_sort_flights_by_schedule_departure_date(CatalogFlight *catalog) {
             compare_flights_array_elements_by_schedule_departure_date);
     set_flights_sorting(catalog, true);
   }
+}
+
+int catalog_get_flight_count_by_timestamp_key(CatalogFlight *catalog,
+                                              int timestamp_key) {
+  int *count = g_hash_table_lookup(catalog->date_flights_aggregate,
+                                   GINT_TO_POINTER(timestamp_key));
+  if (count == NULL) return 0;
+  return *count;
 }
 
 int compare_flights_array_elements_by_schedule_departure_date(gpointer a,

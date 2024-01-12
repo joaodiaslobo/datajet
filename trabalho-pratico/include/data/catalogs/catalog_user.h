@@ -45,6 +45,18 @@ void free_users_catalog(CatalogUser *catalog);
 void insert_user(CatalogUser *catalog, User *user, char *key);
 
 /**
+ * @brief Increment the aggregate of users by date
+ * @details Increments the aggregate of users by date in the provided
+ * CatalogUser structure, associating it with the specified key.
+ *
+ * @param catalog A pointer to the CatalogUser structure.
+ * @param begin_date The date to associate with the incremented
+ * aggregate.
+ */
+void increment_users_date_aggregate(CatalogUser *catalog,
+                                    Timestamp account_creation);
+
+/**
  * @brief Get the total count of users in the user catalog
  * @details Returns the total count of users stored in the CatalogUser
  * structure.
@@ -108,6 +120,19 @@ GPtrArray *get_users(CatalogUser *catalog);
  * @param catalog A pointer to the CatalogUser structure.
  */
 void catalog_sort_users_by_name(CatalogUser *catalog);
+
+/**
+ * @brief Get the number of users in the catalog by timestamp key
+ * @details Returns the number of users stored in the flight hash table
+ * associated with the specified timestamp key.
+ *
+ * @param catalog A pointer to the CatalogUser structure.
+ * @param timestamp_key The timestamp key to look up.
+ * @return The number of users in the catalog associated with the specified
+ * timestamp key.
+ */
+int catalog_get_user_count_by_timestamp_key(CatalogUser *catalog,
+                                            int timestamp_key);
 
 /**
  * @brief Compare two user elements based on their names

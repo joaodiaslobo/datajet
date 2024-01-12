@@ -55,6 +55,18 @@ void insert_reservation(CatalogReservation *catalog, Reservation *reservation,
                         gpointer key);
 
 /**
+ * @brief Increment the aggregate of reservations by date
+ * @details Increments the aggregate of reservations by date in the provided
+ * CatalogReservation structure, associating it with the specified key.
+ *
+ * @param catalog A pointer to the CatalogReservation structure.
+ * @param begin_date The date to associate with the incremented
+ * aggregate.
+ */
+void increment_reservations_date_aggregate(CatalogReservation *catalog,
+                                           Timestamp begin_date);
+
+/**
  * @brief Get the total count of reservations in the catalog
  * @details Returns the total count of reservations stored in the
  * CatalogReservation structure.
@@ -136,6 +148,19 @@ Reservation *get_user_reservation_by_index(CatalogReservation *catalog,
  */
 Reservation *catalog_get_reservation_by_id(CatalogReservation *catalog,
                                            unsigned int reservation_id);
+
+/**
+ * @brief Get the number of reservations in the catalog by timestamp key
+ * @details Returns the number of reservations stored in the reservation hash
+ * table associated with the specified timestamp key.
+ *
+ * @param catalog A pointer to the CatalogReservation structure.
+ * @param timestamp_key The timestamp key to look up.
+ * @return The number of reservations in the catalog associated with the
+ * specified timestamp key.
+ */
+int catalog_get_reservation_count_by_timestamp_key(CatalogReservation *catalog,
+                                                   int timestamp_key);
 
 /**
  * @brief Compare two reservation elements based on their begin dates

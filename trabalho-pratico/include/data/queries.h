@@ -179,7 +179,54 @@ int query_list_users_where_name_starts_with_prefix(RowWriter *writer,
                                                    Database *database,
                                                    char *query_args);
 
+/**
+ * @brief List database metrics.
+ * @details Lists database metrics.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param query_args Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_database_metrics(RowWriter *writer, Database *database,
                            char *query_args);
+
+/**
+ * @brief List database metrics by years.
+ * @details Lists database metrics by all years contained in the database.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ *
+ */
+int query_database_metrics_by_years(RowWriter *writer, Database *database);
+
+/**
+ * @brief List database metrics by months in a year.
+ * @details Lists database metrics by all months in a specific year contained in
+ * the database.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ *
+ */
+int query_database_metrics_by_months_in_year(RowWriter *writer,
+                                             Database *database,
+                                             char *query_args);
+/**
+ * @brief List database metrics by days in a month.
+ * @details Lists database metrics by all days in a specific month from a
+ * specific year contained in the database.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ *
+ */
+int query_database_metrics_by_days_in_month(RowWriter *writer,
+                                            Database *database,
+                                            char *query_args);
 
 #endif

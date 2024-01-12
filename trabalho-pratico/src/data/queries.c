@@ -589,6 +589,144 @@ int query_list_users_where_name_starts_with_prefix(RowWriter *writer,
 
 int query_database_metrics(RowWriter *writer, Database *database,
                            char *query_args) {
-  printf("[WARN] Query 10 not implemented.\n");
-  return -1;
+  switch (strlen(query_args)) {
+    case 0:
+      return query_database_metrics_by_years(writer, database);
+      break;
+    case 4:
+      return query_database_metrics_by_months_in_year(writer, database,
+                                                      query_args);
+      break;
+    case 7:
+      return query_database_metrics_by_days_in_month(writer, database,
+                                                     query_args);
+      break;
+    default:
+      // Error parsing query arguments
+      return -1;
+      break;
+  }
+  return 0;
+}
+
+int query_database_metrics_by_years(RowWriter *writer, Database *database) {
+  char *format[] = {"%d", "%d", "%d", "%d", "%d", "%d"};
+  char *fields[] = {
+      "year",        "users", "flights", "passengers", "unique_passengers",
+      "reservations"};
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  CatalogUser *user_catalog = database_get_user_catalog(database);
+  CatalogFlight *flight_catalog = database_get_flight_catalog(database);
+  CatalogPassenger *passenger_catalog =
+      database_get_passenger_catalog(database);
+  CatalogReservation *reservation_catalog =
+      database_get_reservation_catalog(database);
+
+  for (int year = 2010; year <= 2023; year++) {
+    int users = catalog_get_user_count_by_timestamp_key(user_catalog, year);
+    int flights =
+        catalog_get_flight_count_by_timestamp_key(flight_catalog, year);
+    int passengers =
+        catalog_get_passenger_count_by_timestamp_key(passenger_catalog, year);
+    int unique_passengers = catalog_get_unique_passenger_count_by_timestamp_key(
+        passenger_catalog, year);
+    int reservations = catalog_get_reservation_count_by_timestamp_key(
+        reservation_catalog, year);
+    if (users == 0 && flights == 0 && passengers == 0 &&
+        unique_passengers == 0 && reservations == 0)
+      continue;
+    write_entity_values(writer, 6, year, users, flights, passengers,
+                        unique_passengers, reservations);
+  }
+
+  return 0;
+}
+
+int query_database_metrics_by_months_in_year(RowWriter *writer,
+                                             Database *database,
+                                             char *query_args) {
+  char *format[] = {"%d", "%d", "%d", "%d", "%d", "%d"};
+  char *fields[] = {
+      "month",       "users", "flights", "passengers", "unique_passengers",
+      "reservations"};
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  unsigned short year = parse_unsigned_short(query_args);
+
+  CatalogUser *user_catalog = database_get_user_catalog(database);
+  CatalogFlight *flight_catalog = database_get_flight_catalog(database);
+  CatalogPassenger *passenger_catalog =
+      database_get_passenger_catalog(database);
+  CatalogReservation *reservation_catalog =
+      database_get_reservation_catalog(database);
+
+  int timestamp_key = year * 100;
+  for (int month = 1; month <= 12; month++) {
+    timestamp_key++;
+    int users =
+        catalog_get_user_count_by_timestamp_key(user_catalog, timestamp_key);
+    int flights = catalog_get_flight_count_by_timestamp_key(flight_catalog,
+                                                            timestamp_key);
+    int passengers = catalog_get_passenger_count_by_timestamp_key(
+        passenger_catalog, timestamp_key);
+    int unique_passengers = catalog_get_unique_passenger_count_by_timestamp_key(
+        passenger_catalog, timestamp_key);
+    int reservations = catalog_get_reservation_count_by_timestamp_key(
+        reservation_catalog, timestamp_key);
+    if (users == 0 && flights == 0 && passengers == 0 &&
+        unique_passengers == 0 && reservations == 0)
+      continue;
+    write_entity_values(writer, 6, month, users, flights, passengers,
+                        unique_passengers, reservations);
+  }
+
+  return 0;
+}
+
+int query_database_metrics_by_days_in_month(RowWriter *writer,
+                                            Database *database,
+                                            char *query_args) {
+  char *format[] = {"%d", "%d", "%d", "%d", "%d", "%d"};
+  char *fields[] = {
+      "day",         "users", "flights", "passengers", "unique_passengers",
+      "reservations"};
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  query_args[4] = '\0';
+
+  unsigned short year = parse_unsigned_short(query_args);
+  unsigned short month = parse_unsigned_short(query_args + 5);
+
+  CatalogUser *user_catalog = database_get_user_catalog(database);
+  CatalogFlight *flight_catalog = database_get_flight_catalog(database);
+  CatalogPassenger *passenger_catalog =
+      database_get_passenger_catalog(database);
+  CatalogReservation *reservation_catalog =
+      database_get_reservation_catalog(database);
+
+  int timestamp_key = year * 10000 + month * 100;
+  for (int day = 1; day <= 31; day++) {
+    timestamp_key++;
+    int users =
+        catalog_get_user_count_by_timestamp_key(user_catalog, timestamp_key);
+    int flights = catalog_get_flight_count_by_timestamp_key(flight_catalog,
+                                                            timestamp_key);
+    int passengers = catalog_get_passenger_count_by_timestamp_key(
+        passenger_catalog, timestamp_key);
+    int unique_passengers = catalog_get_unique_passenger_count_by_timestamp_key(
+        passenger_catalog, timestamp_key);
+    int reservations = catalog_get_reservation_count_by_timestamp_key(
+        reservation_catalog, timestamp_key);
+    if (users == 0 && flights == 0 && passengers == 0 &&
+        unique_passengers == 0 && reservations == 0)
+      continue;
+    write_entity_values(writer, 6, day, users, flights, passengers,
+                        unique_passengers, reservations);
+  }
+
+  return 0;
 }

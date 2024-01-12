@@ -39,6 +39,31 @@ void free_flights_catalog(CatalogFlight *catalog);
 void insert_flight(CatalogFlight *catalog, Flight *flight, gpointer key);
 
 /**
+ * @brief Get the number of flights in the catalog by timestamp key
+ * @details Returns the number of flights stored in the flight hash table
+ * associated with the specified timestamp key.
+ *
+ * @param catalog A pointer to the CatalogFlight structure.
+ * @param timestamp_key The timestamp key to look up.
+ * @return The number of flights in the catalog associated with the specified
+ * timestamp key.
+ */
+int catalog_get_flight_count_by_timestamp_key(CatalogFlight *catalog,
+                                              int timestamp_key);
+
+/**
+ * @brief Increment the aggregate of flights by date
+ * @details Increments the aggregate of flights by date in the provided
+ * CatalogFlight structure, associating it with the specified key.
+ *
+ * @param catalog A pointer to the CatalogFlight structure.
+ * @param schedule_departure_date The date to associate with the incremented
+ * aggregate.
+ */
+void increment_flights_date_aggregate(CatalogFlight *catalog,
+                                      Timestamp schedule_departure_date);
+
+/**
  * @brief Count the number of flights in the catalog
  * @details Returns the number of flights stored in the flight hash table
  *
