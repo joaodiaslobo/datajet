@@ -7,6 +7,7 @@
 #include "data/catalogs/catalog_reservation.h"
 #include "data/catalogs/catalog_user.h"
 #include "data/database.h"
+#include "data/procedures/sorting.h"
 #include "data/schemas/flight.h"
 #include "data/schemas/reservation.h"
 #include "data/schemas/schema_data_types.h"
@@ -23,8 +24,8 @@ static int (*query_functions[])(RowWriter *, Database *, char *) = {
     query_calculate_average_hotel_rating,
     query_list_hotel_reservations,
     query_list_airport_flights_between_dates,
-    query_list_top_aiports_by_passengers_in_year,
-    query_list_top_aiports_by_delay_median,
+    query_list_top_airports_by_passengers_in_year,
+    query_list_top_airports_by_delay_median,
     query_calculate_total_hotel_revenue_between_dates,
     query_list_users_where_name_starts_with_prefix,
     query_database_metrics};
@@ -528,16 +529,16 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
   return 0;
 }
 
-int query_list_top_aiports_by_passengers_in_year(RowWriter *writer,
-                                                 Database *database,
-                                                 char *query_args) {
+int query_list_top_airports_by_passengers_in_year(RowWriter *writer,
+                                                  Database *database,
+                                                  char *query_args) {
   printf("[WARN] Query 6 not implemented.\n");
   return -1;
 }
 
-int query_list_top_aiports_by_delay_median(RowWriter *writer,
-                                           Database *database,
-                                           char *query_args) {
+int query_list_top_airports_by_delay_median(RowWriter *writer,
+                                            Database *database,
+                                            char *query_args) {
   printf("[WARN] Query 7 not implemented.\n");
   return -1;
 }
@@ -545,8 +546,56 @@ int query_list_top_aiports_by_delay_median(RowWriter *writer,
 int query_calculate_total_hotel_revenue_between_dates(RowWriter *writer,
                                                       Database *database,
                                                       char *query_args) {
-  printf("[WARN] Query 8 not implemented.\n");
-  return -1;
+  char *format[] = {"%d"};
+  char *fields[] = {"revenue"};
+
+  int index = (strchr(query_args + 1, ' ') - (query_args));
+  query_args[index] = '\0';
+  query_args[index + 11] = '\0';
+  Timestamp begin_date = parse_date(query_args + (index + 1));
+  Timestamp end_date = parse_date(query_args + (index + 12));
+
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  CatalogReservation *catalog = database_get_reservation_catalog(database);
+  GPtrArray *reservations =
+      get_hotel_reservations(catalog, parse_unsigned_short(query_args + 3));
+  if (reservations == NULL) return 1;
+  int reservations_count = reservations->len;
+
+  qsort_g_ptr_array(
+      reservations,
+      (GCompareFunc)compare_reservations_array_elements_by_begin_date);
+
+  int revenue = 0;
+
+  for (int i = 0; i < reservations_count; i++) {
+    Reservation *reservation =
+        (Reservation *)g_ptr_array_index(reservations, i);
+    Timestamp reservation_begin = reservation_get_begin_date(reservation);
+    Timestamp reservation_end = reservation_get_end_date(reservation);
+    if (begin_date.date <= reservation_end.date &&
+        end_date.date >= reservation_begin.date) {
+      int range_start = (begin_date.date > reservation_begin.date)
+                            ? begin_date.date
+                            : reservation_begin.date;
+      int range_end = (end_date.date < reservation_end.date)
+                          ? end_date.date
+                          : reservation_end.date;
+      int days = range_end - range_start;
+
+      if (reservation_end.date > end_date.date) {
+        days++;
+      }
+      int price_per_night = (int)reservation_get_price_per_night(reservation);
+      revenue += (price_per_night * days);
+    }
+  }
+
+  write_entity_values(writer, 1, revenue);
+
+  return 0;
 }
 
 int query_list_users_where_name_starts_with_prefix(RowWriter *writer,

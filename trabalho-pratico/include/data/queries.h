@@ -154,14 +154,33 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
                                              Database *database,
                                              char *query_args);
 
-int query_list_top_aiports_by_passengers_in_year(RowWriter *writer,
-                                                 Database *database,
-                                                 char *query_args);
+int query_list_top_airports_by_passengers_in_year(RowWriter *writer,
+                                                  Database *database,
+                                                  char *query_args);
 
-int query_list_top_aiports_by_delay_median(RowWriter *writer,
-                                           Database *database,
-                                           char *query_args);
+/**
+ * @brief Lists top airports by delay median.
+ * @details Lists top airports by their delay median comparing flights' schedule
+ * and real departure dates that departed from a certain origin airport.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param user_id Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
+int query_list_top_airports_by_delay_median(RowWriter *writer,
+                                            Database *database,
+                                            char *query_args);
 
+/**
+ * @brief Calculates total hotel revenue between dates.
+ * @details Calculates total revenue of a certain hotel made between two dates.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param user_id Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_calculate_total_hotel_revenue_between_dates(RowWriter *writer,
                                                       Database *database,
                                                       char *query_args);
