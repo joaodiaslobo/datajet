@@ -31,6 +31,14 @@ typedef enum ProgramMode {
 Program *initialize_program(ProgramMode);
 
 /**
+ * @brief Gets the database
+ * @details Gets the database from the program.
+ * @param program Program.
+ * @return Database.
+ */
+Database *program_get_database(Program *program);
+
+/**
  * @brief Executes the program
  * @details Executes the program with the given arguments.
  *

@@ -26,7 +26,17 @@
  */
 void parse_and_execute_commands(char *query_commands_path, Database *database);
 
-void execute_command_and_save_result(int query_id, Database *database,
-                                     char *command_args, int command_id);
+/**
+ * @brief Executes a command and saves the result.
+ * @details Executes a command and saves the result to a file.
+ *
+ * @param query_id Query id.
+ * @param database Main database.
+ * @param command_args Command arguments.
+ * @param command_id Command id.
+ * @return 0 if successful, -1 otherwise.
+ */
+int execute_command_and_save_result(int query_id, Database *database,
+                                    char *command_args, int command_id);
 
 #endif

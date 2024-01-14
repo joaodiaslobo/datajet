@@ -532,14 +532,12 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
 int query_list_top_airports_by_passengers_in_year(RowWriter *writer,
                                                   Database *database,
                                                   char *query_args) {
-  printf("[WARN] Query 6 not implemented.\n");
   return -1;
 }
 
 int query_list_top_airports_by_delay_median(RowWriter *writer,
                                             Database *database,
                                             char *query_args) {
-  printf("[WARN] Query 7 not implemented.\n");
   return -1;
 }
 

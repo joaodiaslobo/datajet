@@ -26,6 +26,8 @@ void free_program(Program *program) {
   free(program);
 }
 
+Database *program_get_database(Program *program) { return program->database; }
+
 int execute_program(Program *program, char **args) {
   switch (program->mode) {
     case PROGRAM_MODE_BATCH:

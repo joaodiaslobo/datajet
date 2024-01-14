@@ -1,13 +1,17 @@
 CC := gcc
 
 EXEC := programa-principal
+EXEC_TESTS := programa-testes
+
 FLAGS := -Wall -Wextra -Werror=pedantic -Wfatal-errors -Wno-unused-variable -Wno-unused-parameter
 
 LIBS := $(shell pkg-config --libs glib-2.0)
 FLAGS += $(shell pkg-config --cflags glib-2.0)
 
-SRC := $(shell find src/ -name "*.c")
+SRC := $(shell find src/ -name "*.c" ! -path "src/tests/*")
 INCLUDES := $(shell find include/ -name "*.h")
+
+SRC_FORMAT := $(shell find src/ -name "*.c")
 
 DOCS_DIRECTORY := docs
 
@@ -21,6 +25,12 @@ else ifeq ($(BUILD_TYPE), release)
 	FLAGS += -O3 -flto -funroll-loops
 	BUILD_DIR_PATH := build/release
 	FLAGS += -Iinclude/
+else ifeq ($(BUILD_TYPE), test)
+	FLAGS += -O3 -flto -funroll-loops -Wno-unused-function
+	BUILD_DIR_PATH := build/test
+	FLAGS += -Iinclude/
+	EXEC := programa-testes
+	SRC := $(shell find src/ -name "*.c" -not -path "src/main.c")
 endif
 
 OBJ := $(addprefix $(BUILD_DIR_PATH)/, $(SRC:.c=.o))
@@ -43,7 +53,7 @@ else
 endif
 
 .PHONY: all
-all: build-release place-build-on-root
+all: build-release build-test place-build-on-root
 
 build-debug:
 	@printf "$(RED)[BUILD]$(WHITE) Debug build started.\n"
@@ -52,6 +62,10 @@ build-debug:
 build-release:
 	@printf "$(GREEN)[BUILD]$(WHITE) Release build started.\n"
 	@$(MAKE) BUILD_TYPE=release build
+
+build-test:
+	@printf "$(GREEN)[BUILD]$(WHITE) Tests build started.\n"
+	@$(MAKE) BUILD_TYPE=test build
 
 build: $(BUILD_DIR_PATH)/$(EXEC)
 
@@ -73,11 +87,12 @@ clean-docs:
 clean: clean-docs
 	@rm -rf build;
 	@rm -f programa-principal;
+	@rm -f programa-testes;
 	@printf "$(GRAY)[CLEAN]$(WHITE) Build directory removed.\n"
 
 .PHONY: format
 format:
-	@clang-format --verbose -i $(SRC) $(INCLUDES)
+	@clang-format --verbose -i $(SRC_FORMAT) $(INCLUDES)
 	@printf "$(PINK)[FORMATTER]$(WHITE) Formatted all available files.\n"
 
 .PHONY: docs
@@ -88,4 +103,5 @@ docs:
 
 place-build-on-root: build-release
 	@cp $(BUILD_DIR_PATH)/$(EXEC) programa-principal
-	@printf "$(GREEN)[BUILD]$(WHITE) Success, $(GREEN)$(EXEC) $(WHITE)ready on root.\n"
+	@cp build/test/$(EXEC_TESTS) programa-testes
+	@printf "$(GREEN)[BUILD]$(WHITE) Success, $(GREEN)$(EXEC)$(WHITE), $(GREEN)$(EXEC_TESTS) $(WHITE)ready on root.\n"

@@ -29,8 +29,8 @@ void parse_and_execute_commands(char *query_commands_path, Database *database) {
   close_file(commands_file);
 }
 
-void execute_command_and_save_result(int query_id, Database *database,
-                                     char *command_args, int command_id) {
+int execute_command_and_save_result(int query_id, Database *database,
+                                    char *command_args, int command_id) {
   WriteMode writeMode;
   char flag;
   char query_args[BUFFER_SIZE] = " ";
@@ -60,7 +60,10 @@ void execute_command_and_save_result(int query_id, Database *database,
   if (result != -1) {
     free_and_finish_writing_row(writer);
   } else {
+    // printf("[WARN] Query %d not implemented.\n", query_id + 1);
     free_row_writer(writer);
   }
   g_free(output_file);
+
+  return result;
 }
