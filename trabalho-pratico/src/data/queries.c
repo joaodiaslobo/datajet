@@ -538,7 +538,28 @@ int query_list_top_airports_by_passengers_in_year(RowWriter *writer,
 int query_list_top_airports_by_delay_median(RowWriter *writer,
                                             Database *database,
                                             char *query_args) {
-  return -1;
+  char *format[] = {"%s", "%d"};
+  char *fields[] = {"name", "median"};
+
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  int N = parse_number(query_args);
+
+  CatalogAirport *catalog = database_get_airport_catalog(database);
+  GPtrArray *airport_delays = catalog_get_airport_delays(catalog);
+  if (airport_delays == NULL) return 1;
+  int airport_delays_count = airport_delays->len;
+
+  for (int i = 0; i < N && i < airport_delays_count; i++) {
+    char *airport_id =
+        airport_delay_median_get_airport_id(airport_delays->pdata[i]);
+    write_entity_values(
+        writer, 2, airport_id,
+        airport_delay_median_get_delay_median(airport_delays->pdata[i]));
+    g_free(airport_id);
+  }
+  return 0;
 }
 
 int query_calculate_total_hotel_revenue_between_dates(RowWriter *writer,

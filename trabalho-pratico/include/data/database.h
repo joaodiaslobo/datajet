@@ -5,6 +5,7 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
+#include "catalogs/catalog_airport.h"
 #include "catalogs/catalog_flight.h"
 #include "catalogs/catalog_passenger.h"
 #include "catalogs/catalog_reservation.h"
@@ -76,5 +77,14 @@ CatalogPassenger *database_get_passenger_catalog(Database *database);
  * @return Reservation catalog.
  */
 CatalogReservation *database_get_reservation_catalog(Database *database);
+
+/**
+ * @brief Gets the airport catalog.
+ * @details Gets the airport catalog.
+ *
+ * @param database Database.
+ * @return Airport catalog.
+ */
+CatalogAirport *database_get_airport_catalog(Database *database);
 
 #endif

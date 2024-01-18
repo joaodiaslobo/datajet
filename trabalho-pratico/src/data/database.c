@@ -3,6 +3,7 @@
 #include <glib.h>
 #include <stdlib.h>
 
+#include "data/catalogs/catalog_airport.h"
 #include "data/catalogs/catalog_flight.h"
 #include "data/catalogs/catalog_passenger.h"
 #include "data/catalogs/catalog_reservation.h"
@@ -18,6 +19,7 @@ struct database {
   CatalogFlight *flightCatalog;
   CatalogPassenger *passengerCatalog;
   CatalogReservation *reservationCatalog;
+  CatalogAirport *airportCatalog;
 };
 
 Database *initialize_database() {
@@ -27,6 +29,7 @@ Database *initialize_database() {
   database->flightCatalog = initialize_flights_catalog();
   database->reservationCatalog = initialize_reservations_catalog();
   database->passengerCatalog = initialize_passengers_catalog();
+  database->airportCatalog = initialize_airports_catalog();
 
   return database;
 }
@@ -36,6 +39,7 @@ void free_database(Database *database) {
   free_flights_catalog(database->flightCatalog);
   free_reservations_catalog(database->reservationCatalog);
   free_passengers_catalog(database->passengerCatalog);
+  free_airports_catalog(database->airportCatalog);
   free(database);
 }
 
@@ -119,6 +123,8 @@ int csv_populate_database(Database *database, char *csv_dataset_path) {
   /* Validate invalid field associations */
   validate_flights(database->flightCatalog, database);
 
+  catalog_airport_organize_data(database->airportCatalog);
+
   return 0;
 }
 
@@ -136,4 +142,8 @@ CatalogPassenger *database_get_passenger_catalog(Database *database) {
 
 CatalogReservation *database_get_reservation_catalog(Database *database) {
   return database->reservationCatalog;
+}
+
+CatalogAirport *database_get_airport_catalog(Database *database) {
+  return database->airportCatalog;
 }

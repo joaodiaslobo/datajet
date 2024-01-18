@@ -5,6 +5,7 @@
 #include "data/catalogs/catalog_flight.h"
 #include "data/schemas/schema_data_types.h"
 #include "data/schemas/validation/generic_validation.h"
+#include "data/statistics/airport_flight.h"
 #include "data/statistics/user_flight.h"
 #include "io/parsing/reader.h"
 
@@ -146,6 +147,7 @@ int parse_flight_and_add_to_catalog(RowReader* reader, void* catalog,
       flight_real_arrival_date, flight_pilot, flight_copilot, flight_notes);
 
   insert_flight(catalog, flight, flight_key);
+  create_airport_flight_association(database, flight);
   return 0;
 }
 
