@@ -532,7 +532,34 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
 int query_list_top_airports_by_passengers_in_year(RowWriter *writer,
                                                   Database *database,
                                                   char *query_args) {
-  return -1;
+  char *format[] = {"%s", "%d"};
+  char *fields[] = {"name", "passengers"};
+
+  row_writer_set_formatting(writer, format);
+  row_writer_set_field_names(writer, fields);
+
+  query_args[4] = '\0';
+  int year = parse_number(query_args);
+  int N = parse_number(query_args + 5);
+
+  CatalogAirport *catalog = database_get_airport_catalog(database);
+  GHashTable *airport_passengers_by_year =
+      catalog_get_airport_passengers_by_year(catalog);
+  GPtrArray *airport_passengers =
+      g_hash_table_lookup(airport_passengers_by_year, GINT_TO_POINTER(year));
+
+  if (airport_passengers == NULL) return 1;
+  int airport_passengers_count = airport_passengers->len;
+
+  for (int i = 0; i < N && i < airport_passengers_count; i++) {
+    char *airport_id =
+        airport_passengers_by_year_get_airport_id(airport_passengers->pdata[i]);
+    write_entity_values(writer, 2, airport_id,
+                        airport_passengers_by_year_get_passengers(
+                            airport_passengers->pdata[i]));
+    g_free(airport_id);
+  }
+  return 0;
 }
 
 int query_list_top_airports_by_delay_median(RowWriter *writer,
@@ -552,6 +579,12 @@ int query_list_top_airports_by_delay_median(RowWriter *writer,
   int airport_delays_count = airport_delays->len;
 
   for (int i = 0; i < N && i < airport_delays_count; i++) {
+    // -1 is the value used to represent an airport with no delays
+    if (airport_delay_median_get_delay_median(airport_delays->pdata[i]) == -1) {
+      N++;
+      continue;
+    }
+
     char *airport_id =
         airport_delay_median_get_airport_id(airport_delays->pdata[i]);
     write_entity_values(

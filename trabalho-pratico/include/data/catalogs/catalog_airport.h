@@ -13,6 +13,8 @@ typedef struct airportData AirportData;
 
 typedef struct airportDelayMedian AirportDelayMedian;
 
+typedef struct airportPassengersByYear AirportPassengersByYear;
+
 /**
  * @brief Initialize a catalog of airports
  * @details Allocates memory for a new CatalogAirport structure, initializes its
@@ -35,6 +37,14 @@ void free_airport_data(AirportData *data);
  * @param airport A pointer to the AirportDelayMedian structure to be freed.
  */
 void free_airport_median(AirportDelayMedian *airport);
+
+/**
+ * @brief Free memory allocated for airport passengers by year
+ *
+ * @param airport A pointer to the AirportPassengersByYear structure to be
+ * freed.
+ */
+void free_airport_passengers_by_year(AirportPassengersByYear *airport);
 
 /**
  * @brief Insert a flight delay that departured from a certain airport into the
@@ -78,6 +88,22 @@ void catalog_airport_organize_data(CatalogAirport *catalog);
 void free_airports_catalog(CatalogAirport *catalog);
 
 /**
+ * @brief Insert a passenger that departured from a certain airport into the
+ * catalog
+ * @details Inserts the given passenger into the airport hash table of the
+ * provided CatalogAirport structure, associating it with the specified key
+ * (airport id).
+ *
+ * @param catalog A pointer to the CatalogAirport structure.
+ * @param airport_id The airport id to associate with the inserted passenger in
+ * the hash table.
+ * @param year The year to associate with the inserted passenger in the hash
+ * table.
+ */
+void insert_passenger_by_airport_by_year(CatalogAirport *catalog,
+                                         char *airport_id, int year);
+
+/**
  * @brief Compare delays.
  * @details Compares two delay values for sorting delays in an array in
  * ascending order.
@@ -100,6 +126,18 @@ int compare_delays(gpointer a, gpointer b);
  * 'b', positive value if 'a' is bigger than 'b', and zero if they are equal.
  */
 int compare_medians(gpointer a, gpointer b);
+
+/**
+ * @brief Compare passengers.
+ * @details Compares two passenger values for sorting passengers in an array in
+ * ascending order.
+ *
+ * @param a A pointer to the first passenger.
+ * @param b A pointer to the second passenger.
+ * @return Negative value if the passenger 'a' is smaller than
+ * 'b', positive value if 'a' is bigger than 'b', and zero if they are equal.
+ */
+int compare_passengers(gpointer a, gpointer b);
 
 /**
  * @brief Retrieves an airport id from the airport delay median
@@ -130,5 +168,36 @@ int airport_delay_median_get_delay_median(AirportDelayMedian *airport);
  * @return A pointer to the array.
  */
 GPtrArray *catalog_get_airport_delays(CatalogAirport *catalog);
+
+/**
+ * @brief Retrieves an airport id from the airport passengers by year
+ * @details Looks up and returns the airport id in the provided
+ * AirportPassengersByYear structure.
+ *
+ * @param airport A pointer to the AirportPassengersByYear structure.
+ * @return A pointer to the airport id if found, or NULL if not found.
+ */
+char *airport_passengers_by_year_get_airport_id(
+    AirportPassengersByYear *airport);
+
+/**
+ * @brief Retrieves an passengers from the airport passengers by year
+ * @details Looks up and returns the passengers in the provided
+ * AirportPassengersByYear structure.
+ *
+ * @param airport A pointer to the AirportPassengersByYear structure.
+ * @return The passengers.
+ */
+int airport_passengers_by_year_get_passengers(AirportPassengersByYear *airport);
+
+/**
+ * @brief Gets airport passengers by year
+ * @details Looks up and returns a hash table with airport passengers by year in
+ * the provided CatalogAirport structure.
+ *
+ * @param airport A pointer to the CatalogAirport structure.
+ * @return A pointer to the hash table.
+ */
+GHashTable *catalog_get_airport_passengers_by_year(CatalogAirport *catalog);
 
 #endif

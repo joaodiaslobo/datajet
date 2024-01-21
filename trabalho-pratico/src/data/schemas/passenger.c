@@ -6,6 +6,7 @@
 #include "data/catalogs/catalog_passenger.h"
 #include "data/schemas/schema_data_types.h"
 #include "data/schemas/validation/generic_validation.h"
+#include "data/statistics/airport_passenger.h"
 #include "data/statistics/user_flight.h"
 #include "io/parsing/reader.h"
 
@@ -25,6 +26,8 @@ int parse_passenger_and_add_to_catalog(RowReader* reader, void* catalog,
   strcpy(passenger_user_key, passenger_user_id);
 
   create_passenger_association(database, passenger_user_key, flight_id);
+
+  create_passenger_year_airport_association(database, flight_id);
 
   return 0;
 }

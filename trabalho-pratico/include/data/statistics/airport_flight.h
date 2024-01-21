@@ -2,8 +2,8 @@
  * @file airport_flight.h
  * @brief Airport associations.
  */
-#ifndef STATISTICS_AIRPORT_H
-#define STATISTICS_AIRPORT_H
+#ifndef STATISTICS_AIRPORT_FLIGHTS_H
+#define STATISTICS_AIRPORT_FLIGHTS_H
 
 #include <stdbool.h>
 
