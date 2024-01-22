@@ -1,5 +1,6 @@
 #include "data/statistics/user_flight.h"
 
+#include <glib.h>
 #include <stdbool.h>
 
 #include "data/catalogs/catalog_flight.h"
@@ -33,9 +34,9 @@ bool validate_passenger_association(Database *database, char *user_id,
          flight_exists(flight_catalog, flight_id);
 }
 
-bool validate_flight_passenger_count(gpointer key, Flight *flight,
-                                     void *database) {
-  int total_seats = (int)flight_get_total_seats(flight);
+gboolean validate_flight_passenger_count(gpointer key, void *flight,
+                                         void *database) {
+  int total_seats = (int)flight_get_total_seats((Flight *)flight);
   unsigned int flight_id = GPOINTER_TO_UINT(key);
   CatalogPassenger *catalog = database_get_passenger_catalog(database);
 

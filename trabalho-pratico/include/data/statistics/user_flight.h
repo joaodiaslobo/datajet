@@ -5,6 +5,7 @@
 #ifndef STATISTICS_PASSENGER_H
 #define STATISTICS_PASSENGER_H
 
+#include <glib.h>
 #include <stdbool.h>
 
 #include "data/database.h"
@@ -41,8 +42,8 @@ bool validate_passenger_association(Database *database, char *user_id,
  * @param database Main database.
  * @return true if the passenger count is valid.
  */
-bool validate_flight_passenger_count(gpointer key, Flight *flight,
-                                     void *database);
+gboolean validate_flight_passenger_count(gpointer key, void *flight,
+                                         void *database);
 
 /**
  * @brief Removes all passengers from a flight.
