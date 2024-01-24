@@ -5,7 +5,7 @@ EXEC_TESTS := programa-testes
 
 FLAGS := -Wall -Wextra -Werror=pedantic -Wfatal-errors -Wno-unused-variable -Wno-unused-parameter
 
-LIBS := $(shell pkg-config --libs glib-2.0)
+LIBS := $(shell pkg-config --libs glib-2.0 ncursesw)
 FLAGS += $(shell pkg-config --cflags glib-2.0)
 
 SRC := $(shell find src/ -name "*.c" ! -path "src/tests/*")

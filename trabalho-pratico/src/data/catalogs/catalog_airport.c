@@ -77,8 +77,10 @@ void insert_airport(CatalogAirport *catalog, char *airport_id) {
 }
 
 void free_airports_catalog(CatalogAirport *catalog) {
-  g_ptr_array_free(catalog->airport_delays, TRUE);
-  g_hash_table_destroy(catalog->airport_passengers_by_year);
+  if (catalog->airport_delays != NULL)
+    g_ptr_array_free(catalog->airport_delays, TRUE);
+  if (catalog->airport_passengers_by_year != NULL)
+    g_hash_table_destroy(catalog->airport_passengers_by_year);
   free(catalog);
 }
 

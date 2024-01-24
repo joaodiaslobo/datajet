@@ -34,3 +34,11 @@ bool ends_with(char *string, char *suffix) {
     return 1;
   return 0;
 }
+
+int count_spaces(char *string) {
+  int count = 0;
+  for (int i = 0; string[i] != '\0'; i++) {
+    if (string[i] == ' ') count++;
+  }
+  return count;
+}

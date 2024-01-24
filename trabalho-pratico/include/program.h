@@ -31,6 +31,13 @@ typedef enum ProgramMode {
 Program *initialize_program(ProgramMode);
 
 /**
+ * @brief Refreshes the database
+ * @details Refreshes the database of the program.
+ * @param program Program.
+ */
+void refresh_database(Program *program);
+
+/**
  * @brief Gets the database
  * @details Gets the database from the program.
  * @param program Program.

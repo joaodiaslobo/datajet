@@ -10,6 +10,52 @@
 
 #define SYSTEM_CURRENT_DATE 20231001
 
+typedef struct queryDefinition {
+  char *name;
+  char *description;
+  int min_args;
+  int max_args;
+} QueryDefinition;
+
+static const QueryDefinition query_definitions[10] = {
+    {"List general information about an entity",
+     "Lists general information about an entity (user, flight or reservation) "
+     "associated with the identifier passed in the query arguments.",
+     1, 1},
+    {"List user associations",
+     "Lists all user associations (flights and reservations) sorted by date "
+     "(most recent to oldest). Optionally, the second argument can filter the "
+     "associations by type.",
+     1, 2},
+    {"Calculate average hotel rating",
+     "Calculates the average rating of a hotel via its identifier.", 1, 1},
+    {"List hotel reservations",
+     "Lists all reservations associated with a hotel sorted by date (most "
+     "recent to oldest) based on the identifier passed in the query arguments.",
+     1, 1},
+    {"List airport flights between dates",
+     "Lists flights that departed from a certain origin airport between two "
+     "dates sorted by departure date (oldest to most recent).",
+     3, 3},
+    {"List top airports by passengers in a year",
+     "Lists top airports by most passengers in a given year.", 1, 1},
+    {"List top airports by delay medians",
+     "Lists top airports by highest delay median.", 1, 1},
+    {"Calculate total hotel revenue between dates",
+     "Calculates the total revenue of a certain hotel made between two dates.",
+     3, 3},
+    {"List users whose name starts with prefix",
+     "Lists all users whose name starts with a certain prefix sorted by "
+     "alphabetical order.",
+     1, 1},
+    {"List database metrics",
+     "Lists general application metrics such as number of users, number of "
+     "flights, number of passengers (repeated and unique) and number of "
+     "reservations. Aggregates can be filtered by year or year and month. If "
+     "no arguments are provided metrics are generated for all years where data "
+     "is found.",
+     0, 2}};
+
 /**
  * @brief Executes a query and saves the result.
  * @details Executes a query and saves the result to a file.
@@ -154,6 +200,15 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
                                              Database *database,
                                              char *query_args);
 
+/**
+ * @brief Lists top airports by passengers in a year.
+ * @details Lists top airports by passengers in a year.
+ *
+ * @param writer Writer to be used to write the result.
+ * @param database Main database.
+ * @param user_id Query arguments.
+ * @return 0 if the execution succeeded, 1 if it failed.
+ */
 int query_list_top_airports_by_passengers_in_year(RowWriter *writer,
                                                   Database *database,
                                                   char *query_args);

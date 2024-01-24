@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include "data/database.h"
+#include "workers/interactive.h"
 
 struct Program {
   ProgramMode mode;
@@ -16,9 +17,15 @@ Program *initialize_program(ProgramMode programMode) {
   program->mode = programMode;
   program->database = initialize_database();
 
+  setlocale(LC_ALL, "");
   setlocale(LC_COLLATE, "en_US.UTF-8");
 
   return program;
+}
+
+void refresh_database(Program *program) {
+  free_database(program->database);
+  program->database = initialize_database();
 }
 
 void free_program(Program *program) {
@@ -34,7 +41,7 @@ int execute_program(Program *program, char **args) {
       batch_worker(args, program->database);
       break;
     case PROGRAM_MODE_INTERACTIVE:
-      printf("Interactive mode hasn't been implemented yet.\n");
+      interactive_worker(program);
       break;
     default:
       break;

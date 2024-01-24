@@ -79,7 +79,7 @@ int query_user_parameters_by_id(RowWriter *writer, Database *database,
                     "total_spent"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 8);
 
   write_entity_values(writer, 8, user_name, user_sex_string, user_age,
                       user_country_code, user_passport, user_number_of_flights,
@@ -130,7 +130,7 @@ int query_flight_parameters_by_id(RowWriter *writer, Database *database,
                     "delay"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 8);
 
   write_entity_values(
       writer, 8, flight_airline, flight_plane_model, flight_origin,
@@ -177,7 +177,7 @@ int query_reservation_parameters_by_id(RowWriter *writer, Database *database,
                     "nights",     "total_price"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 8);
 
   write_entity_values(writer, 8, reservation_hotel_id_string,
                       reservation_hotel_name, reservation_hotel_stars,
@@ -213,7 +213,7 @@ int query_list_user_associations(RowWriter *writer, Database *database,
   char *fields[] = {"id", "date", "type"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 3);
 
   CatalogPassenger *catalog_passengers =
       database_get_passenger_catalog(database);
@@ -329,7 +329,7 @@ int query_list_user_flights(RowWriter *writer, Database *database,
   char *fields[] = {"id", "date"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 2);
 
   CatalogPassenger *catalog_passengers =
       database_get_passenger_catalog(database);
@@ -367,7 +367,7 @@ int query_list_user_reservations(RowWriter *writer, Database *database,
   char *fields[] = {"id", "date"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 2);
 
   CatalogReservation *catalog_reservations =
       database_get_reservation_catalog(database);
@@ -402,7 +402,7 @@ int query_calculate_average_hotel_rating(RowWriter *writer, Database *database,
   char *fields[] = {"rating"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 1);
 
   CatalogReservation *catalog = database_get_reservation_catalog(database);
   unsigned short hotel_id = parse_unsigned_short(query_args + 3);
@@ -430,7 +430,7 @@ int query_list_hotel_reservations(RowWriter *writer, Database *database,
                     "user_id", "rating",     "total_price"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 6);
 
   CatalogReservation *catalog = database_get_reservation_catalog(database);
   unsigned short hotel_id = parse_unsigned_short(query_args + 3);
@@ -480,7 +480,7 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
                     "plane_model"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 5);
 
   query_args[46] = '\0';
   char *upper_limit_string = query_args + 27;
@@ -536,7 +536,7 @@ int query_list_top_airports_by_passengers_in_year(RowWriter *writer,
   char *fields[] = {"name", "passengers"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 2);
 
   query_args[4] = '\0';
   int year = parse_number(query_args);
@@ -569,7 +569,7 @@ int query_list_top_airports_by_delay_median(RowWriter *writer,
   char *fields[] = {"name", "median"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 2);
 
   int N = parse_number(query_args);
 
@@ -608,7 +608,7 @@ int query_calculate_total_hotel_revenue_between_dates(RowWriter *writer,
   Timestamp end_date = parse_date(query_args + (index + 12));
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 1);
 
   CatalogReservation *catalog = database_get_reservation_catalog(database);
   GPtrArray *reservations =
@@ -657,7 +657,7 @@ int query_list_users_where_name_starts_with_prefix(RowWriter *writer,
   char *fields[] = {"id", "name"};
 
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 2);
 
   CatalogUser *catalog = database_get_user_catalog(database);
   GPtrArray *users = get_users(catalog);
@@ -716,7 +716,7 @@ int query_database_metrics_by_years(RowWriter *writer, Database *database) {
       "year",        "users", "flights", "passengers", "unique_passengers",
       "reservations"};
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 6);
 
   CatalogUser *user_catalog = database_get_user_catalog(database);
   CatalogFlight *flight_catalog = database_get_flight_catalog(database);
@@ -753,7 +753,7 @@ int query_database_metrics_by_months_in_year(RowWriter *writer,
       "month",       "users", "flights", "passengers", "unique_passengers",
       "reservations"};
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 6);
 
   unsigned short year = parse_unsigned_short(query_args);
 
@@ -795,7 +795,7 @@ int query_database_metrics_by_days_in_month(RowWriter *writer,
       "day",         "users", "flights", "passengers", "unique_passengers",
       "reservations"};
   row_writer_set_formatting(writer, format);
-  row_writer_set_field_names(writer, fields);
+  row_writer_set_field_names(writer, fields, 6);
 
   query_args[4] = '\0';
 

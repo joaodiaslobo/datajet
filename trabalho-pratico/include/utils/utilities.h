@@ -28,4 +28,11 @@ bool starts_with(char *string, char *prefix);
  */
 bool ends_with(char *string, char *suffix);
 
+/**
+ * @brief Counts the number of spaces in a string.
+ *
+ * @param string String to be checked.
+ */
+int count_spaces(char *string);
+
 #endif
