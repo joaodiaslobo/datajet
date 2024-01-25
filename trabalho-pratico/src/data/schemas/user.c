@@ -10,16 +10,16 @@
 #include "io/parsing/reader.h"
 
 struct user {
+  Timestamp birth_date;
+  Timestamp account_creation;
   char* id;
   char* name;
   char* email;
   char* phone_number;
-  Timestamp birth_date;
-  Sex sex;
   char* passport;
   char* country_code;
   char* address;
-  Timestamp account_creation;
+  Sex sex;
   PayMethod pay_method;
   AccountStatus account_status;
 };
@@ -30,14 +30,14 @@ User* create_user(char* id, char* name, char* email, char* phone_number,
                   PayMethod pay_method, AccountStatus account_status) {
   User* user = initialize_user();
 
+  user_set_birth_date(user, birth_date);
+  user_set_account_creation(user, account_creation);
   user_set_id(user, id);
   user_set_name(user, name);
-  user_set_birth_date(user, birth_date);
-  user_set_sex(user, sex);
   user_set_passport(user, passport);
   user_set_country_code(user, country_code);
-  user_set_account_creation(user, account_creation);
   user_set_account_status(user, account_status);
+  user_set_sex(user, sex);
 
   return user;
 }

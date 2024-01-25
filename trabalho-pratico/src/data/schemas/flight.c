@@ -10,19 +10,19 @@
 #include "io/parsing/reader.h"
 
 struct flight {
-  unsigned int id;
-  char* airline;
-  char* plane_model;
-  unsigned short total_seats;
-  char* origin;
-  char* destination;
   Timestamp schedule_departure_date;
   Timestamp schedule_arrival_date;
   Timestamp real_departure_date;
   Timestamp real_arrival_date;
+  char* airline;
+  char* plane_model;
+  char* origin;
+  char* destination;
   char* pilot;
   char* copilot;
   char* notes;
+  unsigned short total_seats;
+  unsigned int id;
 };
 
 Flight* create_flight(unsigned int id, char* airline, char* plane_model,
@@ -34,16 +34,16 @@ Flight* create_flight(unsigned int id, char* airline, char* plane_model,
                       char* notes) {
   Flight* flight = initialize_flight();
 
-  flight_set_id(flight, id);
-  flight_set_airline(flight, airline);
-  flight_set_plane_model(flight, plane_model);
-  flight_set_total_seats(flight, total_seats);
-  flight_set_origin(flight, origin);
-  flight_set_destination(flight, destination);
   flight_set_schedule_departure_date(flight, schedule_departure_date);
   flight_set_schedule_arrival_date(flight, schedule_arrival_date);
   flight_set_real_departure_date(flight, real_departure_date);
   flight_set_real_arrival_date(flight, real_arrival_date);
+  flight_set_plane_model(flight, plane_model);
+  flight_set_total_seats(flight, total_seats);
+  flight_set_origin(flight, origin);
+  flight_set_destination(flight, destination);
+  flight_set_airline(flight, airline);
+  flight_set_id(flight, id);
 
   return flight;
 }

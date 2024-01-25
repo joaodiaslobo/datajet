@@ -12,20 +12,20 @@
 #include "io/parsing/reader.h"
 
 struct reservation {
-  unsigned int id;
+  Timestamp begin_date;
+  Timestamp end_date;
   char* user_id;
-  unsigned int hotel_id;
   char* hotel_name;
   char hotel_stars;
   char city_tax;
   char* address;
-  Timestamp begin_date;
-  Timestamp end_date;
-  unsigned short price_per_night;
-  bool includes_breakfast;
   char* room_details;
   char rating;
   char* comment;
+  bool includes_breakfast;
+  unsigned int id;
+  unsigned int hotel_id;
+  unsigned short price_per_night;
 };
 
 Reservation* create_reservation(unsigned int id, char* user_id,
@@ -37,17 +37,17 @@ Reservation* create_reservation(unsigned int id, char* user_id,
                                 char rating, char* comment) {
   Reservation* reservation = initialize_reservation();
 
-  reservation_set_id(reservation, id);
+  reservation_set_begin_date(reservation, begin_date);
+  reservation_set_end_date(reservation, end_date);
   reservation_set_user_id(reservation, user_id);
-  reservation_set_hotel_id(reservation, hotel_id);
   reservation_set_hotel_stars(reservation, hotel_stars);
   reservation_set_hotel_name(reservation, hotel_name);
   reservation_set_city_tax(reservation, city_tax);
-  reservation_set_begin_date(reservation, begin_date);
-  reservation_set_end_date(reservation, end_date);
-  reservation_set_price_per_night(reservation, price_per_night);
   reservation_set_includes_breakfast(reservation, includes_breakfast);
+  reservation_set_hotel_id(reservation, hotel_id);
   reservation_set_rating(reservation, rating);
+  reservation_set_id(reservation, id);
+  reservation_set_price_per_night(reservation, price_per_night);
 
   return reservation;
 }
