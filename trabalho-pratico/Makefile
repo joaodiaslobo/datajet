@@ -22,11 +22,11 @@ ifeq ($(BUILD_TYPE), debug)
 	BUILD_DIR_PATH := build/debug
 	FLAGS += -Iinclude/
 else ifeq ($(BUILD_TYPE), release)
-	FLAGS += -O3 -flto -funroll-loops
+	FLAGS += -O3 -flto -funroll-loops -Wno-unused-function -march=native
 	BUILD_DIR_PATH := build/release
 	FLAGS += -Iinclude/
 else ifeq ($(BUILD_TYPE), test)
-	FLAGS += -O3 -flto -funroll-loops -Wno-unused-function
+	FLAGS += -O3 -flto -funroll-loops -Wno-unused-function -march=native
 	BUILD_DIR_PATH := build/test
 	FLAGS += -Iinclude/
 	EXEC := programa-testes
