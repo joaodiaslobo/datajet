@@ -1,3 +1,7 @@
+/**
+ * @file aggregates.h
+ * @brief Aggregate procedures.
+ */
 #ifndef AGGREGATES_H
 #define AGGREGATES_H
 

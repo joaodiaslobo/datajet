@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "data/procedures/aggregates.h"
+#include "data/procedures/filtering.h"
 #include "data/procedures/sorting.h"
 #include "data/schemas/flight.h"
 
@@ -135,4 +136,10 @@ int compare_flights_array_elements_by_schedule_departure_date(gpointer a,
 
 GPtrArray *get_flights_array(CatalogFlight *catalog) {
   return catalog->flight_array;
+}
+
+int find_date_lower_bound_flights(GPtrArray *flights, Timestamp lower_limit) {
+  return find_date_lower_bound(
+      flights, lower_limit,
+      (Timestamp(*)(void *))flight_get_schedule_departure_date);
 }

@@ -153,4 +153,12 @@ int compare_flights_array_elements_by_schedule_departure_date(gpointer a,
  */
 GPtrArray *get_flights_array(CatalogFlight *catalog);
 
+/**
+ * @brief Finx the lower bound of a flight in the catalog by schedule departure
+ *
+ * @param flights A pointer to the GPtrArray containing Flight elements.
+ * @return The timestamp of the lower bound of the flight in the array.
+ */
+int find_date_lower_bound_flights(GPtrArray *flights, Timestamp lower_limit);
+
 #endif

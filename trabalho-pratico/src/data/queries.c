@@ -495,7 +495,9 @@ int query_list_airport_flights_between_dates(RowWriter *writer,
   if (flights == NULL) return 1;
   int flights_count = flights->len;
   catalog_sort_flights_by_schedule_departure_date(catalog);
-  for (int i = 0; i < flights_count; i++) {
+  int lower_bound = find_date_lower_bound_flights(flights, lower_limit);
+
+  for (int i = lower_bound; i < flights_count; i++) {
     Flight *flight = g_ptr_array_index(flights, i);
     char *flight_origin = flight_get_origin(flight);
 
