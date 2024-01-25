@@ -49,6 +49,8 @@ static void run_tests(char *dataset_directory, char *commands_file_path,
     return;
   }
 
+  double query_time = 0;
+
   char command[BUFFER_SIZE] = "";
   while (fgets(command, BUFFER_SIZE, commands_file) != NULL) {
     int query_id;
@@ -60,6 +62,7 @@ static void run_tests(char *dataset_directory, char *commands_file_path,
                                                  command_args, command_id);
     clock_t end = clock();
     double elapsed_time = (double)(end - begin) / CLOCKS_PER_SEC;
+    query_time += elapsed_time;
     if (result != -1) {
       print("[INFO] (Command %3d) Query %2d (elapsed time: %fs) ", DEFAULT,
             REGULAR, command_id + 1, query_id, elapsed_time);
@@ -116,6 +119,11 @@ static void run_tests(char *dataset_directory, char *commands_file_path,
           REGULAR, i + 1, average_query_times[i]);
   }
 
+  print("[INFO] Database initialization and seeding (elapsed time: %fs) \n",
+        DEFAULT, REGULAR, database_elapsed_time);
+
+  print("[INFO] Total queries execution time: %fs\n", DEFAULT, REGULAR,
+        query_time);
   print("[INFO] Total execution time: %fs\n", DEFAULT, REGULAR,
         total_execution_time);
   print("[INFO] Max memory usage: %ld KB\n", DEFAULT, REGULAR,
