@@ -6,7 +6,7 @@ This project obtained a final grade of **19/20** 💎
 
 ![screenshot](.github/assets/screenshot.png)
 
-The main goal of the project was to implement object-oriented programming principles, such as encapsulation and modularity, while also developing efficient data structures for fast, performant database querying. 
+The main goal of the project was to implement object-oriented programming principles, such as encapsulation and modularity, while also developing efficient data structures for fast, performant database querying.
 
 The project has two modes: **batch**, where the program receives the dataset path and an input file with a list of command queries to be executed; and **interactive**, a GUI-based database querying application.
 
